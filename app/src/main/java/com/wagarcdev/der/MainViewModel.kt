@@ -1,9 +1,11 @@
 package com.wagarcdev.der
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
-import com.wagarcdev.der.domain.model.User
+import com.wagarcdev.der.data.RoomMethods
+import com.wagarcdev.der.domain.model.UserGoogle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,11 +15,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
     lateinit var navHostController: NavHostController
-    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
-    private val user: StateFlow<User?> = _user
+    private val _user: MutableStateFlow<UserGoogle?> = MutableStateFlow(null)
+    private val user: StateFlow<UserGoogle?> = _user
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -34,10 +36,18 @@ class MainViewModel @Inject constructor() : ViewModel() {
         email: String,
         displayName: String,
         photoUrl: String
-    ): StateFlow<User?> {
+    ): StateFlow<UserGoogle?> {
         delay(2000) // Simulating network call
-        _user.value = User(id, email, displayName, photoUrl)
+        _user.value = UserGoogle(id, email, displayName, photoUrl)
         return user
+    }
+
+    suspend fun createGoogleUserInLocalDatabase(userGoogle: UserGoogle) {
+        RoomMethods(getApplication()).createNewUserWithSignWithGoogle(userGoogle)
+    }
+
+    suspend fun getAllGoogleUsers(): List<UserGoogle> {
+        return RoomMethods(getApplication()).getAllGoogleUsers()
     }
 
 
