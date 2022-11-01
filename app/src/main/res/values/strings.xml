@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DER</string>
+    <string name="DER_Logo_desc">Logo Departamento de Estradas e Rodagens</string>
+    <string name="Logo_ST6">Logo Serviço Técnico ST6 DR6</string>
+    <string name="saudacao_frase">Por favor, realize seu Login para continuar.</string>
+    <string name="registro_frase">Preencha os campos abaixo e depois clique no botão \"Cadastrar\" para completar o seu registro no sistema.</string>
+</resources>
