@@ -3,12 +3,14 @@ package com.wagarcdev.der.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
+import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.presentation.screens.screen_auth.AuthScreen
 import com.wagarcdev.der.presentation.screens.screen_contracts.ContractsScreen
 import com.wagarcdev.der.presentation.screens.screen_main.MainScreen
@@ -20,18 +22,20 @@ fun AppNavigation() {
 
 
     val mainViewModel: MainViewModel = hiltViewModel()
+    val signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 
     mainViewModel.navHostController = rememberNavController()
+    val context = LocalContext.current
 
-    val isUserSigned =  false
-//        signInGoogleViewModel.checkSignedInUser(context) TODO implement Firebase Auth
+    val isUserSigned = false
+    val isLogged = signInGoogleViewModel.checkIfIsLogged(context)
 
 
 
 
     NavHost(
         startDestination =
-        if (isUserSigned) {
+        if (isLogged) {
             Screens.MainScreen.name
         } else {
             Screens.AuthScreen.name
@@ -40,23 +44,23 @@ fun AppNavigation() {
     ) {
 
         /** Main Screen */
-        composable(Screens.MainScreen.name){
-            MainScreen(mainViewModel)
+        composable(Screens.MainScreen.name) {
+            MainScreen(mainViewModel,signInGoogleViewModel)
         }
 
 
         /** Authentication Screen */
-        composable(Screens.AuthScreen.name){
+        composable(Screens.AuthScreen.name) {
             AuthScreen(mainViewModel)
         }
 
         /** Contracts Screen */
-        composable(Screens.DetailScreen.name){
+        composable(Screens.DetailScreen.name) {
             ContractsScreen(mainViewModel)
         }
 
         /** Reports Screen */
-        composable(Screens.ReportsScreen.name){
+        composable(Screens.ReportsScreen.name) {
             ReportsScreen(mainViewModel)
         }
     }

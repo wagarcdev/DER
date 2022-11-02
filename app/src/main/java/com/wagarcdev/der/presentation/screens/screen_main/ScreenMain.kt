@@ -9,9 +9,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,29 +21,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
+import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.ui.widgets.ContractCard
 import com.wagarcdev.der.ui.widgets.SearchBarRow
+import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    signInGoogleViewModel: SignInGoogleViewModel
 ) {
 
+
     Scaffold(
-        topBar = {  },
-        content = { MainScreenContent() },
+        topBar = { },
+        content = { MainScreenContent(signInGoogleViewModel) },
         backgroundColor = Color.Gray
     )
 
+
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreenContent() {
-
+fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
     val maxWidthFloat = 0.95f
+    //já conseguimos pegar os dados do usuario logado com o google
+    val currentUser = signInGoogleViewModel.googleUser.value!!.displayName
+
 
     Column(
         modifier = Modifier
@@ -94,7 +104,8 @@ fun MainScreenPreview(
 ) {
 
     val mainViewModel: MainViewModel = hiltViewModel()
+    val signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 
-    MainScreen(mainViewModel)
+    MainScreen(mainViewModel,signInGoogleViewModel)
 }
 

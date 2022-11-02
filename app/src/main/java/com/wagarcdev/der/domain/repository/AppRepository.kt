@@ -5,13 +5,9 @@ import com.wagarcdev.der.data.entities.UserGoogleEntity
 
 interface AppRepository {
 
-    suspend fun createGoogleUser(userGoogleEntity: UserGoogleEntity)
-
     suspend fun updateMyObject(myObject: MyObject)
 
     suspend fun getMyObjectById(myObjectId: Long): MyObject
-
-    suspend fun getAllGoogleUsers(): List<UserGoogleEntity>
 
     suspend fun deleteAllMyObjects()
 }

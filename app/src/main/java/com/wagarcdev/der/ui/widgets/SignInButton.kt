@@ -133,7 +133,7 @@ fun SignInButton(
                 )
             }
 
-            val showLoadingIcon = remember { mutableStateOf(isLoading?.value) }
+            val showLoadingIcon = remember { mutableStateOf(isLoading.value) }
 
             //DISPLAY ALIGNMENT ROW FOR CENTERING TEXT
             Column(

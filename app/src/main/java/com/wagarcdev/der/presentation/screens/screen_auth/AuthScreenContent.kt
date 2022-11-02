@@ -38,6 +38,7 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
+import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.google.AuthResultContract
 import com.wagarcdev.der.presentation.screens.screen_main.BackgroundImageRow
 import com.wagarcdev.der.ui.theme.*
@@ -45,6 +46,8 @@ import com.wagarcdev.der.ui.widgets.SignInButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue // only if using var
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @RequiresApi(Build.VERSION_CODES.R)
@@ -59,8 +62,7 @@ fun AuthScreenContent(
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
-    val isLoadingState =
-        remember { mutableStateOf<Boolean?>(false) }
+    var isLoadingState = remember { mutableStateOf<Boolean?>(false) }
     val signInRequestCode = 0
 
     val authResultLauncher =
@@ -72,34 +74,22 @@ fun AuthScreenContent(
                 } else {
                     /**
                      * Falta por a navegacao aqui caso o login seja OK
+                     *
                      */
                     coroutineScope.launch {
-                        val user = mainViewModel.signIn(
+                        mainViewModel.signIn(
                             id = account.id!!,
                             email = account.email!!,
                             displayName = account.displayName!!,
                             photoUrl = account.photoUrl!!.toString()
                         )
-
-                        //cadastrando usuário
-                        user.let {
-                            mainViewModel.createGoogleUserInLocalDatabase(it.value!!)
-                        }
-
                     }
+
                 }
             } catch (e: ApiException) {
                 Log.i("TAG", "Google sign in failed 2")
             }
         }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            //recuperando usuarios apenas para testes, essa chamada deve ser implementada em outra tela
-            Log.i("TAG", mainViewModel.getAllGoogleUsers().toString())
-        }
-
-
-
 
 
 

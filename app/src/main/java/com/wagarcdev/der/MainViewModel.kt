@@ -1,9 +1,12 @@
 package com.wagarcdev.der
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.wagarcdev.der.data.RoomMethods
 import com.wagarcdev.der.domain.model.UserGoogle
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,15 +42,12 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
     ): StateFlow<UserGoogle?> {
         delay(2000) // Simulating network call
         _user.value = UserGoogle(id, email, displayName, photoUrl)
+        RoomMethods(getApplication()).createNewUserWithSignWithGoogle(user.value!!)
         return user
     }
 
-    suspend fun createGoogleUserInLocalDatabase(userGoogle: UserGoogle) {
-        RoomMethods(getApplication()).createNewUserWithSignWithGoogle(userGoogle)
-    }
-
-    suspend fun getAllGoogleUsers(): List<UserGoogle> {
-        return RoomMethods(getApplication()).getAllGoogleUsers()
+    suspend fun getCurrentUser(context: Context): GoogleSignInAccount? {
+        return GoogleSignIn.getLastSignedInAccount(context)
     }
 
 
