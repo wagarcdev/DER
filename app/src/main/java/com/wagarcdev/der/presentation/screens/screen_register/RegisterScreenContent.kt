@@ -1,6 +1,7 @@
 package com.wagarcdev.der.presentation.screens.screen_register
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,7 +13,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.runtime.R
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -21,9 +21,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,9 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
-import com.wagarcdev.der.*
+import com.wagarcdev.der.domain.model.SimpleUser
 import com.wagarcdev.der.presentation.screens.screen_main.BackgroundImageRow
-import com.wagarcdev.der.presentation.screens.screen_main.MainScreenContent
 import com.wagarcdev.der.ui.theme.DER_yellow
 import com.wagarcdev.der.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.ui.theme.DER_yellow_light
@@ -49,12 +48,39 @@ fun RegisterScreenContent(
 ) {
 
     val coroutineScope = rememberCoroutineScope()
-
+    val context = LocalContext.current
     val username = remember { mutableStateOf("") }
     val fullName = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordConfirm = remember { mutableStateOf("") }
+
+
+    fun checkIfPasswordAreEquals(): Boolean {
+        if (password.value == passwordConfirm.value) {
+            return true
+        }
+        return false
+    }
+
+    fun createSimpleUser() {
+        if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
+            val isEqual = checkIfPasswordAreEquals()
+            if (isEqual) {
+                coroutineScope.launch {
+                    val simpleUser =
+                        SimpleUser(0, username.value, fullName.value, email.value, password.value)
+                    mainViewModel.createNewSimpleUser(simpleUser)
+                }
+
+            }
+        } else {
+            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+
+    }
 
     Column(
         modifier = Modifier
@@ -250,8 +276,9 @@ fun RegisterScreenContent(
                     .height(48.dp)
                     .width(132.dp)
                     .clickable {
+                        createSimpleUser()
                         mainViewModel.navHostController
-                            .navigate(Screens.DetailScreen.name)
+                        .navigate(Screens.AuthScreen.name)
                     }
                     .clip(RoundedCornerShape(15.dp))
                     .shadow(2.dp)

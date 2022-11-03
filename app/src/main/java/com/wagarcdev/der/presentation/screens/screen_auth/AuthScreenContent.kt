@@ -55,13 +55,24 @@ fun AuthScreenContent(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val username = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
+    val username = remember { mutableStateOf("Gabriel") }
+    val password = remember { mutableStateOf("123") }
     var isLoading = remember { mutableStateOf(false) }
 
 
     val signInRequestCode = 0
     val context = LocalContext.current
+
+
+    fun logar() {
+        //logar usuario
+    }
+
+    fun teste(){
+        coroutineScope.launch {
+            Log.i("TAG", mainViewModel.getAllSimpleUser().toString())
+        }
+    }
 
 
     val authResultLauncher =
@@ -248,8 +259,11 @@ fun AuthScreenContent(
                                 .height(48.dp)
                                 .width(132.dp)
                                 .clickable {
+                                    /**
                                     mainViewModel.navHostController
                                         .navigate(Screens.MainScreen.name)
+                                    **/
+                                    logar()
                                 }
                                 .clip(RoundedCornerShape(15.dp))
                                 .shadow(2.dp)
@@ -350,7 +364,7 @@ fun AuthScreenContent(
                 modifier = Modifier
                     .clickable {
                         coroutineScope.launch {
-                            wannaRegister.value = false
+                            wannaRegister.value = true
                         }
                     },
                 text = "CADASTRE-SE AQUI!",

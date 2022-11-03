@@ -5,12 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.wagarcdev.compose_mvvm_empty_project.domain.model.MyObject
+import com.wagarcdev.der.data.entities.SimpleUserEntity
 import com.wagarcdev.der.data.entities.UserGoogleEntity
 import com.wagarcdev.der.data.local.AppDatabaseDAO
 
 @Database(
-    entities = [UserGoogleEntity::class, MyObject::class],
-    version = 2
+    entities = [UserGoogleEntity::class, MyObject::class, SimpleUserEntity::class],
+    version = 4
 )
 abstract class AppDatabase : RoomDatabase() {
     companion object {
