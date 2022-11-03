@@ -7,15 +7,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.util.Date
+import androidx.compose.ui.unit.sp
+import com.wagarcdev.der.ui.theme.DER_gray
+import java.util.*
 
 
 @Composable
 fun NoReportsDivider() {
 
-    val text = "Não há relatórios para esse contrato"
+    val text = "Não há relatórios salvos desse contrato"
 
     SectionsDividerText(text)
 
@@ -27,7 +31,11 @@ fun DateDivider(date: Date) {
 
     val text = date.time.toString()
 
-    SectionsDividerText(text)
+    SectionsDividerText(
+        text = text,
+        barsColor = DER_gray,
+        textColor = DER_gray
+    )
 
 }
 
@@ -35,10 +43,13 @@ fun DateDivider(date: Date) {
 
 @Composable
 fun SectionsDividerText(
-    text: String
+    text: String,
+    barsColor: Color = Color.Black,
+    textColor: Color = Color.Black
 ) {
     Row(
         modifier = Modifier
+            .padding(vertical = 32.dp)
             .fillMaxWidth(),
 
         verticalAlignment = Alignment.CenterVertically,
@@ -52,7 +63,7 @@ fun SectionsDividerText(
             Divider(
                 modifier = Modifier
                     .height(2.dp),
-                color = Color.Black
+                color = barsColor
             )
         }
 
@@ -64,7 +75,14 @@ fun SectionsDividerText(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text)
+            Text(
+                text = text,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = textColor
+
+            )
         }
 
         Column(
@@ -75,7 +93,7 @@ fun SectionsDividerText(
             Divider(
                 modifier = Modifier
                     .height(2.dp),
-                color = Color.Black
+                color = barsColor
             )
         }
 

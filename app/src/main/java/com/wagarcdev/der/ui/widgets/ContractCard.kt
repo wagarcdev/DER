@@ -1,39 +1,40 @@
 package com.wagarcdev.der.ui.widgets
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
+import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.domain.model.Contract
-import com.wagarcdev.der.ui.theme.*
+import com.wagarcdev.der.ui.theme.DER_yellow_deep
 
 @Composable
 fun ContractCard(
     maxWidthFloat: Float,
-    contract: Contract
+    contract: Contract,
+    onclick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth(maxWidthFloat)
             .padding(4.dp)
-            .clickable { },
+            .clickable { onclick.invoke() },
         border = BorderStroke(2.dp, Color.DarkGray),
         shape = RoundedCornerShape(15.dp),
         elevation = 0.dp,
@@ -160,5 +161,11 @@ fun ContractCard(
 @Preview(showBackground = true)
 @Composable
 fun ContractCardPreview() {
-    ContractCard(0.95f, contracts[0])
+
+    val mainViewModel: MainViewModel = hiltViewModel()
+
+    ContractCard(0.95f, contracts[0], onclick = {
+        mainViewModel.navHostController
+        .navigate(Screens.ReportsScreen.name)
+    })
 }

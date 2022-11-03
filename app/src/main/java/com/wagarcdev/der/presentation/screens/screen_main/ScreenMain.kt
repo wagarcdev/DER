@@ -11,13 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
@@ -34,7 +34,7 @@ fun MainScreen(
 
     Scaffold(
         topBar = { },
-        content = { MainScreenContent(signInGoogleViewModel) },
+        content = { MainScreenContent(signInGoogleViewModel, mainViewModel) },
         backgroundColor = Color.Gray
     )
 
@@ -45,7 +45,10 @@ fun MainScreen(
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
+fun MainScreenContent(
+    signInGoogleViewModel: SignInGoogleViewModel,
+    mainViewModel: MainViewModel
+    ) {
     val maxWidthFloat = 0.95f
     val coroutineScope = rememberCoroutineScope()
     val userName = remember { mutableStateOf("") }
@@ -101,7 +104,12 @@ fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
             ) {
                 contracts.forEach { contract ->
                     item {
-                        ContractCard(maxWidthFloat, contract)
+                        ContractCard(
+                            maxWidthFloat,
+                            contract,
+                            onclick = { mainViewModel.navHostController
+                                .navigate(Screens.ReportsScreen.name) }
+                        )
                     }
                 }
             }
