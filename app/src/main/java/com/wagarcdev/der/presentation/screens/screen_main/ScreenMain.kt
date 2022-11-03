@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +32,12 @@ fun MainScreen(
     signInGoogleViewModel: SignInGoogleViewModel
 ) {
 
-
     Scaffold(
         topBar = { },
         content = { MainScreenContent(signInGoogleViewModel) },
         backgroundColor = Color.Gray
     )
+
 
 
 }
@@ -49,8 +47,22 @@ fun MainScreen(
 @Composable
 fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
     val maxWidthFloat = 0.95f
+    val coroutineScope = rememberCoroutineScope()
+    val userName = remember { mutableStateOf("") }
+
     //já conseguimos pegar os dados do usuario logado com o google
-    val currentUser = signInGoogleViewModel.googleUser.value!!.displayName
+    val currentUser = signInGoogleViewModel.googleUser.value?.displayName
+    if (currentUser.equals(null)){
+        //significa que o usuario nunca fez login com o google
+        //logar com room
+        userName.value = "Room name"
+    }else{
+        coroutineScope.launch {
+            userName.value = currentUser!!
+        }
+    }
+
+
 
 
     Column(
@@ -69,7 +81,7 @@ fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
             Text(
                 modifier = Modifier
                     .padding(start = 6.dp),
-                text = "Contratos",
+                text = "Contratos de ${userName.value}",
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,

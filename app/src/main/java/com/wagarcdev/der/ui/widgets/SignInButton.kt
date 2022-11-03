@@ -11,9 +11,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,13 +24,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @Composable
 fun SignInButton(
     buttonFillMaxWidthFloat: Float = 0.8f,
     buttonVerticalPaddingDp: Dp = 0.dp,
     buttonDefaultMinHeight: Dp = 36.dp,
     buttonMinHeight: Dp = 40.dp,
-    isLoading: MutableState<Boolean?> = mutableStateOf(false),
+    isLoading: Boolean,
     progressColor: Color = MaterialTheme.colors.primary,
     showIcon: Boolean = true,
     iconID: Int,
@@ -64,7 +62,9 @@ fun SignInButton(
             .padding(vertical = buttonVerticalPaddingDp)
             .fillMaxWidth(buttonFillMaxWidthFloat)
             .defaultMinSize(minHeight = buttonDefaultMinHeight)
-            .clickable { onClick.invoke() }
+            .clickable {
+                onClick.invoke()
+            }
             .clip(RoundedCornerShape(cornerDp))
             .background(
                 Brush.horizontalGradient(
@@ -133,8 +133,6 @@ fun SignInButton(
                 )
             }
 
-            val showLoadingIcon = remember { mutableStateOf(isLoading.value) }
-
             //DISPLAY ALIGNMENT ROW FOR CENTERING TEXT
             Column(
                 modifier = Modifier
@@ -144,7 +142,7 @@ fun SignInButton(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (showLoadingIcon.value == true) {
+                if (isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .fillMaxSize()
@@ -152,7 +150,6 @@ fun SignInButton(
                             .size(iconSize),
                         color = progressColor
                     )
-
                 }
             }
         }

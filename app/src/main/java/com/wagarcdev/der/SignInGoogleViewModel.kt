@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInGoogleViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
-    private var _userState = MutableLiveData<UserGoogle>()
-    val googleUser: LiveData<UserGoogle> = _userState
+    private var _userState = MutableLiveData<UserGoogle?>()
+    val googleUser: LiveData<UserGoogle?> = _userState
 
 
     fun checkIfIsLogged(context: Context): Boolean {

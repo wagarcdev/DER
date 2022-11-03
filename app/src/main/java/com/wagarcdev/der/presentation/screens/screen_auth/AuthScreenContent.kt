@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,16 +39,11 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
-import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.google.AuthResultContract
 import com.wagarcdev.der.presentation.screens.screen_main.BackgroundImageRow
 import com.wagarcdev.der.ui.theme.*
 import com.wagarcdev.der.ui.widgets.SignInButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue // only if using var
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @RequiresApi(Build.VERSION_CODES.R)
@@ -61,9 +57,12 @@ fun AuthScreenContent(
 
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+    var isLoading = remember { mutableStateOf(false) }
 
-    var isLoadingState = remember { mutableStateOf<Boolean?>(false) }
+
     val signInRequestCode = 0
+    val context = LocalContext.current
+
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = AuthResultContract()) { task ->
@@ -74,7 +73,6 @@ fun AuthScreenContent(
                 } else {
                     /**
                      * Falta por a navegacao aqui caso o login seja OK
-                     *
                      */
                     coroutineScope.launch {
                         mainViewModel.signIn(
@@ -307,7 +305,7 @@ fun AuthScreenContent(
                             buttonDefaultMinHeight = 30.dp,
                             rowVerticalPadding = 1.dp,
                             rowHorizontalPadding = 8.dp,
-                            isLoading = isLoadingState,
+                            isLoading = false,
                             progressColor = DER_yellow_intense,
                             iconID = R.drawable.ic_google_logo,
                             text = "Login usando Google",
@@ -325,7 +323,6 @@ fun AuthScreenContent(
                             bottomSpacer = 0.dp,
                         ) {
                             authResultLauncher.launch(signInRequestCode)
-
                         }
 
 
@@ -353,7 +350,7 @@ fun AuthScreenContent(
                 modifier = Modifier
                     .clickable {
                         coroutineScope.launch {
-                            wannaRegister.value = true
+                            wannaRegister.value = false
                         }
                     },
                 text = "CADASTRE-SE AQUI!",
