@@ -17,7 +17,9 @@ class SimpleUserEntity(
     @ColumnInfo(name = "email")
     val email: String,
     @ColumnInfo(name = "password")
-    val password: String
+    val password: String,
+    @ColumnInfo(name = "common_user")
+    val isCommonUser: Boolean = true
 ) {
     companion object {
         fun fromModelToEntity(simpleUser: SimpleUser) = SimpleUserEntity(
@@ -25,9 +27,10 @@ class SimpleUserEntity(
             simpleUser.username,
             simpleUser.fullname,
             simpleUser.email,
-            simpleUser.password
+            simpleUser.password,
+            simpleUser.isCommonUser
         )
     }
 
-    fun getAllSimpleUser() = SimpleUser(id, username, fullname, email, password)
+    fun getAllSimpleUser() = SimpleUser(id, username, fullname, email, password, isCommonUser)
 }

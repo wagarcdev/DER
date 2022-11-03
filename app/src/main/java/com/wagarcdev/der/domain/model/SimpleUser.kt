@@ -5,5 +5,6 @@ data class SimpleUser(
     val username : String,
     val fullname:String,
     val email:String,
-    val password:String
+    val password:String,
+    val isCommonUser:Boolean = true
 )
