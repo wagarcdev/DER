@@ -53,7 +53,7 @@ fun MainScreenContent(signInGoogleViewModel: SignInGoogleViewModel) {
     //já conseguimos pegar os dados do usuario logado com o google
     val currentUser = signInGoogleViewModel.googleUser.value?.displayName
     if (currentUser.equals(null)){
-        //significa que o usuario nunca fez login com o google
+        //significa que o usuario nao fez login com o google
         //logar com room
         userName.value = "Room name"
     }else{
