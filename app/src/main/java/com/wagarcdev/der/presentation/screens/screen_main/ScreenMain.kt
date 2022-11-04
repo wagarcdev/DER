@@ -2,7 +2,7 @@ package com.wagarcdev.der.presentation.screens.screen_main
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.LocalOverScrollConfiguration
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -17,10 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
+import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.ui.widgets.ContractCard
 import com.wagarcdev.der.ui.widgets.SearchBarRow
 import kotlinx.coroutines.launch
@@ -94,7 +94,8 @@ fun MainScreenContent(
 
         SearchBarRow(maxWidthFloat)
 
-        CompositionLocalProvider(LocalOverScrollConfiguration provides null) {
+        CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth(),
