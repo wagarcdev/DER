@@ -31,11 +31,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.insets.imePadding
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.domain.model.SimpleUser
+import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.screens.screen_main.BackgroundImageRow
 import com.wagarcdev.der.ui.theme.DER_yellow
 import com.wagarcdev.der.ui.theme.DER_yellow_intense

@@ -1,6 +1,6 @@
-package com.wagarcdev.compose_mvvm_empty_project.data
+package com.wagarcdev.der.data
 
-import com.wagarcdev.compose_mvvm_empty_project.domain.model.MyObject
+import com.wagarcdev.der.domain.model.MyObject
 import com.wagarcdev.der.data.entities.SimpleUserEntity
 import com.wagarcdev.der.data.entities.UserGoogleEntity
 import com.wagarcdev.der.data.local.AppDatabaseDAO

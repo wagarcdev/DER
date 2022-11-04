@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.data.remote
+package com.wagarcdev.der.data.remote
 
 interface ApplicationAPI {
 

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.wagarcdev.compose_mvvm_empty_project.data.local.AppDatabase
 import com.wagarcdev.der.data.local.AppDatabaseDAO
-import com.wagarcdev.compose_mvvm_empty_project.data.remote.ApplicationAPI
+import com.wagarcdev.der.data.remote.ApplicationAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,7 +1,7 @@
 package com.wagarcdev.der.data.local
 
 import androidx.room.*
-import com.wagarcdev.compose_mvvm_empty_project.domain.model.MyObject
+import com.wagarcdev.der.domain.model.MyObject
 import com.wagarcdev.der.data.entities.SimpleUserEntity
 import com.wagarcdev.der.data.entities.UserGoogleEntity
 

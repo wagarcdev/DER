@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
+import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.domain.model.Contract

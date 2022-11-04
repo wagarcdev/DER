@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.domain.model
+package com.wagarcdev.der.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

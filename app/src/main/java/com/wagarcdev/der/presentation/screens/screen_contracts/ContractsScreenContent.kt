@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.presentation.screens.screen_detail
+package com.wagarcdev.der.presentation.screens.screen_contracts
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.wagarcdev.compose_mvvm_empty_project.navigation.Screens
 import com.wagarcdev.der.MainViewModel
+import com.wagarcdev.der.navigation.Screens
 
 @Composable
 fun ContractsScreenContent(

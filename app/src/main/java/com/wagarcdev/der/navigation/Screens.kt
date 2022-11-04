@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.navigation
+package com.wagarcdev.der.navigation
 
 enum class Screens {
 

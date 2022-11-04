@@ -1,7 +1,6 @@
 package com.wagarcdev.der.domain.repository
 
-import com.wagarcdev.compose_mvvm_empty_project.domain.model.MyObject
-import com.wagarcdev.der.data.entities.UserGoogleEntity
+import com.wagarcdev.der.domain.model.MyObject
 
 interface AppRepository {
 
