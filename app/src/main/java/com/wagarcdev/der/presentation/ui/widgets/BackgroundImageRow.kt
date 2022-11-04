@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.screens.screen_main
+package com.wagarcdev.der.presentation.ui.widgets
 
 import android.os.Build
 import androidx.annotation.RequiresApi

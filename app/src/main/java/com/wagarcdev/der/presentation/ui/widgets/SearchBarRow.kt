@@ -1,4 +1,4 @@
-package com.wagarcdev.der.ui.widgets
+package com.wagarcdev.der.presentation.ui.widgets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.wagarcdev.der.ui.theme.DER_yellow
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 
 @Composable
 fun SearchBarRow(widthFloat: Float) {

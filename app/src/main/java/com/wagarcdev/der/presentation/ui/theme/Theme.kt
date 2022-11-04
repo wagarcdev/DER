@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.presentation.ui.theme
+package com.wagarcdev.der.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -28,10 +28,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun Compose_MVVM_Empty_ProjectTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
+fun DERTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.domain.model.Report
-import com.wagarcdev.der.ui.theme.DER_gray
-import com.wagarcdev.der.ui.theme.DER_yellow
+import com.wagarcdev.der.presentation.ui.theme.DER_gray
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.utils.NoReportsDivider
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

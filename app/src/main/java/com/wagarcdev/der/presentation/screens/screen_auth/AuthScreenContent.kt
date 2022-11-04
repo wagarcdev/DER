@@ -41,9 +41,10 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.google.AuthResultContract
-import com.wagarcdev.der.presentation.screens.screen_main.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.theme.*
 import com.wagarcdev.der.ui.theme.*
-import com.wagarcdev.der.ui.widgets.SignInButton
+import com.wagarcdev.der.presentation.ui.widgets.SignInButton
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")

@@ -1,4 +1,4 @@
-package com.wagarcdev.der.ui.widgets
+package com.wagarcdev.der.presentation.ui.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.domain.model.Contract
-import com.wagarcdev.der.ui.theme.DER_gray
-import com.wagarcdev.der.ui.theme.DER_yellow_deep
-import com.wagarcdev.der.ui.theme.DER_yellow_intense
-import com.wagarcdev.der.ui.theme.RB_White_75
+import com.wagarcdev.der.presentation.ui.theme.DER_gray
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_deep
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
+import com.wagarcdev.der.presentation.ui.theme.RB_White_75
 
 @Composable
 fun ContractCard2(

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.wagarcdev.der.navigation.AppNavigation
-import com.wagarcdev.der.ui.theme.DERTheme
+import com.wagarcdev.der.presentation.ui.theme.DERTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -21,8 +21,8 @@ import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.navigation.Screens
-import com.wagarcdev.der.ui.widgets.ContractCard
-import com.wagarcdev.der.ui.widgets.SearchBarRow
+import com.wagarcdev.der.presentation.ui.widgets.ContractCard
+import com.wagarcdev.der.presentation.ui.widgets.SearchBarRow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "CoroutineCreationDuringComposition")

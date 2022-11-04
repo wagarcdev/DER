@@ -1,4 +1,4 @@
-package com.wagarcdev.der.ui.widgets
+package com.wagarcdev.der.presentation.ui.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.wagarcdev.der.ui.theme.RB_Transparent
+import com.wagarcdev.der.presentation.ui.theme.RB_Transparent
 
 @Composable
 fun GradientColumn(

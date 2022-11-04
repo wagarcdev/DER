@@ -1,4 +1,4 @@
-package com.wagarcdev.der.ui.widgets
+package com.wagarcdev.der.presentation.ui.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

@@ -1,4 +1,4 @@
-package com.wagarcdev.compose_mvvm_empty_project.presentation.ui.theme
+package com.wagarcdev.der.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
