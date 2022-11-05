@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.screens.screen_register
+package com.wagarcdev.der.presentation.screens.screen_auth
 
 import android.os.Build
 import android.widget.Toast
@@ -35,16 +35,16 @@ import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.domain.model.SimpleUser
 import com.wagarcdev.der.navigation.Screens
-import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
+import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
-fun RegisterScreenContent(
+fun RegisterContent(
     mainViewModel: MainViewModel,
     wannaRegister: MutableState<Boolean>,
 ) {
@@ -387,7 +387,7 @@ fun RegisterScreenContentPreview() {
 
     val mainViewModel: MainViewModel = hiltViewModel()
 
-    RegisterScreenContent(
+    RegisterContent(
         mainViewModel = mainViewModel,
         wannaRegister = remember { mutableStateOf(false) }
     )

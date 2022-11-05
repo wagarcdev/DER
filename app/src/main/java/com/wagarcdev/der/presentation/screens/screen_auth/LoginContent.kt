@@ -41,15 +41,15 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.google.AuthResultContract
-import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.theme.*
+import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.widgets.SignInButton
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
-fun AuthScreenContent(
+fun LoginContent(
     mainViewModel: MainViewModel,
     wannaRegister: MutableState<Boolean>,
 ) {
@@ -403,7 +403,7 @@ fun AuthScreenContentPreview() {
 
     val mainViewModel: MainViewModel = hiltViewModel()
 
-    AuthScreenContent(
+    LoginContent(
         mainViewModel = mainViewModel,
         wannaRegister = remember { mutableStateOf(false) }
     )
