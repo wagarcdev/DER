@@ -2,7 +2,7 @@ package com.wagarcdev.der.presentation.screens.screen_main
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.gestures.LocalOverScrollConfiguration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -94,7 +94,8 @@ fun MainScreenContent(
 
         SearchBarRow(maxWidthFloat)
 
-        CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
+        CompositionLocalProvider(LocalOverScrollConfiguration provides null) {
+
 
             LazyColumn(
                 modifier = Modifier
