@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
 
     lateinit var navHostController: NavHostController
     private val _userGoogle: MutableStateFlow<UserGoogle?> = MutableStateFlow(null)
-    private val userGoogle: StateFlow<UserGoogle?> = _userGoogle
+    val userGoogle: StateFlow<UserGoogle?> = _userGoogle
 
     private val _simpleUser: MutableStateFlow<SimpleUser?> = MutableStateFlow(null)
     private val simpleUser: StateFlow<SimpleUser?> = _simpleUser
@@ -47,6 +47,8 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         RoomMethods(getApplication()).createNewUserWithSignWithGoogle(userGoogle.value!!)
         return userGoogle
     }
+
+
 
     suspend fun createNewSimpleUser(user: SimpleUser) {
         _simpleUser.value = user

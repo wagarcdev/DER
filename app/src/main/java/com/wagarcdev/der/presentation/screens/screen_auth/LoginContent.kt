@@ -1,7 +1,7 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -38,7 +38,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
+import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.google.AuthResultContract
+import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
 import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.widgets.SignInButton
@@ -49,12 +51,13 @@ import kotlinx.coroutines.launch
 fun LoginContent(
     mainViewModel: MainViewModel,
     wannaRegister: MutableState<Boolean>,
+    signInGoogleViewModel: SignInGoogleViewModel
 ) {
 
     val coroutineScope = rememberCoroutineScope()
 
-    val username = remember { mutableStateOf("Gabriel") }
-    val password = remember { mutableStateOf("123") }
+    val username = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
     var isLoading = remember { mutableStateOf(false) }
 
 
@@ -64,25 +67,18 @@ fun LoginContent(
 
     fun logar() {
         //logar usuario
+        mainViewModel.navHostController
+            .navigate(Screens.MainScreen.name)
     }
-
-    fun teste(){
-        coroutineScope.launch {
-            Log.i("TAG", mainViewModel.getAllSimpleUser().toString())
-        }
-    }
-
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = AuthResultContract()) { task ->
             try {
                 val account = task?.getResult(ApiException::class.java)
                 if (account == null) {
-                    Log.i("TAG", "Google sign in failed 1")
+                    Toast.makeText(context, "Autenticação falhou", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
-                    /**
-                     * Falta por a navegacao aqui caso o login seja OK
-                     */
                     coroutineScope.launch {
                         mainViewModel.signIn(
                             id = account.id!!,
@@ -91,10 +87,16 @@ fun LoginContent(
                             photoUrl = account.photoUrl!!.toString()
                         )
                     }
+                    val isReadyToGetTheUser = signInGoogleViewModel.checkIfIsLogged(context)
+                    if (isReadyToGetTheUser) {
+                        mainViewModel.navHostController
+                            .navigate(Screens.MainScreen.name)
+                    }
 
                 }
             } catch (e: ApiException) {
-                Log.i("TAG", "Google sign in failed 2")
+                Toast.makeText(context, "Autenticação falhou ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -262,10 +264,6 @@ fun LoginContent(
                                     .height(48.dp)
                                     .width(132.dp)
                                     .clickable {
-                                        /**
-                                        mainViewModel.navHostController
-                                        .navigate(Screens.MainScreen.name)
-                                         **/
                                         logar()
                                     }
                                     .clip(RoundedCornerShape(15.dp))
@@ -398,9 +396,11 @@ fun LoginContent(
 fun AuthScreenContentPreview() {
 
     val mainViewModel: MainViewModel = hiltViewModel()
+    val signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 
     LoginContent(
         mainViewModel = mainViewModel,
-        wannaRegister = remember { mutableStateOf(false) }
+        wannaRegister = remember { mutableStateOf(false) },
+        signInGoogleViewModel = signInGoogleViewModel
     )
 }

@@ -30,12 +30,11 @@ fun AppNavigation() {
 
     NavHost(
         startDestination =
-//        if (isUserSigned) {
-//            Screens.MainScreen.name
-//        } else {
+        if (isLogged) {
+            Screens.MainScreen.name
+        } else {
             Screens.AuthScreen.name
-//        }
-        ,
+        },
         navController = mainViewModel.navHostController
     ) {
 
@@ -47,9 +46,8 @@ fun AppNavigation() {
 
         /** Authentication Screen */
         composable(Screens.AuthScreen.name) {
-            AuthScreen(mainViewModel)
+            AuthScreen(mainViewModel, signInGoogleViewModel)
         }
-
 
 
         /** Reports Screen */
