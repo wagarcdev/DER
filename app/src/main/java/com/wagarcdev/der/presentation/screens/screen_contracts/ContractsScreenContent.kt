@@ -37,7 +37,7 @@ fun ContractsScreenContent(
     val context = LocalContext.current
 
     //Recuperando dados do usuario
-    Log.i("TAG", signInGoogleViewModel.googleUser.value?.toString().toString())
+    Log.i("TAGggg", signInGoogleViewModel.googleUser.value?.toString().toString())
 
     Column(
         modifier = Modifier
@@ -54,7 +54,7 @@ fun ContractsScreenContent(
             Text(
                 modifier = Modifier
                     .padding(start = 6.dp),
-                text = "Contratos",
+                text = "Contratos: ${signInGoogleViewModel.googleUser.value?.displayName.toString()}",
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
