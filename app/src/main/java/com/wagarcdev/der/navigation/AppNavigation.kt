@@ -1,7 +1,5 @@
 package com.wagarcdev.der.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,7 +12,6 @@ import com.wagarcdev.der.presentation.screens.screen_auth.AuthScreen
 import com.wagarcdev.der.presentation.screens.screen_contracts.ContractsScreen
 import com.wagarcdev.der.presentation.screens.screen_reports.ReportsScreen
 
-@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun AppNavigation() {
 

@@ -1,10 +1,8 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,7 +45,6 @@ import com.wagarcdev.der.presentation.ui.widgets.SignInButton
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
-@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun LoginContent(
     mainViewModel: MainViewModel,
@@ -396,7 +393,6 @@ fun LoginContent(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 @Preview(showBackground = true)
 fun AuthScreenContentPreview() {

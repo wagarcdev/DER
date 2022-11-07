@@ -1,8 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +40,6 @@ import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun RegisterContent(
     mainViewModel: MainViewModel,
@@ -380,7 +377,6 @@ fun RegisterContent(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.R)
 @Composable
 @Preview(showBackground = true)
 fun RegisterScreenContentPreview() {
