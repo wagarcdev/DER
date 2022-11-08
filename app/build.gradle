@@ -21,12 +21,43 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    signingConfigs {
+        def signingProperties = new Properties()
+        signingProperties.load(new FileInputStream(rootProject.file("signing.properties")))
+
+        debug {
+            storeFile = file("$rootDir/${signingProperties['DEBUG_KEYSTORE_FILE_PATH']}")
+            storePassword signingProperties["DEBUG_KEYSTORE_PASSWORD"]
+            keyAlias signingProperties["DEBUG_KEY_ALIAS"]
+            keyPassword signingProperties["DEBUG_KEY_PASSWORD"]
+        }
+
+        release { // using debug key temporary while we don't have a release keystore
+            storeFile = file("$rootDir/${signingProperties['DEBUG_KEYSTORE_FILE_PATH']}")
+            storePassword signingProperties["DEBUG_KEYSTORE_PASSWORD"]
+            keyAlias signingProperties["DEBUG_KEY_ALIAS"]
+            keyPassword signingProperties["DEBUG_KEY_PASSWORD"]
         }
     }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+        }
+
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
