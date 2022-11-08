@@ -4,6 +4,6 @@
     <string name="Logo_ST6">Logo Serviço Técnico ST6 DR6</string>
     <string name="saudacao_frase">Por favor, realize seu Login para continuar.</string>
     <string name="registro_frase">Preencha os campos abaixo e depois clique no botão \"Cadastrar\" para completar o seu registro no sistema.</string>
-    <string name="google_key">129169662595-rbgl86nq054mibcl6bc6kttbif01k518.apps.googleusercontent.com</string>
+    <string name="google_cloud_server_client_id" translatable="false">129169662595-duu81pl3ihnvh69v83pgl9ndrhj8plap.apps.googleusercontent.com</string>
 
 </resources>
