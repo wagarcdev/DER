@@ -26,7 +26,7 @@ class AppRepositoryImplementation(
 
     override fun getAllGoogleUsers(): List<Users> {
         val listUserEntity = dao.getAllGoogleUsers(false)
-        return listUserEntity.map { it.getAllSimpleUser() }
+        return listUserEntity.map { it.fromEntityToModel() }
     }
 
     override fun createNewSimpleUser(simpleUser: Users) {
@@ -35,8 +35,12 @@ class AppRepositoryImplementation(
 
     override fun getAllUsers(): List<Users> {
         return dao.getAllSimpleUsers(true).map {
-            it.getAllSimpleUser()
+            it.fromEntityToModel()
         }
+    }
+
+    override fun validateLogin(isCommonUser: Boolean, email: String, password: String): String {
+        return dao.validateLogin(isCommonUser, email)
     }
 
 }

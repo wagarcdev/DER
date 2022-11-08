@@ -68,7 +68,7 @@ fun RegisterContent(
             if (isEqual) {
                 coroutineScope.launch {
                     val simpleUser =
-                        Users(System.currentTimeMillis().toString(), email.value, username.value, fullName.value, null, null, password.value, true)
+                        Users(System.currentTimeMillis().toString(), email.value, username.value, fullName.value, fullName.value, "", password.value, true)
                     mainViewModel.createNewSimpleUser(simpleUser)
                 }
 

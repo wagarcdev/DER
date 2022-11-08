@@ -29,5 +29,5 @@ class UserEntity(
         )
     }
 
-    fun getAllSimpleUser() = Users(id, email, username, fullname, displayName, photoUrl, password, isCommonUser)
+    fun fromEntityToModel() = Users(id, email, username, fullname, displayName, photoUrl, password, isCommonUser)
 }

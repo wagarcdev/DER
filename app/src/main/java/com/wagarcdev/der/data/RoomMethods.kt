@@ -18,7 +18,7 @@ class RoomMethods(context: Context) : GoogleRepository, SimpleUserRepository {
 
     override fun getAllGoogleUsers(): List<Users> {
         val listUserEntity = myDao.getAllGoogleUsers(false)
-        return listUserEntity.map { it.getAllSimpleUser() }
+        return listUserEntity.map { it.fromEntityToModel() }
     }
 
     override fun createNewSimpleUser(user: Users) {
@@ -28,8 +28,14 @@ class RoomMethods(context: Context) : GoogleRepository, SimpleUserRepository {
 
     override fun getAllUsers(): List<Users> {
         return myDao.getAllSimpleUsers(true).map {
-            it.getAllSimpleUser()
+            it.fromEntityToModel()
         }
+    }
+
+    override fun validateLogin(isCommonUser: Boolean, email: String, password: String): String {
+        var id = myDao.validateLogin(isCommonUser, email)
+        Log.i("TAG", id + "room")
+        return id
     }
 
 }

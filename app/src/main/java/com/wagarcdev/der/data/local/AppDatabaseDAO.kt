@@ -17,11 +17,13 @@ interface AppDatabaseDAO {
     fun updateMyObject(myObject: MyObject)
 
     @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
-    fun getAllGoogleUsers(isCommonUser:Boolean): List<UserEntity>
+    fun getAllGoogleUsers(isCommonUser: Boolean): List<UserEntity>
 
     @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
-    fun getAllSimpleUsers(isCommonUser:Boolean): List<UserEntity>
+    fun getAllSimpleUsers(isCommonUser: Boolean): List<UserEntity>
 
+    @Query("SELECT id FROM Usuarios WHERE isCommonUser = :isCommonUser AND username = :email")
+    fun validateLogin(isCommonUser: Boolean, email: String): String
 
     @Query("SELECT * from my_object_tbl where id=:id")
     fun getMyObjectById(id: Long): MyObject

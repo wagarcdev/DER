@@ -66,9 +66,15 @@ fun LoginContent(
 
 
     fun logar() {
-        //logar usuario
-        mainViewModel.navHostController
-            .navigate(Screens.MainScreen.name)
+        coroutineScope.launch {
+            val id = mainViewModel.validateLogin(username = username.value, password = password.value)
+            if (id != null){
+                mainViewModel.navHostController.navigate(Screens.MainScreen.name)
+            }else{
+                Toast.makeText(context, "Credênciais inválidas $id", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     val authResultLauncher =

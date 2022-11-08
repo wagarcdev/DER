@@ -48,15 +48,16 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
     }
 
 
-
     suspend fun createNewSimpleUser(user: Users) {
         _simpleUser.value = user
         RoomMethods(getApplication()).createNewSimpleUser(simpleUser.value!!)
         Log.i("TAG", user.toString() + "etapa1")
     }
 
-    suspend fun getAllSimpleUser():List<Users> {
-        return RoomMethods(getApplication()).getAllUsers()
+    suspend fun validateLogin(username: String, password: String): String {
+        val id = RoomMethods(getApplication()).validateLogin(true, username, password)
+        Log.i("TAG", id + "view model")
+        return id
     }
 
 }
