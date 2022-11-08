@@ -6,8 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.wagarcdev.der.data.RoomMethods
-import com.wagarcdev.der.domain.model.SimpleUser
-import com.wagarcdev.der.domain.model.UserGoogle
+import com.wagarcdev.der.domain.model.Users
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +19,11 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
 
     lateinit var navHostController: NavHostController
-    private val _userGoogle: MutableStateFlow<UserGoogle?> = MutableStateFlow(null)
-    val userGoogle: StateFlow<UserGoogle?> = _userGoogle
+    private val _users: MutableStateFlow<Users?> = MutableStateFlow(null)
+    val users: StateFlow<Users?> = _users
 
-    private val _simpleUser: MutableStateFlow<SimpleUser?> = MutableStateFlow(null)
-    private val simpleUser: StateFlow<SimpleUser?> = _simpleUser
+    private val _simpleUser: MutableStateFlow<Users?> = MutableStateFlow(null)
+    private val simpleUser: StateFlow<Users?> = _simpleUser
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
@@ -41,22 +40,22 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         email: String,
         displayName: String,
         photoUrl: String
-    ): StateFlow<UserGoogle?> {
+    ): StateFlow<Users?> {
         delay(2000) // Simulating network call
-        _userGoogle.value = UserGoogle(id, email, displayName, photoUrl)
-        RoomMethods(getApplication()).createNewUserWithSignWithGoogle(userGoogle.value!!)
-        return userGoogle
+        _users.value = Users(id, email, null, null, displayName, photoUrl, null, false)
+        RoomMethods(getApplication()).createNewUserWithSignWithGoogle(users.value!!)
+        return users
     }
 
 
 
-    suspend fun createNewSimpleUser(user: SimpleUser) {
+    suspend fun createNewSimpleUser(user: Users) {
         _simpleUser.value = user
         RoomMethods(getApplication()).createNewSimpleUser(simpleUser.value!!)
         Log.i("TAG", user.toString() + "etapa1")
     }
 
-    suspend fun getAllSimpleUser():List<SimpleUser> {
+    suspend fun getAllSimpleUser():List<Users> {
         return RoomMethods(getApplication()).getAllUsers()
     }
 

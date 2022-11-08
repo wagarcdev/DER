@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
-import com.wagarcdev.der.domain.model.SimpleUser
+import com.wagarcdev.der.domain.model.Users
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
@@ -68,7 +68,7 @@ fun RegisterContent(
             if (isEqual) {
                 coroutineScope.launch {
                     val simpleUser =
-                        SimpleUser(0, username.value, fullName.value, email.value, password.value)
+                        Users(System.currentTimeMillis().toString(), email.value, username.value, fullName.value, null, null, password.value, true)
                     mainViewModel.createNewSimpleUser(simpleUser)
                 }
 

@@ -2,26 +2,25 @@ package com.wagarcdev.der.data.local
 
 import androidx.room.*
 import com.wagarcdev.der.domain.model.MyObject
-import com.wagarcdev.der.data.entities.SimpleUserEntity
-import com.wagarcdev.der.data.entities.UserGoogleEntity
+import com.wagarcdev.der.data.entities.UserEntity
 
 @Dao
 interface AppDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun createNewUserWithSignWithGoogle(userGoogleEntity: UserGoogleEntity)
+    fun createNewUserWithSignWithGoogle(userEntity: UserEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun createNewSimpleUser(userGoogleEntity: SimpleUserEntity)
+    fun createNewSimpleUser(userEntity: UserEntity)
 
     @Update
     fun updateMyObject(myObject: MyObject)
 
-    @Query("SELECT * from UsuarioGoogle")
-    fun getAllGoogleUsers(): List<UserGoogleEntity>
+    @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
+    fun getAllGoogleUsers(isCommonUser:Boolean): List<UserEntity>
 
-    @Query("SELECT * from UsuarioComum")
-    fun getAllSimpleUsers(): List<SimpleUserEntity>
+    @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
+    fun getAllSimpleUsers(isCommonUser:Boolean): List<UserEntity>
 
 
     @Query("SELECT * from my_object_tbl where id=:id")

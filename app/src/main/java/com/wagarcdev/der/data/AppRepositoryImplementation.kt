@@ -1,11 +1,9 @@
 package com.wagarcdev.der.data
 
 import com.wagarcdev.der.domain.model.MyObject
-import com.wagarcdev.der.data.entities.SimpleUserEntity
-import com.wagarcdev.der.data.entities.UserGoogleEntity
+import com.wagarcdev.der.data.entities.UserEntity
 import com.wagarcdev.der.data.local.AppDatabaseDAO
-import com.wagarcdev.der.domain.model.SimpleUser
-import com.wagarcdev.der.domain.model.UserGoogle
+import com.wagarcdev.der.domain.model.Users
 import com.wagarcdev.der.domain.repository.AppRepository
 import com.wagarcdev.der.domain.repository.GoogleRepository
 import com.wagarcdev.der.domain.repository.SimpleUserRepository
@@ -22,22 +20,21 @@ class AppRepositoryImplementation(
 
     override suspend fun deleteAllMyObjects() = dao.deleteAllMyObjects()
 
-    override fun createNewUserWithSignWithGoogle(userGoogle: UserGoogle) {
-        dao.createNewUserWithSignWithGoogle(UserGoogleEntity.fromModelToEntity(userGoogle))
+    override fun createNewUserWithSignWithGoogle(users: Users) {
+        dao.createNewUserWithSignWithGoogle(UserEntity.fromModelToEntity(users))
     }
 
-    override fun getAllGoogleUsers(): List<UserGoogle> {
-        return dao.getAllGoogleUsers().map {
-            it.getAll()
-        }
+    override fun getAllGoogleUsers(): List<Users> {
+        val listUserEntity = dao.getAllGoogleUsers(false)
+        return listUserEntity.map { it.getAllSimpleUser() }
     }
 
-    override fun createNewSimpleUser(simpleUser: SimpleUser) {
-        dao.createNewSimpleUser(SimpleUserEntity.fromModelToEntity(simpleUser))
+    override fun createNewSimpleUser(simpleUser: Users) {
+        dao.createNewSimpleUser(UserEntity.fromModelToEntity(simpleUser))
     }
 
-    override fun getAllUsers(): List<SimpleUser> {
-        return dao.getAllSimpleUsers().map {
+    override fun getAllUsers(): List<Users> {
+        return dao.getAllSimpleUsers(true).map {
             it.getAllSimpleUser()
         }
     }
