@@ -3,6 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.android"
     id "org.jetbrains.kotlin.kapt"
     id "com.google.dagger.hilt.android"
+//    id "com.google.gms.google-services" enable only when having google-services.json for firebase
 }
 
 android {
@@ -128,5 +129,9 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVer"
     implementation "androidx.room:room-ktx:$roomVer"
     kapt "androidx.room:room-compiler:$roomVer"
+
+    implementation platform("com.google.firebase:firebase-bom:31.0.2")
+    implementation "com.google.firebase:firebase-firestore-ktx"
+    implementation "com.google.firebase:firebase-storage-ktx"
 
 }
