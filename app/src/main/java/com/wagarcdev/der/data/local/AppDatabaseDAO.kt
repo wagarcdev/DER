@@ -1,6 +1,8 @@
 package com.wagarcdev.der.data.local
 
 import androidx.room.*
+import com.wagarcdev.der.data.entities.ReportEntity
+import com.wagarcdev.der.data.entities.ServiceEntity
 import com.wagarcdev.der.domain.model.MyObject
 import com.wagarcdev.der.data.entities.UserEntity
 
@@ -12,6 +14,12 @@ interface AppDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createNewSimpleUser(userEntity: UserEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createNewReport(reportEntity: ReportEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createNewService(serviceEntity: ServiceEntity)
 
     @Update
     fun updateMyObject(myObject: MyObject)
@@ -33,5 +41,7 @@ interface AppDatabaseDAO {
 
     @Query("DELETE from my_object_tbl")
     fun deleteAllMyObjects()
+    
+
 
 }
