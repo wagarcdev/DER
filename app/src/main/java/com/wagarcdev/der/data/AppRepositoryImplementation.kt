@@ -39,8 +39,12 @@ class AppRepositoryImplementation(
         }
     }
 
-    override fun validateLogin(isCommonUser: Boolean, email: String, password: String): String {
-        return dao.validateLogin(isCommonUser, email)
+    override fun validateLogin(isCommonUser: Boolean, username: String): String {
+        return dao.validateLogin(isCommonUser, username)
+    }
+
+    override fun getUserId(isCommonUser: Boolean, username: String): String {
+        return dao.getUserId(isCommonUser, username)
     }
 
 }

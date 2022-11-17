@@ -54,10 +54,12 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         Log.i("TAG", user.toString() + "etapa1")
     }
 
-    suspend fun validateLogin(username: String, password: String): String {
-        val id = RoomMethods(getApplication()).validateLogin(true, username, password)
-        Log.i("TAG", id + "view model")
-        return id
+    suspend fun validateLogin(username: String): String {
+        return RoomMethods(getApplication()).validateLogin(true, username)
+    }
+
+    suspend fun getUserId(username: String): String {
+        return RoomMethods(getApplication()).getUserId(true, username)
     }
 
 }

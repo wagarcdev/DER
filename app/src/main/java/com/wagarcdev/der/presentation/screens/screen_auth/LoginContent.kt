@@ -66,11 +66,16 @@ fun LoginContent(
 
     fun logar() {
         coroutineScope.launch {
-            val id = mainViewModel.validateLogin(username = username.value, password = password.value)
-            if (id != null){
-                mainViewModel.navHostController.navigate(Screens.MainScreen.name)
+            val comingPassword = mainViewModel.validateLogin(username = username.value)
+            if (comingPassword != null){
+                if (comingPassword == password.value){
+                    //se faz necessario passar o username do usuario para a outra tela para conseguirmos recuperar o id do usuario atual logado
+                    mainViewModel.navHostController.navigate(Screens.MainScreen.name)
+                }else{
+                    Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
+                }
             }else{
-                Toast.makeText(context, "Credênciais inválidas $id", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
             }
         }
 

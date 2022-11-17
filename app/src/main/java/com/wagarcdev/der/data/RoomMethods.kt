@@ -32,10 +32,12 @@ class RoomMethods(context: Context) : GoogleRepository, SimpleUserRepository {
         }
     }
 
-    override fun validateLogin(isCommonUser: Boolean, email: String, password: String): String {
-        var id = myDao.validateLogin(isCommonUser, email)
-        Log.i("TAG", id + "room")
-        return id
+    override fun validateLogin(isCommonUser: Boolean, username: String): String {
+        return myDao.validateLogin(isCommonUser, username)
+    }
+
+    override fun getUserId(isCommonUser: Boolean, username: String): String {
+        return myDao.getUserId(isCommonUser, username)
     }
 
 }

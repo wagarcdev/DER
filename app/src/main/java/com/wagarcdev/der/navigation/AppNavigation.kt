@@ -30,7 +30,7 @@ fun AppNavigation() {
 
     NavHost(
         startDestination =
-        if (isLogged) {
+        if (false) {
             Screens.MainScreen.name
         } else {
             Screens.AuthScreen.name

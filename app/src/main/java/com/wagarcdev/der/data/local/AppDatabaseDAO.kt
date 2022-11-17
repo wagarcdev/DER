@@ -30,8 +30,11 @@ interface AppDatabaseDAO {
     @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
     fun getAllSimpleUsers(isCommonUser: Boolean): List<UserEntity>
 
-    @Query("SELECT id FROM Usuarios WHERE isCommonUser = :isCommonUser AND username = :email")
-    fun validateLogin(isCommonUser: Boolean, email: String): String
+    @Query("SELECT password FROM Usuarios WHERE isCommonUser = :isCommonUser AND username = :username")
+    fun validateLogin(isCommonUser: Boolean, username: String): String
+
+    @Query("SELECT id FROM Usuarios WHERE isCommonUser = :isCommonUser AND username = :username")
+    fun getUserId(isCommonUser: Boolean, username: String): String
 
     @Query("SELECT * from my_object_tbl where id=:id")
     fun getMyObjectById(id: Long): MyObject
@@ -41,7 +44,6 @@ interface AppDatabaseDAO {
 
     @Query("DELETE from my_object_tbl")
     fun deleteAllMyObjects()
-    
 
 
 }

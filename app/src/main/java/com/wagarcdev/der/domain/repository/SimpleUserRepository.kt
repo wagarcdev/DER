@@ -7,5 +7,6 @@ interface SimpleUserRepository {
 
     fun createNewSimpleUser(user: Users)
     fun getAllUsers():List<Users>
-    fun validateLogin(isCommonUser: Boolean, username:String, password:String) : String
+    fun validateLogin(isCommonUser: Boolean, username:String) : String
+    fun getUserId(isCommonUser: Boolean, username:String) : String
 }
