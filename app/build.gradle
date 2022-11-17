@@ -91,16 +91,16 @@ dependencies {
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.activity:activity-compose:1.6.1"
 
-    implementation "androidx.compose.animation:animation:$composeVer"
-    implementation "androidx.compose.foundation:foundation:$composeVer"
-    implementation "androidx.compose.runtime:runtime:$composeVer"
-    implementation "androidx.compose.ui:ui:$composeVer"
+    implementation "androidx.compose.animation:animation:$composeUiVer"
+    implementation "androidx.compose.foundation:foundation:$composeUiVer"
+    implementation "androidx.compose.runtime:runtime:$composeUiVer"
+    implementation "androidx.compose.ui:ui:$composeUiVer"
 
-    implementation "androidx.compose.ui:ui-tooling-preview:$composeVer"
-    debugImplementation "androidx.compose.ui:ui-tooling:$composeVer"
+    implementation "androidx.compose.ui:ui-tooling-preview:$composeUiVer"
+    debugImplementation "androidx.compose.ui:ui-tooling:$composeUiVer"
 
-    implementation "androidx.compose.material:material:$composeVer"
-    implementation "androidx.compose.material:material-icons-extended:$composeVer"
+    implementation "androidx.compose.material:material:$composeUiVer"
+    implementation "androidx.compose.material:material-icons-extended:$composeUiVer"
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVer"
     implementation "com.google.accompanist:accompanist-permissions:$accompanistVer"
