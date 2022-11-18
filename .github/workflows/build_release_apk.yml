@@ -1,4 +1,4 @@
-name: Build Debug APK
+name: Build Release APK
 
 on: workflow_dispatch
 
@@ -15,14 +15,14 @@ jobs:
         id: validate_gradle_wrapper_step
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Decode Debug Keystore
-        id: decode_debug_keystore_step
+      - name: Decode Release Keystore
+        id: decode_release_keystore_step
         env:
-          DEBUG_STORE_BASE64: ${{ secrets.DEBUG_STORE_BASE64 }}
-          DEBUG_STORE_FILE_PATH: /home/runner/work/_temp/keystore
+          RELEASE_STORE_BASE64: ${{ secrets.RELEASE_STORE_BASE64 }}
+          RELEASE_STORE_FILE_PATH: /home/runner/work/_temp/keystore
         run: |
-          mkdir $DEBUG_STORE_FILE_PATH
-          echo $DEBUG_STORE_BASE64 | base64 -di > $DEBUG_STORE_FILE_PATH/${{ secrets.DEBUG_STORE_FILE_NAME }}
+          mkdir $RELEASE_STORE_FILE_PATH
+          echo $RELEASE_STORE_BASE64 | base64 -di > $RELEASE_STORE_FILE_PATH/${{ secrets.RELEASE_STORE_FILE_NAME }}
 
       - name: Setup JDK
         id: setup_jdk_step
@@ -42,20 +42,20 @@ jobs:
         id: permission_gradlew_step
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        id: build_debug_apk_step
+      - name: Build Release APK
+        id: build_release_apk_step
         env:
-          DEBUG_STORE_FILE: /home/runner/work/_temp/keystore/${{ secrets.DEBUG_STORE_FILE_NAME }}
-          DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
-          DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
-          DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
-          # Workaround to avoid exception with signing on release build.
-          RELEASE_STORE_FILE: unknow-key
-        run: ./gradlew assembleDebug --stacktrace
+          RELEASE_STORE_FILE: /home/runner/work/_temp/keystore/${{ secrets.RELEASE_STORE_FILE_NAME }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          # Workaround to avoid exception with signing on debug build.
+          DEBUG_STORE_FILE: unknow-key
+        run: ./gradlew assembleRelease --stacktrace
 
       - name: Upload Artifact
         id: upload_artifact_step
         uses: actions/upload-artifact@v3
         with:
-          name: Debug Artifacts
+          name: Release Artifacts
           path: app/build/outputs/

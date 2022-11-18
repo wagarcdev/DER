@@ -1,4 +1,4 @@
-name: Build and Unit Test Checkout
+name: Debug Unit Test Checkout
 
 on:
   pull_request:
@@ -13,6 +13,19 @@ jobs:
       - name: Checkout
         id: checkout_step
         uses: actions/checkout@v3
+
+      - name: Validate Gradle Wrapper
+        id: validate_gradle_wrapper_step
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Decode Debug Keystore
+        id: decode_debug_keystore_step
+        env:
+          DEBUG_STORE_BASE64: ${{ secrets.DEBUG_STORE_BASE64 }}
+          DEBUG_STORE_FILE_PATH: /home/runner/work/_temp/keystore
+        run: |
+          mkdir $DEBUG_STORE_FILE_PATH
+          echo $DEBUG_STORE_BASE64 | base64 -di > $DEBUG_STORE_FILE_PATH/${{ secrets.DEBUG_STORE_FILE_NAME }}
 
       - name: Setup JDK
         id: setup_jdk_step
@@ -32,8 +45,15 @@ jobs:
         id: permission_gradlew_step
         run: chmod +x gradlew
 
-      - name: Run Unit Tests
-        id: run_unit_tests_step
+      - name: Run Debug Unit Tests
+        id: run_debug_unit_tests_step
+        env:
+          DEBUG_STORE_FILE: /home/runner/work/_temp/keystore/${{ secrets.DEBUG_STORE_FILE_NAME }}
+          DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
+          DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+          DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
+          # Workaround to avoid exception with signing on release build.
+          RELEASE_STORE_FILE: unknow-key
         run: ./gradlew testDebugUnitTest --stacktrace
 
       - name: Upload Test Reports
