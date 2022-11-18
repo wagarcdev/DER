@@ -26,21 +26,46 @@ android {
     }
 
     signingConfigs {
-        def signingProperties = new Properties()
-        signingProperties.load(new FileInputStream(rootProject.file("signing.properties")))
-
         debug {
-            storeFile = file("$rootDir/${signingProperties['DEBUG_KEYSTORE_FILE_PATH']}")
-            storePassword signingProperties["DEBUG_KEYSTORE_PASSWORD"]
-            keyAlias signingProperties["DEBUG_KEY_ALIAS"]
-            keyPassword signingProperties["DEBUG_KEY_PASSWORD"]
+            def debugStoreFile = System.getenv("DEBUG_STORE_FILE")
+            def debugStorePassword = System.getenv("DEBUG_STORE_PASSWORD")
+            def debugKeyAlias = System.getenv("DEBUG_KEY_ALIAS")
+            def debugKeyPassword = System.getenv("DEBUG_KEY_PASSWORD")
+
+            if (debugStoreFile == null) {
+                def signingProperties = localSigningProperties()
+
+                debugStoreFile = "$rootDir/${signingProperties["DEBUG_STORE_FILE"]}"
+                debugStorePassword = signingProperties["DEBUG_STORE_PASSWORD"]
+                debugKeyAlias = signingProperties["DEBUG_KEY_ALIAS"]
+                debugKeyPassword = signingProperties["DEBUG_KEY_PASSWORD"]
+            }
+
+            storeFile = file(debugStoreFile)
+            storePassword = debugStorePassword
+            keyAlias = debugKeyAlias
+            keyPassword = debugKeyPassword
         }
 
-        release { // using debug key temporary while we don't have a release keystore
-            storeFile = file("$rootDir/${signingProperties['DEBUG_KEYSTORE_FILE_PATH']}")
-            storePassword signingProperties["DEBUG_KEYSTORE_PASSWORD"]
-            keyAlias signingProperties["DEBUG_KEY_ALIAS"]
-            keyPassword signingProperties["DEBUG_KEY_PASSWORD"]
+        release {
+            def releaseStoreFile = System.getenv("RELEASE_STORE_FILE")
+            def releaseStorePassword = System.getenv("RELEASE_STORE_PASSWORD")
+            def releaseKeyAlias = System.getenv("RELEASE_KEY_ALIAS")
+            def releaseKeyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+
+            if (releaseStoreFile == null) {
+                def signingProperties = localSigningProperties()
+
+                releaseStoreFile = "$rootDir/${signingProperties["RELEASE_STORE_FILE"]}"
+                releaseStorePassword = signingProperties["RELEASE_STORE_PASSWORD"]
+                releaseKeyAlias = signingProperties["RELEASE_KEY_ALIAS"]
+                releaseKeyPassword = signingProperties["RELEASE_KEY_PASSWORD"]
+            }
+
+            storeFile = file(releaseStoreFile)
+            storePassword = releaseStorePassword
+            keyAlias = releaseKeyAlias
+            keyPassword = releaseKeyPassword
         }
     }
 
@@ -139,4 +164,14 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVer"
 
+}
+
+private def localSigningProperties() {
+    def signingProperties = project.rootProject.file("signing.properties")
+    if (!signingProperties.exists())
+        throw new GradleException("Missing signing.properties")
+
+    Properties properties = new Properties()
+    properties.load(signingProperties.newDataInputStream())
+    return properties
 }
