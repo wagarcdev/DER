@@ -11,6 +11,19 @@ jobs:
         id: checkout_step
         uses: actions/checkout@v3
 
+      - name: Validate Gradle Wrapper
+        id: validate_gradle_wrapper_step
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Decode Debug Keystore
+        id: decode_debug_keystore_step
+        env:
+          DEBUG_STORE_BASE64: ${{ secrets.DEBUG_STORE_BASE64 }}
+          DEBUG_STORE_FILE_PATH: /home/runner/work/_temp/keystore
+        run: |
+          mkdir $DEBUG_STORE_FILE_PATH
+          echo $DEBUG_STORE_BASE64 | base64 -di > $DEBUG_STORE_FILE_PATH/${{ secrets.DEBUG_STORE_FILE_NAME }}
+
       - name: Setup JDK
         id: setup_jdk_step
         uses: actions/setup-java@v3
@@ -25,12 +38,19 @@ jobs:
       # Gradle files created from Windows may require permission, two options to fix:
       # first option is run the following command on your project: git update-index --chmod=+x gradlew
       # second option is to create a step to run every time along with the workflow:
-      # - name: Permission to Gradlew
-      #   id: permission_gradlew_step
-      #   run: chmod +x gradlew
+      - name: Permission to Gradlew
+        id: permission_gradlew_step
+        run: chmod +x gradlew
 
       - name: Build Debug APK
         id: build_debug_apk_step
+        env:
+          DEBUG_STORE_FILE: /home/runner/work/_temp/keystore/${{ secrets.DEBUG_STORE_FILE_NAME }}
+          DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
+          DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+          DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
+          # Workaround to avoid exception with signing on release build.
+          RELEASE_STORE_FILE: unknow-key
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload Artifact
