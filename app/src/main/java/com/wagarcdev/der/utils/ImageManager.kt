@@ -45,11 +45,26 @@ class ImageManagerImpl @Inject constructor(
     // TODO(decide the image path)
     private val imagesPath = "${context.filesDir}/images"
 
-    private fun imageNameWithExtensionFromPath(path: String): String {
-        return imageNameWithExtension(name = path.substringAfterLast(delimiter = "/"))
+    /**
+     * Formats a string, removing the char sequence before the last occurrence of "/".
+     *
+     * @param path a string to be formatted.
+     *
+     * @return the formatted string.
+     */
+    private fun imageNameFromPath(path: String): String {
+        return imageNameWithPngExtension(name = path.substringAfterLast(delimiter = "/"))
     }
 
-    private fun imageNameWithExtension(name: String): String {
+    /**
+     * Formats a string, removing the char sequence after last occurrence of "."
+     * and add ".png" in this place.
+     *
+     * @param name a string to be formated.
+     *
+     * @return the formatted string.
+     */
+    private fun imageNameWithPngExtension(name: String): String {
         return name.substringBeforeLast(delimiter = ".") + ".png"
     }
 
@@ -128,11 +143,11 @@ class ImageManagerImpl @Inject constructor(
 
             val bitmap = uri.getBitmap().run { resize() }
 
-            val imageNameWithExtension =
-                if (fileName.isNotBlank()) imageNameWithExtension(name = fileName)
-                else imageNameWithExtensionFromPath(path = uri.pathSegments.last())
+            val imageNameWithPngExtension =
+                if (fileName.isNotBlank()) imageNameWithPngExtension(name = fileName)
+                else imageNameFromPath(path = uri.pathSegments.last())
 
-            val file = File(imagesFilePath, imageNameWithExtension)
+            val file = File(imagesFilePath, imageNameWithPngExtension)
 
             bitmap.outputImage(file = file)
 
