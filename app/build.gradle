@@ -129,8 +129,8 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVer"
     implementation "com.google.accompanist:accompanist-permissions:$accompanistVer"
-    implementation "com.google.accompanist:accompanist-pager:$accompanistVer"
-    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanistVer"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanistVer"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistVer"
 
     implementation "com.google.dagger:hilt-android:$hiltVer"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVer"
