@@ -96,14 +96,12 @@ fun LoginContent(
                     Toast.makeText(context, "Autenticação falhou", Toast.LENGTH_SHORT)
                         .show()
                 } else {
-                    coroutineScope.launch {
-                        mainViewModel.signIn(
-                            id = account.id!!,
-                            email = account.email!!,
-                            displayName = account.displayName!!,
-                            photoUrl = account.photoUrl!!.toString()
-                        )
-                    }
+                    mainViewModel.signIn(
+                        id = account.id!!,
+                        email = account.email!!,
+                        displayName = account.displayName!!,
+                        photoUrl = account.photoUrl!!.toString()
+                    )
                     val isReadyToGetTheUser = signInGoogleViewModel.checkIfIsLogged(context)
                     if (isReadyToGetTheUser) {
                         mainViewModel.navHostController
