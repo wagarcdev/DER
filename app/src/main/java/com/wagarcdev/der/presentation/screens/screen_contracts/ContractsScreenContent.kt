@@ -22,6 +22,7 @@ import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.widgets.ContractCard
 import com.wagarcdev.der.presentation.ui.widgets.SearchBarRow
+import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")
 @OptIn(ExperimentalFoundationApi::class)
@@ -37,9 +38,13 @@ fun ContractsScreenContent(
 
     //Recuperando dados do usuario
     val googleUser = signInGoogleViewModel.user.value
-    if (googleUser == null){
-        name.value = "Usuario do room"
-    }else{
+    if (googleUser == null) {
+        coroutineScope.launch {
+            val userId = mainViewModel.getUserIdFromDatastore()
+            val user = mainViewModel.getUserById(userId.toString())
+            name.value = user.username.toString()
+        }
+    } else {
         name.value = googleUser.displayName.toString()
     }
 

@@ -3,8 +3,8 @@ package com.wagarcdev.der.data.local
 import androidx.room.*
 import com.wagarcdev.der.data.entities.ReportEntity
 import com.wagarcdev.der.data.entities.ServiceEntity
-import com.wagarcdev.der.domain.model.MyObject
 import com.wagarcdev.der.data.entities.UserEntity
+import com.wagarcdev.der.domain.model.MyObject
 
 @Dao
 interface AppDatabaseDAO {
@@ -35,6 +35,9 @@ interface AppDatabaseDAO {
 
     @Query("SELECT id FROM Usuarios WHERE isCommonUser = :isCommonUser AND username = :username")
     fun getUserId(isCommonUser: Boolean, username: String): String
+
+    @Query("SELECT * FROM Usuarios WHERE id =:id")
+    fun getUserById(id: String) : UserEntity
 
     @Query("SELECT * from my_object_tbl where id=:id")
     fun getMyObjectById(id: Long): MyObject

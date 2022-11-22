@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.wagarcdev.der.data.RoomMethods
+import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.domain.model.Users
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -16,11 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
+class MainViewModel @Inject constructor(application: Application, appPreferences: AppPreferences) :
+    AndroidViewModel(application) {
 
     lateinit var navHostController: NavHostController
     private val _users: MutableStateFlow<Users?> = MutableStateFlow(null)
     val users: StateFlow<Users?> = _users
+    private val _appPreference = appPreferences
+
 
     private val _simpleUser: MutableStateFlow<Users?> = MutableStateFlow(null)
     private val simpleUser: StateFlow<Users?> = _simpleUser
@@ -35,6 +39,7 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         }
     }
 
+
     suspend fun signIn(
         id: String,
         email: String,
@@ -47,6 +52,20 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         return users
     }
 
+    /**
+     * method to save userId in datastore
+     */
+    suspend fun changeUserId(userId: String) {
+        _appPreference.changeUserId(userId)
+    }
+
+    /**
+     * Method to getUserId from datastore
+     */
+    suspend fun getUserIdFromDatastore(): String? {
+        return _appPreference.getUserId()
+    }
+
 
     suspend fun createNewSimpleUser(user: Users) {
         _simpleUser.value = user
@@ -56,6 +75,14 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
 
     suspend fun validateLogin(username: String): String {
         return RoomMethods(getApplication()).validateLogin(true, username)
+    }
+
+    /**
+     * method to get user by id
+     * @param id userId retrived by method getUserIdFromDatastore
+     */
+    suspend fun getUserById(id: String): Users {
+        return RoomMethods(getApplication()).getUserById(id)
     }
 
     suspend fun getUserId(username: String): String {

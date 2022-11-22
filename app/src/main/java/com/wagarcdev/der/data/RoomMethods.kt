@@ -40,4 +40,8 @@ class RoomMethods(context: Context) : GoogleRepository, SimpleUserRepository {
         return myDao.getUserId(isCommonUser, username)
     }
 
+    override fun getUserById(id: String): Users {
+        return myDao.getUserById(id).fromEntityToModel()
+    }
+
 }
