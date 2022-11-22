@@ -1,14 +1,9 @@
 package com.wagarcdev.der.presentation.screens.screen_create_report
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -23,6 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.wagarcdev.der.presentation.screens.screen_create_report.navigation.StepRoute
+import com.wagarcdev.der.presentation.screens.screen_create_report.navigation.composeSlideAnimateScreen
+import com.wagarcdev.der.presentation.screens.screen_create_report.navigation.navigate
+import com.wagarcdev.der.presentation.screens.screen_create_report.navigation.navigateBackWithFallback
+import com.wagarcdev.der.presentation.screens.screen_create_report.steps.FirstStep
+import com.wagarcdev.der.presentation.screens.screen_create_report.steps.SecondStep
 
 /**
  * Composes the Create Report screen.
@@ -33,7 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
  * @param viewModel the [CreateReportViewModel] for this screen. Default instance of view model
  * is created by [hiltViewModel].
  */
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CreateReportScreen(
     modifier: Modifier = Modifier,
@@ -41,7 +44,7 @@ fun CreateReportScreen(
     viewModel: CreateReportViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
-    val scrollState = rememberScrollState()
+    val stepsNavController = rememberAnimatedNavController()
 
     BackHandler(onBack = onBack)
 
@@ -61,29 +64,50 @@ fun CreateReportScreen(
             )
         }
     ) { innerPadding ->
-        Column(
+        AnimatedNavHost(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues = innerPadding)
-                .verticalScroll(state = scrollState)
+                .padding(paddingValues = innerPadding),
+            navController = stepsNavController,
+            startDestination = StepRoute.FirstStep.route
         ) {
-            ReportForm(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                text = screenState.text,
-                textError = screenState.textError,
-                changeText = { viewModel.changeText(value = it) }
-            )
+            composeSlideAnimateScreen(route = StepRoute.FirstStep.route) {
+                FirstStep(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(all = 16.dp),
+                    text = screenState.text,
+                    textError = screenState.textError,
+                    changeText = { viewModel.changeText(value = it) },
+                    onBack = onBack,
+                    onNext = {
+                        stepsNavController.navigate(
+                            destinationRoute = StepRoute.SecondStep.route
+                        )
+                    }
+                )
+            }
 
-            Spacer(modifier = Modifier.height(height = 16.dp))
-
-            ReportImages(
-                modifier = Modifier.fillMaxWidth(),
-                imagesBitmap = screenState.imagesBitmap,
-                onAddImage = { viewModel.addImage(uri = it) },
-                onRemoveImage = { viewModel.removeImage(index = it) }
-            )
+            composeSlideAnimateScreen(route = StepRoute.SecondStep.route) {
+                SecondStep(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(all = 16.dp),
+                    imagesBitmap = screenState.imagesBitmap,
+                    onAddImage = { viewModel.addImage(uri = it) },
+                    onRemoveImage = { viewModel.removeImage(index = it) },
+                    onBack = onBack,
+                    onPrevious = {
+                        stepsNavController.navigateBackWithFallback(
+                            currentRoute = StepRoute.SecondStep.route,
+                            destinationRoute = StepRoute.SecondStep.route
+                        )
+                    },
+                    onFinish = {
+                        // TODO
+                    }
+                )
+            }
         }
     }
 }
