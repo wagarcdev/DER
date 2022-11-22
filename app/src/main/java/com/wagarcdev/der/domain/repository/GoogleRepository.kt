@@ -4,7 +4,7 @@ import com.wagarcdev.der.domain.model.User
 
 // TODO(GIVE A BETTER NAME)
 interface GoogleRepository {
-    fun createNewUserWithSignWithGoogle(users: User)
+    suspend fun createNewUserWithSignWithGoogle(users: User)
 
-    fun getAllGoogleUsers(): List<User>
+    suspend fun getAllGoogleUsers(): List<User>
 }

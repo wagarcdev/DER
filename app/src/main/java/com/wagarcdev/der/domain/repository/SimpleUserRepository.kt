@@ -4,13 +4,13 @@ import com.wagarcdev.der.domain.model.User
 
 // TODO(GIVE A BETTER NAME)
 interface SimpleUserRepository {
-    fun createNewSimpleUser(user: User)
+    suspend fun createNewSimpleUser(user: User)
 
-    fun getAllUsers(): List<User>
+    suspend fun getAllUsers(): List<User>
 
-    fun validateLogin(isCommonUser: Boolean, username: String): String
+    suspend fun validateLogin(isCommonUser: Boolean, username: String): String
 
-    fun getUserId(isCommonUser: Boolean, username: String): String
+    suspend fun getUserId(isCommonUser: Boolean, username: String): String
 
-    fun getUserById(id: String): User
+    suspend fun getUserById(id: String): User
 }
