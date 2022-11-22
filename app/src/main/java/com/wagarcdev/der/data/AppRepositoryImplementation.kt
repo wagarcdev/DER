@@ -1,5 +1,6 @@
 package com.wagarcdev.der.data
 
+import com.google.firebase.firestore.auth.User
 import com.wagarcdev.der.domain.model.MyObject
 import com.wagarcdev.der.data.entities.UserEntity
 import com.wagarcdev.der.data.local.AppDatabaseDAO
@@ -45,6 +46,10 @@ class AppRepositoryImplementation(
 
     override fun getUserId(isCommonUser: Boolean, username: String): String {
         return dao.getUserId(isCommonUser, username)
+    }
+
+    override fun getUserById(id: String) : Users {
+        return dao.getUserById(id).fromEntityToModel()
     }
 
 }

@@ -32,12 +32,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.util.CollectionUtils.listOf
+import com.google.firebase.firestore.remote.Datastore
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
+import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
@@ -71,6 +76,7 @@ fun LoginContent(
                 if (comingPassword == password.value){
                     //se faz necessario passar o id do usuario para a outra tela para conseguirmos recuperar os dados usuario atual logado
                     val userId = mainViewModel.getUserId(username.value)
+                    mainViewModel.changeUserId(userId)
                     mainViewModel.navHostController.navigate(Screens.MainScreen.name)
                 }else{
                     Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
