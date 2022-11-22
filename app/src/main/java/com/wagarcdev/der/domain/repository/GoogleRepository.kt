@@ -1,9 +1,10 @@
 package com.wagarcdev.der.domain.repository
 
-import com.wagarcdev.der.domain.model.Users
+import com.wagarcdev.der.domain.model.User
 
+// TODO(GIVE A BETTER NAME)
 interface GoogleRepository {
+    fun createNewUserWithSignWithGoogle(users: User)
 
-    fun createNewUserWithSignWithGoogle(users: Users)
-    fun getAllGoogleUsers():List<Users>
+    fun getAllGoogleUsers(): List<User>
 }

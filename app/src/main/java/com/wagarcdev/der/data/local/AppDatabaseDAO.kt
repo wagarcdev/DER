@@ -4,11 +4,9 @@ import androidx.room.*
 import com.wagarcdev.der.data.entities.ReportEntity
 import com.wagarcdev.der.data.entities.ServiceEntity
 import com.wagarcdev.der.data.entities.UserEntity
-import com.wagarcdev.der.domain.model.MyObject
 
 @Dao
 interface AppDatabaseDAO {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createNewUserWithSignWithGoogle(userEntity: UserEntity)
 
@@ -20,9 +18,6 @@ interface AppDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun createNewService(serviceEntity: ServiceEntity)
-
-    @Update
-    fun updateMyObject(myObject: MyObject)
 
     @Query("SELECT * from Usuarios WHERE isCommonUser = :isCommonUser")
     fun getAllGoogleUsers(isCommonUser: Boolean): List<UserEntity>
@@ -37,16 +32,5 @@ interface AppDatabaseDAO {
     fun getUserId(isCommonUser: Boolean, username: String): String
 
     @Query("SELECT * FROM Usuarios WHERE id =:id")
-    fun getUserById(id: String) : UserEntity
-
-    @Query("SELECT * from my_object_tbl where id=:id")
-    fun getMyObjectById(id: Long): MyObject
-
-    @Query("DELETE  from my_object_tbl where id=:id")
-    fun deleteMyObjectById(id: Long)
-
-    @Query("DELETE from my_object_tbl")
-    fun deleteAllMyObjects()
-
-
+    fun getUserById(id: String): UserEntity
 }
