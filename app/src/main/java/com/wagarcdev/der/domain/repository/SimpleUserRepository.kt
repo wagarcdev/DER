@@ -9,4 +9,5 @@ interface SimpleUserRepository {
     fun getAllUsers():List<Users>
     fun validateLogin(isCommonUser: Boolean, username:String) : String
     fun getUserId(isCommonUser: Boolean, username:String) : String
+    fun getUserById(id:String) : Users
 }
