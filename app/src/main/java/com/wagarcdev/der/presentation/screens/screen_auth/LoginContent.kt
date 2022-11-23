@@ -10,10 +10,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +40,7 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
+import com.wagarcdev.der.components.InputField
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
@@ -67,15 +70,15 @@ fun LoginContent(
     fun logar() {
         coroutineScope.launch {
             val comingPassword = mainViewModel.validateLogin(username = username.value)
-            if (comingPassword != null){
-                if (comingPassword == password.value){
+            if (comingPassword != null) {
+                if (comingPassword == password.value) {
                     //se faz necessario passar o id do usuario para a outra tela para conseguirmos recuperar os dados usuario atual logado
                     val userId = mainViewModel.getUserId(username.value)
                     mainViewModel.navHostController.navigate(Screens.MainScreen.name)
-                }else{
+                } else {
                     Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
                 }
-            }else{
+            } else {
                 Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
             }
         }
@@ -195,48 +198,34 @@ fun LoginContent(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            OutlinedTextField(
-                                value = username.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        username.value = it
-                                    }
-                                },
-                                label = { Text(text = "Usuário", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                            InputField(
+                                valueState = username,
+                                labelId = "Usuário",
+                                enabled = true,
+                                isSingleLine = true,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Person,
+                                        "Usuário"
+                                    )
+                                }
                             )
 
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            OutlinedTextField(
-                                value = password.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        password.value = it
-                                    }
+                            InputField(
+                                valueState = password,
+                                labelId = "Senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Key,
+                                        "Senha"
+                                    )
                                 },
-                                label = { Text(text = "Senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                                keyboardType = KeyboardType.Password,
+                                isPassword = true,
+                                imeAction = ImeAction.Done
                             )
-
-
-                            Spacer(modifier = Modifier.height(4.dp))
 
                             Row(
                                 modifier = Modifier

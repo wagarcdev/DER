@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
+import com.wagarcdev.der.components.InputField
 import com.wagarcdev.der.domain.model.Users
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
@@ -164,108 +165,16 @@ fun RegisterContent(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            OutlinedTextField(
-                                value = fullName.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        fullName.value = it
-                                    }
-                                },
-                                label = { Text(text = "Nome completo", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
-                            )
+                            InputField(valueState = fullName, labelId = "Nome completo", enabled = true, isSingleLine = true)
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                            InputField(valueState = email, labelId = "E-mail", enabled = true, isSingleLine = true)
 
-                            OutlinedTextField(
-                                value = email.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        email.value = it
-                                    }
-                                },
-                                label = { Text(text = "E-mail", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
-                            )
+                            InputField(valueState = username, labelId = "Usuário", enabled = true, isSingleLine = true)
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                            InputField(valueState = password, labelId = "Senha", enabled = true, isSingleLine = true, isPassword = true)
 
-                            OutlinedTextField(
-                                value = username.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        username.value = it
-                                    }
-                                },
-                                label = { Text(text = "Usuário", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
-                            )
+                            InputField(valueState = passwordConfirm, labelId = "Repita a senha", enabled = true, isSingleLine = true, isPassword = true)
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = password.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        password.value = it
-                                    }
-                                },
-                                label = { Text(text = "Senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
-                            )
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = passwordConfirm.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        passwordConfirm.value = it
-                                    }
-                                },
-                                label = { Text(text = "Repita a senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
-                            )
                         }
                     }
                 }
