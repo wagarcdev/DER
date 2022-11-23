@@ -46,7 +46,7 @@ import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.components.InputField
-import com.wagarcdev.der.data.local.AppPreference
+import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*

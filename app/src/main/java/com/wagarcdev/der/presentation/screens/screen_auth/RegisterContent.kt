@@ -32,7 +32,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.components.InputField
-import com.wagarcdev.der.domain.model.Users
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
