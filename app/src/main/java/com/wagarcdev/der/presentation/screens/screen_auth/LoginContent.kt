@@ -1,6 +1,5 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
@@ -10,7 +9,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
@@ -48,7 +49,6 @@ import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.widgets.SignInButton
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun LoginContent(
     mainViewModel: MainViewModel,
@@ -62,11 +62,9 @@ fun LoginContent(
     val password = remember { mutableStateOf("") }
     var isLoading = remember { mutableStateOf(false) }
 
-
     val signInRequestCode = 0
     val context = LocalContext.current
-
-
+    
     fun logar() {
         coroutineScope.launch {
             val comingPassword = mainViewModel.validateLogin(username = username.value)
@@ -113,8 +111,6 @@ fun LoginContent(
                     .show()
             }
         }
-
-
 
     LazyColumn(
         modifier = Modifier

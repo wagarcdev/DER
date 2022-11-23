@@ -52,7 +52,15 @@ fun SearchBarRow(widthFloat: Float) {
                     .fillMaxWidth(0.8f),
                 value = search.value,
                 onValueChange = { search.value = it },
-
+                trailingIcon = {
+                    Icon(
+                        modifier = Modifier
+                            .clickable { search.value = "" },
+                        painter = painterResource(com.wagarcdev.der.R.drawable.ic_cancel),
+                        contentDescription = "search filters icon",
+                        tint = Color.DarkGray
+                    )
+                },
                 label = {
                     Text(
                         text = "procurar contrato",
