@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Colors
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -21,10 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,18 +40,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.util.CollectionUtils.listOf
-import com.google.firebase.firestore.remote.Datastore
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.components.InputField
-import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
@@ -69,7 +69,7 @@ fun LoginContent(
 
     val signInRequestCode = 0
     val context = LocalContext.current
-    
+
     fun logar() {
         coroutineScope.launch {
             val comingPassword = mainViewModel.validateLogin(username = username.value)
@@ -198,11 +198,30 @@ fun LoginContent(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+
+                            val isEmailError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isPasswordError = remember {
+                                mutableStateOf(false)
+                            }
+
+                            val localFocusManager = LocalFocusManager.current
+                            val focusRequester = FocusRequester()
+
                             InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isEmailError.value = false
+                                    }
+                                },
                                 valueState = username,
                                 labelId = "Usuário",
                                 enabled = true,
                                 isSingleLine = true,
+                                isError = isEmailError,
+                                errorMessage = "Preencha o nome de usuario",
+                                focusRequester = focusRequester,
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Rounded.Person,
@@ -212,10 +231,18 @@ fun LoginContent(
                             )
 
                             InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isPasswordError.value = false
+                                    }
+                                },
                                 valueState = password,
                                 labelId = "Senha",
                                 enabled = true,
                                 isSingleLine = true,
+                                focusRequester = focusRequester,
+                                isError = isPasswordError,
+                                errorMessage = "Preencha a senha",
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Rounded.Key,
@@ -264,7 +291,15 @@ fun LoginContent(
                                     .height(48.dp)
                                     .width(132.dp)
                                     .clickable {
-                                        logar()
+                                        if (username.value.isEmpty()) {
+                                            isEmailError.value = true
+                                            localFocusManager.clearFocus()
+                                        }
+                                        else if(password.value.isEmpty()) {
+                                            isPasswordError.value = true
+                                            localFocusManager.clearFocus()
+                                        }
+                                        else logar()
                                     }
                                     .clip(RoundedCornerShape(15.dp))
                                     .shadow(2.dp)
