@@ -8,19 +8,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -69,7 +70,16 @@ fun RegisterContent(
             if (isEqual) {
                 coroutineScope.launch {
                     val simpleUser =
-                        User(System.currentTimeMillis().toString(), email.value, username.value, fullName.value, fullName.value, "", password.value, true)
+                        User(
+                            System.currentTimeMillis().toString(),
+                            email.value,
+                            username.value,
+                            fullName.value,
+                            fullName.value,
+                            "",
+                            password.value,
+                            true
+                        )
                     mainViewModel.createNewSimpleUser(simpleUser)
                 }
 
@@ -89,7 +99,6 @@ fun RegisterContent(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
 
         item {
             Row(
@@ -141,7 +150,6 @@ fun RegisterContent(
             Spacer(modifier = Modifier.height(32.dp))
 
         }
-
         item {
             Box(contentAlignment = Alignment.Center) {
 
@@ -164,16 +172,85 @@ fun RegisterContent(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            val isFullnameError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isEmailError = remember {
+                                mutableStateOf(false)
+                            }
 
-                            InputField(valueState = fullName, labelId = "Nome completo", enabled = true, isSingleLine = true)
+                            val isUsernameError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isPasswordError = remember {
+                                mutableStateOf(false)
+                            }
 
-                            InputField(valueState = email, labelId = "E-mail", enabled = true, isSingleLine = true)
+                            val isPasswordConfirmError = remember {
+                                mutableStateOf(false)
+                            }
 
-                            InputField(valueState = username, labelId = "Usuário", enabled = true, isSingleLine = true)
 
-                            InputField(valueState = password, labelId = "Senha", enabled = true, isSingleLine = true, isPassword = true)
+                            val localFocusManager = LocalFocusManager.current
+                            val focusRequester = FocusRequester()
 
-                            InputField(valueState = passwordConfirm, labelId = "Repita a senha", enabled = true, isSingleLine = true, isPassword = true)
+
+                            InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isFullnameError.value = false
+                                    }
+                                },
+                                valueState = fullName,
+                                labelId = "Nome completo",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isFullnameError,
+                                errorMessage = "Preencha seu nome completo",
+                                focusRequester = focusRequester
+                            )
+
+                            InputField(
+                                valueState = email,
+                                labelId = "E-mail",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isEmailError,
+                                errorMessage = "Preencha o email",
+                                focusRequester = focusRequester
+                            )
+
+                            InputField(
+                                valueState = username,
+                                labelId = "Usuário",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isUsernameError,
+                                errorMessage = "Preencha o nome de usuario",
+                                focusRequester = focusRequester
+                            )
+
+                            InputField(
+                                valueState = password,
+                                labelId = "Senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                isPassword = true,
+                                isError = isPasswordError,
+                                errorMessage = "Preencha a senha",
+                                focusRequester = focusRequester
+                            )
+
+                            InputField(
+                                valueState = passwordConfirm,
+                                labelId = "Repita a senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                isPassword = true,
+                                isError = isPasswordConfirmError,
+                                errorMessage = "Preencha a confirmação da senha",
+                                focusRequester = focusRequester
+                            )
 
                         }
                     }
@@ -196,9 +273,11 @@ fun RegisterContent(
                         .height(48.dp)
                         .width(132.dp)
                         .clickable {
+
                             createSimpleUser()
                             mainViewModel.navHostController
                                 .navigate(Screens.AuthScreen.name)
+
                         }
                         .clip(RoundedCornerShape(15.dp))
                         .shadow(2.dp)
@@ -276,13 +355,6 @@ fun RegisterContent(
         }
 
 
-
-
-
-
-
-
-
     }
 }
 
@@ -296,7 +368,9 @@ fun RegisterScreenContentPreview() {
         mainViewModel = mainViewModel,
         wannaRegister = remember { mutableStateOf(false) }
     )
+
 }
+
 
 
 

@@ -10,6 +10,7 @@ import javax.inject.Inject
 class GoogleRepositoryImpl @Inject constructor(
     private val dao: AppDatabaseDAO
 ) : GoogleRepository {
+
     override suspend  fun createNewUserWithSignWithGoogle(users: User) {
         dao.createNewUserWithSignWithGoogle(UserEntity.fromModelToEntity(users))
     }
