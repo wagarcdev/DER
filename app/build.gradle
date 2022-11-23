@@ -129,8 +129,8 @@ dependencies {
 
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistVer"
     implementation "com.google.accompanist:accompanist-permissions:$accompanistVer"
-    implementation "com.google.accompanist:accompanist-pager:$accompanistVer"
-    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanistVer"
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanistVer"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanistVer"
 
     implementation "com.google.dagger:hilt-android:$hiltVer"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVer"
@@ -149,7 +149,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVer"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesVer"
 
-    implementation "com.google.android.gms:play-services-auth:20.3.0"
+    implementation "com.google.android.gms:play-services-auth:20.4.0"
 
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 

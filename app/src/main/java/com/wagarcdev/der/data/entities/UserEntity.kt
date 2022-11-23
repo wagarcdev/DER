@@ -2,7 +2,7 @@ package com.wagarcdev.der.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.wagarcdev.der.domain.model.Users
+import com.wagarcdev.der.domain.model.User
 
 @Entity(tableName = "Usuarios")
 class UserEntity(
@@ -17,7 +17,7 @@ class UserEntity(
     val isCommonUser: Boolean
 ) {
     companion object {
-        fun fromModelToEntity(simpleUser: Users) = UserEntity(
+        fun fromModelToEntity(simpleUser: User) = UserEntity(
             simpleUser.id,
             simpleUser.email,
             simpleUser.username,
@@ -30,5 +30,5 @@ class UserEntity(
     }
 
     fun fromEntityToModel() =
-        Users(id, email, username, fullname, displayName, photoUrl, password, isCommonUser)
+        User(id, email, username, fullname, displayName, photoUrl, password, isCommonUser)
 }
