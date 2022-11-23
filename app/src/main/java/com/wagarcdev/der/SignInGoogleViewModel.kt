@@ -14,7 +14,6 @@ class SignInGoogleViewModel @Inject constructor(application: Application) : Andr
     private var _userState = MutableLiveData<Users?>()
     val user: LiveData<Users?> = _userState
 
-
     fun checkIfIsLogged(context: Context): Boolean {
         val gsa = GoogleSignIn.getLastSignedInAccount(context)
         return if (gsa != null) {
@@ -35,7 +34,4 @@ class SignInGoogleViewModel @Inject constructor(application: Application) : Andr
             false
         }
     }
-
-
-
 }
