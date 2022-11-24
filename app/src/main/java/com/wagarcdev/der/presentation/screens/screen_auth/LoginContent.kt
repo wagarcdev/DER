@@ -44,12 +44,10 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
-import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
+import com.wagarcdev.der.presentation.ui.components.*
 import com.wagarcdev.der.presentation.ui.theme.*
-import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
-import com.wagarcdev.der.presentation.ui.components.SignInButton
 import kotlinx.coroutines.launch
 
 @Composable
@@ -197,6 +195,11 @@ fun LoginContent(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
+                            val validState = remember(username.value, password.value) {
+                                username.value.trim().isNotEmpty() && password.value.trim()
+                                    .isNotEmpty()
+                            }
+
                             val isEmailError = remember {
                                 mutableStateOf(false)
                             }
@@ -284,52 +287,10 @@ fun LoginContent(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             //Button "Entrar"
-                            Card(
-                                modifier = Modifier
-                                    .height(48.dp)
-                                    .width(132.dp)
-                                    .clickable {
-                                        if (username.value.isEmpty()) {
-                                            isEmailError.value = true
-                                            localFocusManager.clearFocus()
-                                        }
-                                        else if(password.value.isEmpty()) {
-                                            isPasswordError.value = true
-                                            localFocusManager.clearFocus()
-                                        }
-                                        else logar()
-                                    }
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .shadow(2.dp)
-                                    .background(
-                                        Brush
-                                            .verticalGradient(
-                                                listOf(
-                                                    DER_yellow_light_extra,
-                                                    DER_yellow_light,
-                                                    DER_yellow,
-                                                    DER_yellow,
-                                                    DER_yellow_intense
-                                                )
-                                            )
-                                    ),
-                                backgroundColor = Color(0x00000000),
-                                elevation = 0.dp,
-                                shape = RoundedCornerShape(15.dp)
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "Entrar",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 22.sp,
-                                        color = Color.Black
-                                    )
-                                }
-
-                            }
+                            SignInButton(
+                                onClick = { logar() },
+                                enable = validState
+                            )
 
                             Row(
                                 modifier = Modifier
@@ -435,5 +396,28 @@ fun AuthScreenContentPreview() {
         mainViewModel = mainViewModel,
         wannaRegister = remember { mutableStateOf(false) },
         signInGoogleViewModel = signInGoogleViewModel
+    )
+}
+
+@Composable
+fun SignInButton(onClick: () -> Unit, enable: Boolean) {
+    GradientButton(
+        modifier = Modifier
+            .height(48.dp)
+            .width(132.dp),
+        text = "Entrar",
+        textColor = Color.Black,
+        gradient = Brush
+            .verticalGradient(
+                kotlin.collections.listOf(
+                    DER_yellow_light_extra,
+                    DER_yellow_light,
+                    DER_yellow,
+                    DER_yellow,
+                    DER_yellow_intense
+                )
+            ),
+        onClick = { onClick() },
+        enabled = enable
     )
 }
