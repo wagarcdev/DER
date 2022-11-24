@@ -73,7 +73,7 @@ fun LoginContent(
             val comingPassword = mainViewModel.validateLogin(username = username.value)
             if (comingPassword != null) {
                 if (comingPassword == password.value) {
-                    //se faz necessario passar o id do usuario para a outra tela para conseguirmos recuperar os dados usuario atual logado
+
                     val userId = mainViewModel.getUserId(username.value)
                     mainViewModel.changeUserId(userId)
                     mainViewModel.navHostController.navigate(Screens.MainScreen.name)

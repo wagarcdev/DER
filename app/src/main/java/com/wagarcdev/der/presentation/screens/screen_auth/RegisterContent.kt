@@ -66,26 +66,35 @@ fun RegisterContent(
 
     fun createSimpleUser() {
         if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
-            val isEqual = checkIfPasswordAreEquals()
-            if (isEqual) {
-                coroutineScope.launch {
-                    val simpleUser =
-                        User(
-                            System.currentTimeMillis().toString(),
-                            email.value,
-                            username.value,
-                            fullName.value,
-                            fullName.value,
-                            "",
-                            password.value,
-                            true
-                        )
-                    mainViewModel.createNewSimpleUser(simpleUser)
-                }
+            if (email.value.contains("@")) {
+                val isEqualsPassword = checkIfPasswordAreEquals()
+                if (isEqualsPassword) {
+                    coroutineScope.launch {
+                        val simpleUser =
+                            User(
+                                System.currentTimeMillis().toString(),
+                                email.value,
+                                username.value,
+                                fullName.value,
+                                fullName.value,
+                                "",
+                                password.value,
+                                true
+                            )
+                        mainViewModel.createNewSimpleUser(simpleUser).also {
+                            mainViewModel.navHostController
+                                .navigate(Screens.AuthScreen.name)
+                        }
 
+                    }
+                } else {
+                    Toast.makeText(context, "As senhas não coincidem", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(context, "Email não está de acordo", Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_SHORT)
+            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
                 .show()
         }
 
@@ -273,10 +282,8 @@ fun RegisterContent(
                         .height(48.dp)
                         .width(132.dp)
                         .clickable {
-
                             createSimpleUser()
-                            mainViewModel.navHostController
-                                .navigate(Screens.AuthScreen.name)
+
 
                         }
                         .clip(RoundedCornerShape(15.dp))
