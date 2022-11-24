@@ -8,6 +8,7 @@ import android.text.StaticLayout
 import android.text.TextPaint
 import com.wagarcdev.der.domain.model.PdfContent
 import com.wagarcdev.der.domain.model.TextConfig
+import com.wagarcdev.der.utils.Constants.REPORT_PDFS_FOLDER
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -36,8 +37,7 @@ class CreatePdfImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val coroutinesDispatchers: CoroutinesDispatchers
 ) : CreatePdf {
-    // TODO(decide the pdf path)
-    private val pdfsPath = "${context.filesDir}/reports"
+    private val pdfsPath = "${context.filesDir}/$REPORT_PDFS_FOLDER"
 
     private val textPaint = TextPaint()
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import com.wagarcdev.der.utils.Constants.IMAGES_FOLDER
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -21,9 +22,11 @@ interface ImageManager {
      * the original file name will be used. Default is empty.
      * @param uri the [Uri] of the selected image.
      *
-     * @return the new [Bitmap] of this [image file][File] or null if failed to create a File.
+     * @return an [Pair] or null if failed to create a File. This Pair has a [String] that
+     * correspond to the created file name on first value and a [Bitmap] of the image
+     * on second value.
      */
-    suspend fun saveImage(fileName: String = "", uri: Uri): Bitmap?
+    suspend fun saveImage(fileName: String = "", uri: Uri): Pair<String, Bitmap>?
 
     /**
      * Creates a image from a URI and save it on app directory.
@@ -42,8 +45,7 @@ class ImageManagerImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val coroutinesDispatchers: CoroutinesDispatchers
 ) : ImageManager {
-    // TODO(decide the image path)
-    private val imagesPath = "${context.filesDir}/images"
+    private val imagesPath = "${context.filesDir}/$IMAGES_FOLDER"
 
     /**
      * Formats a string, removing the char sequence before the last occurrence of "/".
@@ -136,7 +138,7 @@ class ImageManagerImpl @Inject constructor(
     override suspend fun saveImage(
         fileName: String,
         uri: Uri
-    ): Bitmap? = withContext(context = coroutinesDispatchers.io) {
+    ): Pair<String, Bitmap>? = withContext(context = coroutinesDispatchers.io) {
         return@withContext try {
             val imagesFilePath = File(imagesPath)
             if (!imagesFilePath.exists()) imagesFilePath.mkdirs()
@@ -151,7 +153,7 @@ class ImageManagerImpl @Inject constructor(
 
             bitmap.outputImage(file = file)
 
-            BitmapFactory.decodeFile(file.absolutePath)
+            file.name to BitmapFactory.decodeFile(file.absolutePath)
         } catch (e: Exception) {
             e.printStackTrace()
             null

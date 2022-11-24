@@ -4,13 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -48,22 +42,7 @@ fun CreateReportScreen(
 
     BackHandler(onBack = onBack)
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Create Report") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
-                            contentDescription = "Navigate back"
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
+    Scaffold(modifier = modifier) { innerPadding ->
         AnimatedNavHost(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,14 +55,17 @@ fun CreateReportScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(all = 16.dp),
-                    text = screenState.text,
-                    textError = screenState.textError,
-                    changeText = { viewModel.changeText(value = it) },
+                    report = screenState.report,
+                    changeName = { viewModel.changeName(value = it) },
+                    changeRegionCode = { viewModel.changeRegionCode(value = it) },
+                    changeHighway = { viewModel.changeHighway(value = it) },
+                    changeCounty = { viewModel.changeCounty(value = it) },
+                    changeContractor = { viewModel.changeContractor(value = it) },
+                    changeAreaExtension = { viewModel.changeAreaExtension(value = it) },
+                    changeSupervisor = { viewModel.changeSupervisor(value = it) },
                     onBack = onBack,
                     onNext = {
-                        stepsNavController.navigate(
-                            destinationRoute = StepRoute.SecondStep.route
-                        )
+                        stepsNavController.navigate(destinationRoute = StepRoute.SecondStep.route)
                     }
                 )
             }
@@ -93,7 +75,7 @@ fun CreateReportScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(all = 16.dp),
-                    imagesBitmap = screenState.imagesBitmap,
+                    attachedImageNames = screenState.report.attachedImageNames,
                     onAddImage = { viewModel.addImage(uri = it) },
                     onRemoveImage = { viewModel.removeImage(index = it) },
                     onBack = onBack,
