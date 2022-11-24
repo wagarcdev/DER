@@ -8,19 +8,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
+import com.wagarcdev.der.components.InputField
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
@@ -68,7 +70,16 @@ fun RegisterContent(
             if (isEqual) {
                 coroutineScope.launch {
                     val simpleUser =
-                        User(System.currentTimeMillis().toString(), email.value, username.value, fullName.value, fullName.value, "", password.value, true)
+                        User(
+                            System.currentTimeMillis().toString(),
+                            email.value,
+                            username.value,
+                            fullName.value,
+                            fullName.value,
+                            "",
+                            password.value,
+                            true
+                        )
                     mainViewModel.createNewSimpleUser(simpleUser)
                 }
 
@@ -88,7 +99,6 @@ fun RegisterContent(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
 
         item {
             Row(
@@ -140,7 +150,6 @@ fun RegisterContent(
             Spacer(modifier = Modifier.height(32.dp))
 
         }
-
         item {
             Box(contentAlignment = Alignment.Center) {
 
@@ -163,109 +172,86 @@ fun RegisterContent(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            val isFullnameError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isEmailError = remember {
+                                mutableStateOf(false)
+                            }
 
-                            OutlinedTextField(
-                                value = fullName.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        fullName.value = it
+                            val isUsernameError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isPasswordError = remember {
+                                mutableStateOf(false)
+                            }
+
+                            val isPasswordConfirmError = remember {
+                                mutableStateOf(false)
+                            }
+
+
+                            val localFocusManager = LocalFocusManager.current
+                            val focusRequester = FocusRequester()
+
+
+                            InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isFullnameError.value = false
                                     }
                                 },
-                                label = { Text(text = "Nome completo", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                                valueState = fullName,
+                                labelId = "Nome completo",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isFullnameError,
+                                errorMessage = "Preencha seu nome completo",
+                                focusRequester = focusRequester
                             )
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = email.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        email.value = it
-                                    }
-                                },
-                                label = { Text(text = "E-mail", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                            InputField(
+                                valueState = email,
+                                labelId = "E-mail",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isEmailError,
+                                errorMessage = "Preencha o email",
+                                focusRequester = focusRequester
                             )
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = username.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        username.value = it
-                                    }
-                                },
-                                label = { Text(text = "Usuário", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                            InputField(
+                                valueState = username,
+                                labelId = "Usuário",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isUsernameError,
+                                errorMessage = "Preencha o nome de usuario",
+                                focusRequester = focusRequester
                             )
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = password.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        password.value = it
-                                    }
-                                },
-                                label = { Text(text = "Senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                            InputField(
+                                valueState = password,
+                                labelId = "Senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                isPassword = true,
+                                isError = isPasswordError,
+                                errorMessage = "Preencha a senha",
+                                focusRequester = focusRequester
                             )
 
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            OutlinedTextField(
-                                value = passwordConfirm.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        passwordConfirm.value = it
-                                    }
-                                },
-                                label = { Text(text = "Repita a senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                            InputField(
+                                valueState = passwordConfirm,
+                                labelId = "Repita a senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                isPassword = true,
+                                isError = isPasswordConfirmError,
+                                errorMessage = "Preencha a confirmação da senha",
+                                focusRequester = focusRequester
                             )
+
                         }
                     }
                 }
@@ -287,9 +273,11 @@ fun RegisterContent(
                         .height(48.dp)
                         .width(132.dp)
                         .clickable {
+
                             createSimpleUser()
                             mainViewModel.navHostController
                                 .navigate(Screens.AuthScreen.name)
+
                         }
                         .clip(RoundedCornerShape(15.dp))
                         .shadow(2.dp)
@@ -367,13 +355,6 @@ fun RegisterContent(
         }
 
 
-
-
-
-
-
-
-
     }
 }
 
@@ -387,7 +368,9 @@ fun RegisterScreenContentPreview() {
         mainViewModel = mainViewModel,
         wannaRegister = remember { mutableStateOf(false) }
     )
+
 }
+
 
 
 

@@ -20,6 +20,7 @@ fun AuthScreen(
     Scaffold(
         topBar = {  },
         content = {
+
             if (!wannaRegisterState.value) {
                 LoginContent(mainViewModel, wannaRegisterState, signInGoogleViewModel)
             } else {

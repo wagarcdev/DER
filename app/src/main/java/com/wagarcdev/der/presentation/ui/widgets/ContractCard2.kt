@@ -91,7 +91,7 @@ fun ContractCard2(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
-            Row() {
+            Row {
                 Text(
                     text = " ${contract.site}",
                     fontSize = 16.sp,
@@ -109,7 +109,7 @@ fun ContractCard2(
             }
 
 
-            Row() {
+            Row {
                 Text(
                     text = contract.road,
                     fontWeight = FontWeight.Bold,

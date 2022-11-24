@@ -14,8 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wagarcdev.der.components.InputField
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
+
 
 @Composable
 fun SearchBarRow(widthFloat: Float) {

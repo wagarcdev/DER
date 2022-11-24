@@ -1,6 +1,5 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
@@ -11,38 +10,43 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Colors
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.util.CollectionUtils.listOf
-import com.google.firebase.firestore.remote.Datastore
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
-import com.wagarcdev.der.data.local.AppPreferences
+import com.wagarcdev.der.components.InputField
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
@@ -50,7 +54,6 @@ import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.widgets.SignInButton
 import kotlinx.coroutines.launch
 
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun LoginContent(
     mainViewModel: MainViewModel,
@@ -64,24 +67,22 @@ fun LoginContent(
     val password = remember { mutableStateOf("") }
     var isLoading = remember { mutableStateOf(false) }
 
-
     val signInRequestCode = 0
     val context = LocalContext.current
-
 
     fun logar() {
         coroutineScope.launch {
             val comingPassword = mainViewModel.validateLogin(username = username.value)
-            if (comingPassword != null){
-                if (comingPassword == password.value){
+            if (comingPassword != null) {
+                if (comingPassword == password.value) {
                     //se faz necessario passar o id do usuario para a outra tela para conseguirmos recuperar os dados usuario atual logado
                     val userId = mainViewModel.getUserId(username.value)
                     mainViewModel.changeUserId(userId)
                     mainViewModel.navHostController.navigate(Screens.MainScreen.name)
-                }else{
+                } else {
                     Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
                 }
-            }else{
+            } else {
                 Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
             }
         }
@@ -114,8 +115,6 @@ fun LoginContent(
                     .show()
             }
         }
-
-
 
     LazyColumn(
         modifier = Modifier
@@ -199,48 +198,61 @@ fun LoginContent(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            OutlinedTextField(
-                                value = username.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        username.value = it
+
+                            val isEmailError = remember {
+                                mutableStateOf(false)
+                            }
+                            val isPasswordError = remember {
+                                mutableStateOf(false)
+                            }
+
+                            val localFocusManager = LocalFocusManager.current
+                            val focusRequester = FocusRequester()
+
+                            InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isEmailError.value = false
                                     }
                                 },
-                                label = { Text(text = "Usuário", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                                valueState = username,
+                                labelId = "Usuário",
+                                enabled = true,
+                                isSingleLine = true,
+                                isError = isEmailError,
+                                errorMessage = "Preencha o nome de usuario",
+                                focusRequester = focusRequester,
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Person,
+                                        "Usuário"
+                                    )
+                                }
                             )
 
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            OutlinedTextField(
-                                value = password.value,
-                                shape = RoundedCornerShape(15.dp),
-                                onValueChange = {
-                                    coroutineScope.launch {
-                                        password.value = it
+                            InputField(
+                                modifier = Modifier.onFocusChanged {
+                                    if (it.isFocused) {
+                                        isPasswordError.value = false
                                     }
                                 },
-                                label = { Text(text = "Senha", color = Color.Gray) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    cursorColor = Color.Black,
-                                    focusedLabelColor = Color.Black,
-                                    focusedIndicatorColor = DER_yellow,
-                                    unfocusedLabelColor = Color.Black,
-                                    backgroundColor = Color.White
-                                )
+                                valueState = password,
+                                labelId = "Senha",
+                                enabled = true,
+                                isSingleLine = true,
+                                focusRequester = focusRequester,
+                                isError = isPasswordError,
+                                errorMessage = "Preencha a senha",
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Key,
+                                        "Senha"
+                                    )
+                                },
+                                keyboardType = KeyboardType.Password,
+                                isPassword = true,
+                                imeAction = ImeAction.Done
                             )
-
-
-                            Spacer(modifier = Modifier.height(4.dp))
 
                             Row(
                                 modifier = Modifier
@@ -279,7 +291,15 @@ fun LoginContent(
                                     .height(48.dp)
                                     .width(132.dp)
                                     .clickable {
-                                        logar()
+                                        if (username.value.isEmpty()) {
+                                            isEmailError.value = true
+                                            localFocusManager.clearFocus()
+                                        }
+                                        else if(password.value.isEmpty()) {
+                                            isPasswordError.value = true
+                                            localFocusManager.clearFocus()
+                                        }
+                                        else logar()
                                     }
                                     .clip(RoundedCornerShape(15.dp))
                                     .shadow(2.dp)

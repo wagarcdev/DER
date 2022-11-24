@@ -1,7 +1,6 @@
 package com.wagarcdev.der.navigation
 
 enum class Screens {
-
     MainScreen,
     AuthScreen,
     DetailScreen,

@@ -130,7 +130,7 @@ fun ContractCard(
 
                     )
 
-                    Row() {
+                    Row {
 
                         Text(text = "Ext: ")
                         Text(
