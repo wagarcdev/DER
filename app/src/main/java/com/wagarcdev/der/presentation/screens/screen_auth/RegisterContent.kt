@@ -40,6 +40,7 @@ import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.GradientButton
 import kotlinx.coroutines.launch
 
 @Composable
@@ -268,48 +269,28 @@ fun RegisterContent(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Card(
-                    modifier = Modifier
-                        .height(48.dp)
-                        .width(132.dp)
-                        .clickable {
 
-                            createSimpleUser()
-                            mainViewModel.navHostController
-                                .navigate(Screens.AuthScreen.name)
-
-                        }
-                        .clip(RoundedCornerShape(15.dp))
-                        .shadow(2.dp)
-                        .background(
-                            Brush
-                                .verticalGradient(
-                                    listOf(
-                                        DER_yellow_light_extra,
-                                        DER_yellow_light,
-                                        DER_yellow,
-                                        DER_yellow,
-                                        DER_yellow_intense
-                                    )
-                                )
-                        ),
-                    backgroundColor = Color(0x00000000),
-                    elevation = 0.dp,
-                    shape = RoundedCornerShape(15.dp)
+                val validState = remember(
+                    fullName.value,
+                    username.value,
+                    email.value,
+                    password.value,
+                    passwordConfirm.value
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Cadastrar",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp,
-                            color = Color.Black
-                        )
-                    }
-
+                    fullName.value.trim().isNotEmpty() && username.value.trim()
+                        .isNotEmpty()
+                    &&                    email.value.trim().isNotEmpty() && password.value.trim()
+                        .isNotEmpty() && passwordConfirm.value.trim()
+                        .isNotEmpty()
                 }
+
+                SignUpButton(
+                    onClick = {
+                        createSimpleUser()
+                        mainViewModel.navHostController.navigate(Screens.AuthScreen.name)
+                              },
+                    enable = validState
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -371,7 +352,25 @@ fun RegisterScreenContentPreview() {
 
 }
 
-
-
-
-
+@Composable
+fun SignUpButton(onClick: () -> Unit, enable: Boolean) {
+    GradientButton(
+        modifier = Modifier
+            .height(48.dp)
+            .width(140.dp),
+        text = "Cadastrar",
+        textColor = Color.Black,
+        gradient = Brush
+            .verticalGradient(
+                listOf(
+                    DER_yellow_light_extra,
+                    DER_yellow_light,
+                    DER_yellow,
+                    DER_yellow,
+                    DER_yellow_intense
+                )
+            ),
+        onClick = { onClick() },
+        enabled = enable
+    )
+}
