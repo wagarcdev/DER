@@ -54,7 +54,7 @@ fun GradientButton(
         ) {
             Text(
                 text = text,
-                color = textColor,
+                color = if (enabled) textColor else Color.Gray,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp,
                 textAlign = TextAlign.Center
