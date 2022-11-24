@@ -1,7 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_create_report.steps
 
 import android.Manifest
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -26,6 +24,9 @@ import androidx.compose.material.icons.rounded.AttachFile
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
@@ -33,20 +34,28 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import com.wagarcdev.der.presentation.ui.components.GradientButton
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
+import com.wagarcdev.der.utils.imageFile
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SecondStep(
     modifier: Modifier = Modifier,
-    imagesBitmap: List<Bitmap>,
+    attachedImageNames: List<String>,
     onAddImage: (Uri) -> Unit,
     onRemoveImage: (Int) -> Unit,
     onBack: () -> Unit,
     onPrevious: () -> Unit,
     onFinish: () -> Unit
 ) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
 
+    // TODO(make it compatible with Android 13)
     val readStoragePermissionState = rememberPermissionState(
         permission = Manifest.permission.READ_EXTERNAL_STORAGE
     )
@@ -77,7 +86,7 @@ fun SecondStep(
             mainAxisSpacing = 8.dp,
             crossAxisSpacing = 8.dp
         ) {
-            imagesBitmap.forEachIndexed { index, bitmap ->
+            attachedImageNames.forEachIndexed { index, imageName ->
                 Surface(
                     shape = MaterialTheme.shapes.medium,
                     elevation = 2.dp
@@ -86,7 +95,7 @@ fun SecondStep(
                         modifier = Modifier
                             .size(size = imageSize)
                             .clickable { onRemoveImage(index) },
-                        model = bitmap,
+                        model = context.imageFile(fileName = imageName),
                         contentDescription = null
                     )
                 }
@@ -123,19 +132,39 @@ fun SecondStep(
             horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
+            GradientButton(
                 modifier = Modifier.weight(weight = 1F),
-                onClick = onPrevious
-            ) {
-                Text(text = "Previous")
-            }
+                text = "Previous",
+                textColor = Color.Black,
+                gradient = Brush.verticalGradient(
+                    colors = listOf(
+                        DER_yellow_light_extra,
+                        DER_yellow_light,
+                        DER_yellow,
+                        DER_yellow,
+                        DER_yellow_intense
+                    )
+                ),
+                onClick = onPrevious,
+                enabled = true
+            )
 
-            Button(
+            GradientButton(
                 modifier = Modifier.weight(weight = 1F),
-                onClick = onFinish
-            ) {
-                Text(text = "Finish")
-            }
+                text = "Finish",
+                textColor = Color.Black,
+                gradient = Brush.verticalGradient(
+                    colors = listOf(
+                        DER_yellow_light_extra,
+                        DER_yellow_light,
+                        DER_yellow,
+                        DER_yellow,
+                        DER_yellow_intense
+                    )
+                ),
+                onClick = onFinish,
+                enabled = true
+            )
         }
     }
 }
