@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -67,26 +68,35 @@ fun RegisterContent(
 
     fun createSimpleUser() {
         if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
-            val isEqual = checkIfPasswordAreEquals()
-            if (isEqual) {
-                coroutineScope.launch {
-                    val simpleUser =
-                        User(
-                            System.currentTimeMillis().toString(),
-                            email.value,
-                            username.value,
-                            fullName.value,
-                            fullName.value,
-                            "",
-                            password.value,
-                            true
-                        )
-                    mainViewModel.createNewSimpleUser(simpleUser)
-                }
+            if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                val isEqualsPassword = checkIfPasswordAreEquals()
+                if (isEqualsPassword) {
+                    coroutineScope.launch {
+                        val simpleUser =
+                            User(
+                                System.currentTimeMillis().toString(),
+                                email.value,
+                                username.value,
+                                fullName.value,
+                                fullName.value,
+                                "",
+                                password.value,
+                                true
+                            )
+                        mainViewModel.createNewSimpleUser(simpleUser).also {
+                            mainViewModel.navHostController
+                                .navigate(Screens.AuthScreen.name)
+                        }
 
+                    }
+                } else {
+                    Toast.makeText(context, "As senhas não coincidem", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(context, "Email não está de acordo", Toast.LENGTH_LONG).show()
             }
         } else {
-            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_SHORT)
+            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
                 .show()
         }
 
@@ -269,7 +279,7 @@ fun RegisterContent(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
+            
                 val validState = remember(
                     fullName.value,
                     username.value,
