@@ -1,8 +1,10 @@
 package com.wagarcdev.der.di
 
 import com.wagarcdev.der.data.GoogleRepositoryImpl
+import com.wagarcdev.der.data.ReportsRepositoryImpl
 import com.wagarcdev.der.data.SimpleUserRepositoryImpl
 import com.wagarcdev.der.domain.repository.GoogleRepository
+import com.wagarcdev.der.domain.repository.ReportsRepository
 import com.wagarcdev.der.domain.repository.SimpleUserRepository
 import dagger.Binds
 import dagger.Module
@@ -24,4 +26,10 @@ interface RepositoryModule {
     fun bindSimpleUserRepository(
         repository: SimpleUserRepositoryImpl
     ): SimpleUserRepository
+
+    @Binds
+    @Singleton
+    fun bindReportsRepository(
+        repository: ReportsRepositoryImpl
+    ): ReportsRepository
 }
