@@ -279,7 +279,7 @@ fun RegisterContent(
                 ) {
                     fullName.value.trim().isNotEmpty() && username.value.trim()
                         .isNotEmpty()
-                    &&                    email.value.trim().isNotEmpty() && password.value.trim()
+                            && email.value.trim().isNotEmpty() && password.value.trim()
                         .isNotEmpty() && passwordConfirm.value.trim()
                         .isNotEmpty()
                 }
@@ -288,11 +288,9 @@ fun RegisterContent(
                     onClick = {
                         createSimpleUser()
                         mainViewModel.navHostController.navigate(Screens.AuthScreen.name)
-                              },
+                    },
                     enable = validState
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
                     modifier = Modifier
