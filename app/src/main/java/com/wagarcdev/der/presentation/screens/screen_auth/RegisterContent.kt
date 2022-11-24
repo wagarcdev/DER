@@ -32,14 +32,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
-import com.wagarcdev.der.components.InputField
+import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
-import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import kotlinx.coroutines.launch
 
 @Composable

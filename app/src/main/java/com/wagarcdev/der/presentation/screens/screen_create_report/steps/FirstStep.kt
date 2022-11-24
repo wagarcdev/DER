@@ -18,8 +18,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.wagarcdev.der.presentation.ui.widgets.ClearTrailingButton
-import com.wagarcdev.der.presentation.ui.widgets.DerOutlinedTextField
+import com.wagarcdev.der.presentation.ui.components.ClearTrailingButton
+import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
 
 @Composable
 fun FirstStep(
@@ -39,7 +39,7 @@ fun FirstStep(
         modifier = modifier.verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.spacedBy(space = 16.dp)
     ) {
-        DerOutlinedTextField(
+        TempDerOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = text,
             onValueChange = { changeText(it) },
