@@ -1,7 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_contracts
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.*
@@ -20,8 +19,8 @@ import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.navigation.Screens
-import com.wagarcdev.der.presentation.ui.widgets.ContractCard
-import com.wagarcdev.der.presentation.ui.widgets.SearchBarRow
+import com.wagarcdev.der.presentation.ui.components.ContractCard
+import com.wagarcdev.der.presentation.ui.components.SearchBarRow
 import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition", "StateFlowValueCalledInComposition")

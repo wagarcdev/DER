@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.ui.widgets
+package com.wagarcdev.der.presentation.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
  * callback is called.
  */
 @Composable
-fun DerTextField(
+fun TempDerTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
@@ -151,7 +151,7 @@ fun DerTextField(
  * callback is called.
  */
 @Composable
-fun DerOutlinedTextField(
+fun TempDerOutlinedTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,

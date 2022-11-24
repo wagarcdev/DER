@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Colors
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -46,12 +44,12 @@ import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
-import com.wagarcdev.der.components.InputField
+import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.google.GoogleApiContract
 import com.wagarcdev.der.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.*
-import com.wagarcdev.der.presentation.ui.widgets.BackgroundImageRow
-import com.wagarcdev.der.presentation.ui.widgets.SignInButton
+import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.SignInButton
 import kotlinx.coroutines.launch
 
 @Composable
