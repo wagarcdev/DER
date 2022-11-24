@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,7 +67,7 @@ fun RegisterContent(
 
     fun createSimpleUser() {
         if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
-            if (email.value.contains("@")) {
+            if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
                 val isEqualsPassword = checkIfPasswordAreEquals()
                 if (isEqualsPassword) {
                     coroutineScope.launch {
