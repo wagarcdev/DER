@@ -23,8 +23,7 @@ fun AuthScreen(
 
             if (!wannaRegisterState.value) {
                 LoginContent(mainViewModel, wannaRegisterState, signInGoogleViewModel)
-            } else {
-                RegisterContent(mainViewModel, wannaRegisterState)
+            } else { RegisterContent(mainViewModel, wannaRegisterState)
             }
         }
     )

@@ -3,19 +3,16 @@ package com.wagarcdev.der.presentation.screens.screen_auth
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
@@ -26,6 +23,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,15 +31,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
-import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.navigation.Screens
+import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.GradientButton
+import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
-import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
-import com.wagarcdev.der.presentation.ui.components.GradientButton
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,7 +55,6 @@ fun RegisterContent(
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordConfirm = remember { mutableStateOf("") }
-
 
     fun checkIfPasswordAreEquals(): Boolean {
         if (password.value == passwordConfirm.value) {
@@ -87,7 +84,6 @@ fun RegisterContent(
                             mainViewModel.navHostController
                                 .navigate(Screens.AuthScreen.name)
                         }
-
                     }
                 } else {
                     Toast.makeText(context, "As senhas não coincidem", Toast.LENGTH_LONG).show()
@@ -99,69 +95,47 @@ fun RegisterContent(
             Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
                 .show()
         }
-
-
     }
 
-    LazyColumn(
+    Surface(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .systemBarsPadding()
-            .navigationBarsPadding(),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+            .navigationBarsPadding()
+            .padding(bottom = 16.dp),
 
-        item {
-            Row(
+        ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly
-
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 2.dp)
-                            .fillMaxWidth(1f),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(
-                            text = "Novo cadastro",
-                            color = Color.Black,
-                            fontSize = 42.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 2.dp, bottom = 2.dp)
-                            .fillMaxWidth(1f),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Text(
-                            modifier = Modifier.alpha(1f),
-                            text = stringResource(com.wagarcdev.der.R.string.registro_frase),
-                            color = Color.Black,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
+                Text(
+                    text = "Novo cadastro",
+                    color = Color.Black,
+                    fontSize = 42.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    modifier = Modifier.alpha(1f),
+                    text = stringResource(com.wagarcdev.der.R.string.registro_frase),
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        }
-        item {
             Box(contentAlignment = Alignment.Center) {
 
                 BackgroundImageRow(imageResInt = R.drawable.backgroung_gray_img)
@@ -170,7 +144,6 @@ fun RegisterContent(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
 
                     Row(
                         modifier = Modifier.fillMaxWidth(1f),
@@ -204,7 +177,6 @@ fun RegisterContent(
 
                             val localFocusManager = LocalFocusManager.current
                             val focusRequester = FocusRequester()
-
 
                             InputField(
                                 modifier = Modifier.onFocusChanged {
@@ -268,18 +240,14 @@ fun RegisterContent(
                 }
 
             }
-        }
 
-        item {
             Spacer(modifier = Modifier.height(16.dp))
-        }
 
-        item {
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-            
+
                 val validState = remember(
                     fullName.value,
                     username.value,
@@ -304,7 +272,7 @@ fun RegisterContent(
 
                 Row(
                     modifier = Modifier
-                        .padding(vertical = 4.dp)
+                        .padding(top = 32.dp, bottom = 32.dp)
                         .wrapContentWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
@@ -331,8 +299,6 @@ fun RegisterContent(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
-
                 Image(
                     modifier = Modifier.fillMaxWidth(0.5f),
                     painter = painterResource(id = com.wagarcdev.der.R.drawable.logotipo_st),
@@ -342,8 +308,6 @@ fun RegisterContent(
                 )
             }
         }
-
-
     }
 }
 
