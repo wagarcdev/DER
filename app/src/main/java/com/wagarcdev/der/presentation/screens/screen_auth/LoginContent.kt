@@ -1,6 +1,5 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -39,17 +38,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
-import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.google.GoogleApiContract
-import com.wagarcdev.der.navigation.Screens
-import com.wagarcdev.der.presentation.ui.theme.*
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.InputField
 import com.wagarcdev.der.presentation.ui.components.SignInButton
+import com.wagarcdev.der.presentation.ui.theme.*
 import kotlinx.coroutines.launch
 
 @Composable
@@ -68,50 +65,10 @@ fun LoginContent(
     val signInRequestCode = 0
     val context = LocalContext.current
 
-    fun logar() {
-        coroutineScope.launch {
-            val comingPassword = mainViewModel.validateLogin(username = username.value)
-            if (comingPassword != null) {
-                if (comingPassword == password.value) {
-
-                    val userId = mainViewModel.getUserId(username.value)
-                    mainViewModel.changeUserId(userId)
-                    mainViewModel.navHostController.navigate(Screens.MainScreen.name)
-                } else {
-                    Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
-            try {
-                val account = task?.getResult(ApiException::class.java)
-                if (account == null) {
-                    Toast.makeText(context, "Autenticação falhou", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    mainViewModel.signIn(
-                        id = account.id!!,
-                        email = account.email!!,
-                        displayName = account.displayName!!,
-                        photoUrl = account.photoUrl!!.toString()
-                    )
-                    val isReadyToGetTheUser = signInGoogleViewModel.checkIfIsLogged(context)
-                    if (isReadyToGetTheUser) {
-                        mainViewModel.navHostController
-                            .navigate(Screens.MainScreen.name)
-                    }
-
-                }
-            } catch (e: ApiException) {
-                Toast.makeText(context, "Autenticação falhou ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            signInGoogleViewModel.googleSignIn(task, context, mainViewModel)
         }
 
     LazyColumn(
@@ -292,12 +249,19 @@ fun LoginContent(
                                         if (username.value.isEmpty()) {
                                             isEmailError.value = true
                                             localFocusManager.clearFocus()
-                                        }
-                                        else if(password.value.isEmpty()) {
+                                        } else if (password.value.isEmpty()) {
                                             isPasswordError.value = true
                                             localFocusManager.clearFocus()
+                                        } else {
+                                            coroutineScope.launch {
+                                                mainViewModel.signInUser(
+                                                    password,
+                                                    username,
+                                                    mainViewModel,
+                                                    context
+                                                )
+                                            }
                                         }
-                                        else logar()
                                     }
                                     .clip(RoundedCornerShape(15.dp))
                                     .shadow(2.dp)
