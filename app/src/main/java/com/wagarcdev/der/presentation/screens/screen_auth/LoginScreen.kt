@@ -63,10 +63,13 @@ fun LoginScreen(
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     var isLoading = remember { mutableStateOf(false) }
-
     val signInRequestCode = 0
     val context = LocalContext.current
 
+    //como resolver o erro de coroutine creation during compose?
+    coroutineScope.launch {
+        mainViewModel.checkIfUserAreLogged(navHostController)
+    }
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->

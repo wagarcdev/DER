@@ -38,8 +38,6 @@ fun ContractsScreenContent(
     val name = remember { mutableStateOf("") }
 
     //Recuperando dados do usuario
-
-
     coroutineScope.launch {
         val userId = mainViewModel.getUserIdFromDatastore()
         val user = mainViewModel.getUserById(userId.toString())
