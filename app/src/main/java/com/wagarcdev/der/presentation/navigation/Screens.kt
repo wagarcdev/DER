@@ -1,4 +1,4 @@
-package com.wagarcdev.der.navigation
+package com.wagarcdev.der.presentation.navigation
 
 enum class Screens {
     MainScreen,

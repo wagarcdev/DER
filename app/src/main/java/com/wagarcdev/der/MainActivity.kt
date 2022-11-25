@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.wagarcdev.der.navigation.AppNavigation
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.wagarcdev.der.presentation.navigation.RootNavGraph
 import com.wagarcdev.der.presentation.ui.theme.DERTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,6 +18,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,23 +28,18 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DERTheme {
-                AppNavigation()
+                RootNavGraph(navHostController = rememberAnimatedNavController())
             }
         }
     }
 }
 
-//comentei para poder passar o contexto pra logar, não consegui por ele dentro do método default preview
- /**contexto � sempre local, alterei aqui e no Navigation, o contexto se passa dentro do Composable,
- no caso, dentro da MainScreen, caso contr�rio pode gerar MemoryLeak */
-
-
-
+@OptIn(ExperimentalAnimationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     DERTheme {
-        AppNavigation()
+        RootNavGraph(navHostController = rememberAnimatedNavController())
     }
 }
 

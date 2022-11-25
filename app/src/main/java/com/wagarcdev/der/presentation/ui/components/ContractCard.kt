@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.ui.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,11 +18,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.wagarcdev.der.MainViewModel
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.domain.model.Contract
-import com.wagarcdev.der.navigation.Screens
+import com.wagarcdev.der.presentation.navigation.Screens
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_deep
 
 @Composable
@@ -158,14 +158,15 @@ fun ContractCard(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun ContractCardPreview() {
 
-    val mainViewModel: MainViewModel = hiltViewModel()
+    val navHostController = rememberAnimatedNavController()
 
     ContractCard(0.95f, contracts[0], onclick = {
-        mainViewModel.navHostController
+        navHostController
         .navigate(Screens.ReportsScreen.name)
     })
 }

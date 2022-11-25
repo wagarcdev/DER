@@ -15,10 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.data.local.contracts
-import com.wagarcdev.der.navigation.Screens
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens
 import com.wagarcdev.der.presentation.ui.components.ContractCard
 import com.wagarcdev.der.presentation.ui.components.SearchBarRow
 import kotlinx.coroutines.launch
@@ -27,13 +29,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContractsScreenContent(
-    signInGoogleViewModel: SignInGoogleViewModel,
-    mainViewModel: MainViewModel
+    navHostController: NavHostController,
+    signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     val maxWidthFloat = 0.95f
     val coroutineScope = rememberCoroutineScope()
     val name = remember { mutableStateOf("") }
-    val context = LocalContext.current
 
     //Recuperando dados do usuario
     val googleUser = signInGoogleViewModel.user.value
@@ -89,8 +91,8 @@ fun ContractsScreenContent(
                             maxWidthFloat,
                             contract,
                             onclick = {
-                                mainViewModel.navHostController
-                                    .navigate(Screens.ReportsScreen.name)
+                                navHostController
+                                    .navigate(AppScreens.Reports.route)
                             }
                         )
                     }

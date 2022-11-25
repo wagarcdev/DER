@@ -9,13 +9,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,29 +27,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.domain.model.User
-import com.wagarcdev.der.navigation.Screens
+import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
-import com.wagarcdev.der.presentation.ui.components.GradientButton
 import com.wagarcdev.der.presentation.ui.components.InputField
+import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterContent(
-    mainViewModel: MainViewModel,
-    wannaRegister: MutableState<Boolean>,
+fun RegisterScreen(
+    navHostController: NavHostController,
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
-
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val username = remember { mutableStateOf("") }
@@ -81,8 +79,8 @@ fun RegisterContent(
                                 true
                             )
                         mainViewModel.createNewSimpleUser(simpleUser).also {
-                            mainViewModel.navHostController
-                                .navigate(Screens.AuthScreen.name)
+                            navHostController
+                                .navigate(AuthScreens.Login.route)
                         }
                     }
                 } else {
@@ -126,7 +124,7 @@ fun RegisterContent(
                 )
                 Text(
                     modifier = Modifier.alpha(1f),
-                    text = stringResource(com.wagarcdev.der.R.string.registro_frase),
+                    text = stringResource(R.string.registro_frase),
                     color = Color.Black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -265,9 +263,10 @@ fun RegisterContent(
                 SignUpButton(
                     onClick = {
                         createSimpleUser()
-                        mainViewModel.navHostController.navigate(Screens.AuthScreen.name)
+                        navHostController.navigate(AuthScreens.Login.route)
                     },
-                    enable = validState
+                    enable = validState,
+                    buttonText = "Cadastrar"
                 )
 
                 Row(
@@ -287,9 +286,8 @@ fun RegisterContent(
                     Text(
                         modifier = Modifier
                             .clickable {
-                                coroutineScope.launch {
-                                    wannaRegister.value = false
-                                }
+                                       navHostController
+                                           .navigate(AuthScreens.Login.route)
                             },
                         text = "Efetue o seu Login!",
                         color = DER_yellow,
@@ -301,48 +299,12 @@ fun RegisterContent(
 
                 Image(
                     modifier = Modifier.fillMaxWidth(0.5f),
-                    painter = painterResource(id = com.wagarcdev.der.R.drawable.logotipo_st),
-                    contentDescription = stringResource(com.wagarcdev.der.R.string.Logo_ST6),
+                    painter = painterResource(id = R.drawable.logotipo_st),
+                    contentDescription = stringResource(R.string.Logo_ST6),
                     contentScale = ContentScale.Fit
 
                 )
             }
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun RegisterScreenContentPreview() {
-
-    val mainViewModel: MainViewModel = hiltViewModel()
-
-    RegisterContent(
-        mainViewModel = mainViewModel,
-        wannaRegister = remember { mutableStateOf(false) }
-    )
-
-}
-
-@Composable
-fun SignUpButton(onClick: () -> Unit, enable: Boolean) {
-    GradientButton(
-        modifier = Modifier
-            .height(48.dp)
-            .width(140.dp),
-        text = "Cadastrar",
-        textColor = Color.Black,
-        gradient = Brush
-            .verticalGradient(
-                listOf(
-                    DER_yellow_light_extra,
-                    DER_yellow_light,
-                    DER_yellow,
-                    DER_yellow,
-                    DER_yellow_intense
-                )
-            ),
-        onClick = { onClick() },
-        enabled = enable
-    )
 }
