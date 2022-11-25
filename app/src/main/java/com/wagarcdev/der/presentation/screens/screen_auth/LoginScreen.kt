@@ -292,7 +292,8 @@ fun LoginScreen(
                             //Button "Entrar"
                             SignUpButton(
                                 onClick = { logIn() },
-                                enable = validState
+                                enable = validState,
+                                buttonText = "Entrar"
                             )
 
                             Row(

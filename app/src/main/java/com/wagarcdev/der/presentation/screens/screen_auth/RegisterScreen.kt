@@ -265,7 +265,8 @@ fun RegisterScreen(
                         createSimpleUser()
                         navHostController.navigate(AuthScreens.Login.route)
                     },
-                    enable = validState
+                    enable = validState,
+                    buttonText = "Cadastrar"
                 )
 
                 Row(

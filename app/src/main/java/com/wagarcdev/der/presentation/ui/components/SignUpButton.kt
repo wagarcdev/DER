@@ -13,12 +13,16 @@ import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 
 @Composable
-fun SignUpButton(onClick: () -> Unit, enable: Boolean) {
+fun SignUpButton(
+    onClick: () -> Unit, enable: Boolean,
+    buttonText: String = ""
+) {
+
     GradientButton(
         modifier = Modifier
             .height(48.dp)
             .width(140.dp),
-        text = "Cadastrar",
+        text = buttonText,
         textColor = Color.Black,
         gradient = Brush.verticalGradient(
             listOf(
