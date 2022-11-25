@@ -2,7 +2,6 @@ package com.wagarcdev.der
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.domain.repository.GoogleRepository
@@ -21,8 +20,6 @@ class MainViewModel @Inject constructor(
     private val simpleUserRepository: SimpleUserRepository,
     private val appPreferences: AppPreferences
 ) : ViewModel() {
-    // TODO(REMOVE NavHostController from view model)
-    lateinit var navHostController: NavHostController
 
     // TODO(Provide an empty user instead of null)
     private val _user: MutableStateFlow<User?> = MutableStateFlow(null)

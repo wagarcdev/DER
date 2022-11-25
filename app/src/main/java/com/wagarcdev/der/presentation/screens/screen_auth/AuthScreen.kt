@@ -21,10 +21,6 @@ fun AuthScreen(
         topBar = {  },
         content = {
 
-            if (!wannaRegisterState.value) {
-                LoginContent(mainViewModel, wannaRegisterState, signInGoogleViewModel)
-            } else { RegisterContent(mainViewModel, wannaRegisterState)
-            }
         }
     )
 

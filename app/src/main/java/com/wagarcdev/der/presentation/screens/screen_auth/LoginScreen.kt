@@ -4,26 +4,23 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -35,26 +32,30 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.google.GoogleApiContract
-import com.wagarcdev.der.navigation.Screens
-import com.wagarcdev.der.presentation.ui.components.*
-import com.wagarcdev.der.presentation.ui.theme.*
+import com.wagarcdev.der.presentation.navigation.Screens
+import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
+import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.InputField
+import com.wagarcdev.der.presentation.ui.components.SignUpButton
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
+import com.wagarcdev.der.presentation.ui.theme.RB_Black
+import com.wagarcdev.der.presentation.ui.theme.RB_White
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginContent(
-    mainViewModel: MainViewModel,
-    wannaRegister: MutableState<Boolean>,
-    signInGoogleViewModel: SignInGoogleViewModel
+fun LoginScreen(
+    navHostController: NavHostController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -66,20 +67,16 @@ fun LoginContent(
     val signInRequestCode = 0
     val context = LocalContext.current
 
-    fun logar() {
+    fun logIn() {
         coroutineScope.launch {
             val comingPassword = mainViewModel.validateLogin(username = username.value)
-            if (comingPassword != null) {
-                if (comingPassword == password.value) {
+            if (comingPassword == password.value) {
 
-                    val userId = mainViewModel.getUserId(username.value)
-                    mainViewModel.changeUserId(userId)
-                    mainViewModel.navHostController.navigate(Screens.MainScreen.name)
-                } else {
-                    Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
-                }
+                val userId = mainViewModel.getUserId(username.value)
+                mainViewModel.changeUserId(userId)
+                navHostController.navigate(Screens.MainScreen.name)
             } else {
-                Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -101,8 +98,7 @@ fun LoginContent(
                     )
                     val isReadyToGetTheUser = signInGoogleViewModel.checkIfIsLogged(context)
                     if (isReadyToGetTheUser) {
-                        mainViewModel.navHostController
-                            .navigate(Screens.MainScreen.name)
+                        navHostController.navigate(Screens.MainScreen.name)
                     }
 
                 }
@@ -112,6 +108,7 @@ fun LoginContent(
             }
         }
 
+    /** TODO onCLick */
     LazyColumn(
         modifier = Modifier
             .imePadding()
@@ -130,11 +127,15 @@ fun LoginContent(
                 contentDescription = stringResource(R.string.DER_Logo_desc)
             )
         }
+
         item {
+
+            /** TODO onCLick */
             Box(contentAlignment = Alignment.Center) {
 
                 BackgroundImageRow(imageResInt = R.drawable.backgroung_color_img)
 
+                /** TODO onCLick */
                 Column(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -182,12 +183,15 @@ fun LoginContent(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
+                    /** TODO onCLick */
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(1f),
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+
+                        /** TODO onCLick */
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth(1.0f),
@@ -254,7 +258,7 @@ fun LoginContent(
                                 isPassword = true,
                                 imeAction = ImeAction.Done
                             )
-
+                            /** TODO onCLick */
                             Row(
                                 modifier = Modifier
                                     .padding(bottom = 4.dp)
@@ -272,9 +276,8 @@ fun LoginContent(
                                 Text(
                                     modifier = Modifier
                                         .clickable {
-                                            coroutineScope.launch {
-                                                /** TODO onCLick */
-                                            }
+                                                   navHostController
+                                                       .navigate(AuthScreens.Recover.route)
                                         },
                                     text = "clicando aqui!",
                                     color = Color.DarkGray,
@@ -287,8 +290,8 @@ fun LoginContent(
                             Spacer(modifier = Modifier.height(16.dp))
 
                             //Button "Entrar"
-                            SignInButton(
-                                onClick = { logar() },
+                            SignUpButton(
+                                onClick = { logIn() },
                                 enable = validState
                             )
 
@@ -308,7 +311,7 @@ fun LoginContent(
                             }
 
                             /** Sign In Google Button*/
-                            SignInButton(
+                            com.wagarcdev.der.presentation.ui.components.SignInButton(
                                 buttonFillMaxWidthFloat = 0.7f,
                                 buttonVerticalPaddingDp = 15.dp,
                                 buttonDefaultMinHeight = 30.dp,
@@ -359,9 +362,8 @@ fun LoginContent(
                 Text(
                     modifier = Modifier
                         .clickable {
-                            coroutineScope.launch {
-                                wannaRegister.value = true
-                            }
+                            navHostController
+                                .navigate(AuthScreens.Register.route)
                         },
                     text = "CADASTRE-SE AQUI!",
                     color = DER_yellow_intense,
@@ -383,41 +385,5 @@ fun LoginContent(
             )
         }
     }
-}
 
-@Composable
-@Preview(showBackground = true)
-fun AuthScreenContentPreview() {
-
-    val mainViewModel: MainViewModel = hiltViewModel()
-    val signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
-
-    LoginContent(
-        mainViewModel = mainViewModel,
-        wannaRegister = remember { mutableStateOf(false) },
-        signInGoogleViewModel = signInGoogleViewModel
-    )
-}
-
-@Composable
-fun SignInButton(onClick: () -> Unit, enable: Boolean) {
-    GradientButton(
-        modifier = Modifier
-            .height(48.dp)
-            .width(132.dp),
-        text = "Entrar",
-        textColor = Color.Black,
-        gradient = Brush
-            .verticalGradient(
-                kotlin.collections.listOf(
-                    DER_yellow_light_extra,
-                    DER_yellow_light,
-                    DER_yellow,
-                    DER_yellow,
-                    DER_yellow_intense
-                )
-            ),
-        onClick = { onClick() },
-        enabled = enable
-    )
 }

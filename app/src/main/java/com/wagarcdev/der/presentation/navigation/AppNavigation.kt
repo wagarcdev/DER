@@ -1,5 +1,6 @@
-package com.wagarcdev.der.navigation
+package com.wagarcdev.der.presentation.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.presentation.screens.screen_auth.AuthScreen
@@ -15,17 +16,16 @@ import com.wagarcdev.der.presentation.screens.screen_contracts.ContractsScreen
 import com.wagarcdev.der.presentation.screens.screen_create_report.CreateReportScreen
 import com.wagarcdev.der.presentation.screens.screen_reports.ReportsScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavigation() {
+
     val mainViewModel: MainViewModel = hiltViewModel()
     val signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 
-    // nav host should not be stored on view model
-    // TODO(remove nav controller from view model)
-    mainViewModel.navHostController = rememberNavController()
+    val navHostController = rememberAnimatedNavController()
     val context = LocalContext.current
 
-//    val isUserSigned = false
     val isLogged = signInGoogleViewModel.checkIfIsLogged(context)
 
     NavHost(
@@ -35,11 +35,12 @@ fun AppNavigation() {
         } else {
             Screens.AuthScreen.name
         },
-        navController = mainViewModel.navHostController
+        navController = navHostController
     ) {
+
         /** Main Screen */
         composable(route = Screens.MainScreen.name) {
-            ContractsScreen(mainViewModel, signInGoogleViewModel)
+            ContractsScreen(navHostController)
         }
 
         /** Authentication Screen */
@@ -52,7 +53,7 @@ fun AppNavigation() {
             ReportsScreen(
                 modifier = Modifier.fillMaxSize(),
                 onCreateReport = {
-                    mainViewModel.navHostController.navigate(
+                    navHostController.navigate(
                         route = Screens.CreateReportScreen.name
                     ) {
                         launchSingleTop = true
@@ -67,7 +68,7 @@ fun AppNavigation() {
             CreateReportScreen(
                 modifier = Modifier.fillMaxSize(),
                 onBack = {
-                    mainViewModel.navHostController.popBackStack()
+                    navHostController.popBackStack()
                 }
             )
         }
