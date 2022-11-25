@@ -54,46 +54,7 @@ fun RegisterScreen(
     val password = remember { mutableStateOf("") }
     val passwordConfirm = remember { mutableStateOf("") }
 
-    fun checkIfPasswordAreEquals(): Boolean {
-        if (password.value == passwordConfirm.value) {
-            return true
-        }
-        return false
-    }
 
-    fun createSimpleUser() {
-        if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
-            if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-                val isEqualsPassword = checkIfPasswordAreEquals()
-                if (isEqualsPassword) {
-                    coroutineScope.launch {
-                        val simpleUser =
-                            User(
-                                System.currentTimeMillis().toString(),
-                                email.value,
-                                username.value,
-                                fullName.value,
-                                fullName.value,
-                                "",
-                                password.value,
-                                true
-                            )
-                        mainViewModel.createNewSimpleUser(simpleUser).also {
-                            navHostController
-                                .navigate(AuthScreens.Login.route)
-                        }
-                    }
-                } else {
-                    Toast.makeText(context, "As senhas não coincidem", Toast.LENGTH_LONG).show()
-                }
-            } else {
-                Toast.makeText(context, "Email não está de acordo", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
-                .show()
-        }
-    }
 
     Surface(
         modifier = Modifier
@@ -262,8 +223,10 @@ fun RegisterScreen(
 
                 SignUpButton(
                     onClick = {
-                        createSimpleUser()
-                        navHostController.navigate(AuthScreens.Login.route)
+                        coroutineScope.launch {
+                            mainViewModel.createSimpleUser(username, fullName, email, password, passwordConfirm, context, navHostController)
+                        }
+
                     },
                     enable = validState,
                     buttonText = "Cadastrar"

@@ -38,16 +38,14 @@ fun ContractsScreenContent(
     val name = remember { mutableStateOf("") }
 
     //Recuperando dados do usuario
-    val googleUser = signInGoogleViewModel.user.value
-    if (googleUser == null) {
-        coroutineScope.launch {
-            val userId = mainViewModel.getUserIdFromDatastore()
-            val user = mainViewModel.getUserById(userId.toString())
-            name.value = user.username.toString()
-        }
-    } else {
-        name.value = googleUser.displayName.toString()
+
+
+    coroutineScope.launch {
+        val userId = mainViewModel.getUserIdFromDatastore()
+        val user = mainViewModel.getUserById(userId.toString())
+        name.value = user.username.toString()
     }
+
 
 
     Column(

@@ -7,4 +7,6 @@ interface GoogleRepository {
     suspend fun createNewUserWithSignWithGoogle(users: User)
 
     suspend fun getAllGoogleUsers(): List<User>
+
+    suspend fun getGoogleUserById(idUser:String) : User
 }
