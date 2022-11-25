@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.navigation
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -26,11 +27,11 @@ fun AppNavigation() {
     val navHostController = rememberAnimatedNavController()
     val context = LocalContext.current
 
-    val isLogged = signInGoogleViewModel.checkIfIsLogged(context)
+
 
     NavHost(
         startDestination =
-        if (isLogged) {
+        if (false) {
             Screens.MainScreen.name
         } else {
             Screens.AuthScreen.name

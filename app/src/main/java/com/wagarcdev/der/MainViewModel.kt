@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.domain.repository.GoogleRepository
@@ -58,7 +59,6 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             _user.value = User(id, email, displayName, null, null, photoUrl, null, false)
             googleRepository.createNewUserWithSignWithGoogle((user.value!!)).also {
-                Log.i("tag", user.value.toString())
                 this@MainViewModel.changeUserId(id)
                 navHostController
                     .navigate(AppScreens.Contracts.route)
@@ -114,6 +114,22 @@ class MainViewModel @Inject constructor(
         } else {
             Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
                 .show()
+        }
+    }
+
+
+    /**
+     * Método que verifica se o usuario está logado, caso esteja redireciona para a tela de contrato
+     * @param context, navHostController
+     */
+    suspend fun checkIfUserAreLogged(navHostController: NavHostController) {
+        /**
+         * recupera dados do usuario e checa se ele é nulo
+         */
+        val userId = this.getUserIdFromDatastore()
+        if (!userId.isNullOrEmpty()) {
+            navHostController
+                .navigate(AppScreens.Contracts.route)
         }
     }
 
