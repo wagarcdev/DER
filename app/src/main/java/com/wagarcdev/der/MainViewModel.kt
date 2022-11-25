@@ -1,11 +1,20 @@
 package com.wagarcdev.der
 
+import android.content.Context
+import android.util.Log
+import android.util.Patterns
+import android.widget.Toast
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.domain.repository.GoogleRepository
 import com.wagarcdev.der.domain.repository.SimpleUserRepository
+import com.wagarcdev.der.presentation.navigation.Screens
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens
+import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,15 +48,94 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun signIn(
+    fun createGoogleUserInDatabase(
         id: String,
         email: String,
         displayName: String,
-        photoUrl: String
+        photoUrl: String,
+        navHostController: NavHostController
     ) {
         viewModelScope.launch {
-            _user.value = User(id, email, null, null, displayName, photoUrl, null, false)
-            googleRepository.createNewUserWithSignWithGoogle((user.value!!))
+            _user.value = User(id, email, displayName, null, null, photoUrl, null, false)
+            googleRepository.createNewUserWithSignWithGoogle((user.value!!)).also {
+                Log.i("tag", user.value.toString())
+                this@MainViewModel.changeUserId(id)
+                navHostController
+                    .navigate(AppScreens.Contracts.route)
+            }
+        }
+    }
+
+    private fun checkIfPasswordAreEquals(
+        password: MutableState<String>,
+        passwordConfirm: MutableState<String>
+    ): Boolean {
+        if (password.value == passwordConfirm.value) {
+            return true
+        }
+        return false
+    }
+
+
+    suspend fun createSimpleUser(
+        username: MutableState<String>,
+        fullName: MutableState<String>,
+        email: MutableState<String>,
+        password: MutableState<String>,
+        passwordConfirm: MutableState<String>,
+        context: Context,
+        navHostController: NavHostController
+    ) {
+        if (username.value.isNotEmpty() && fullName.value.isNotEmpty() && email.value.isNotEmpty() && password.value.isNotEmpty() && passwordConfirm.value.isNotEmpty()) {
+            if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                val isEqualsPassword = checkIfPasswordAreEquals(password, passwordConfirm)
+                if (isEqualsPassword) {
+                    val simpleUser =
+                        User(
+                            System.currentTimeMillis().toString(),
+                            email.value,
+                            username.value,
+                            fullName.value,
+                            fullName.value,
+                            "",
+                            password.value,
+                            true
+                        )
+                    this.createNewSimpleUser(simpleUser).also {
+                        navHostController.navigate(AuthScreens.Login.route)
+                        Log.i("TAG", "usuario criado: $simpleUser")
+                    }
+                } else {
+                    Toast.makeText(context, "As senhas não coincidem", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(context, "Email não está de acordo", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+
+    suspend fun signInUser(
+        password: MutableState<String>,
+        username: MutableState<String>,
+        mainViewModel: MainViewModel,
+        context: Context,
+        navHostController: NavHostController
+    ) {
+        val comingPassword = mainViewModel.validateLogin(username = username.value)
+        if (comingPassword != null) {
+            if (comingPassword == password.value) {
+                val userId = mainViewModel.getUserId(username.value)
+                mainViewModel.changeUserId(userId)
+                navHostController.navigate(AppScreens.Contracts.route)
+            } else {
+                Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "Username incorreto", Toast.LENGTH_SHORT).show()
         }
     }
 

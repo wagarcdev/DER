@@ -67,45 +67,13 @@ fun LoginScreen(
     val signInRequestCode = 0
     val context = LocalContext.current
 
-    fun logIn() {
-        coroutineScope.launch {
-            val comingPassword = mainViewModel.validateLogin(username = username.value)
-            if (comingPassword == password.value) {
-
-                val userId = mainViewModel.getUserId(username.value)
-                mainViewModel.changeUserId(userId)
-                navHostController.navigate(Screens.MainScreen.name)
-            } else {
-                Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
-            try {
-                val account = task?.getResult(ApiException::class.java)
-                if (account == null) {
-                    Toast.makeText(context, "Autenticação falhou", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    mainViewModel.signIn(
-                        id = account.id!!,
-                        email = account.email!!,
-                        displayName = account.displayName!!,
-                        photoUrl = account.photoUrl!!.toString()
-                    )
-                    val isReadyToGetTheUser = signInGoogleViewModel.checkIfIsLogged(context)
-                    if (isReadyToGetTheUser) {
-                        navHostController.navigate(Screens.MainScreen.name)
-                    }
-
-                }
-            } catch (e: ApiException) {
-                Toast.makeText(context, "Autenticação falhou ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
+            coroutineScope.launch {
+                signInGoogleViewModel.googleSignIn(task, context, mainViewModel, navHostController)
             }
+
         }
 
     /** TODO onCLick */
@@ -276,8 +244,8 @@ fun LoginScreen(
                                 Text(
                                     modifier = Modifier
                                         .clickable {
-                                                   navHostController
-                                                       .navigate(AuthScreens.Recover.route)
+                                            navHostController
+                                                .navigate(AuthScreens.Recover.route)
                                         },
                                     text = "clicando aqui!",
                                     color = Color.DarkGray,
@@ -291,7 +259,20 @@ fun LoginScreen(
 
                             //Button "Entrar"
                             SignUpButton(
-                                onClick = { logIn() },
+                                onClick = {
+
+                                    coroutineScope.launch {
+                                        mainViewModel.signInUser(
+                                            password,
+                                            username,
+                                            mainViewModel,
+                                            context,
+                                            navHostController
+                                        )
+                                    }
+
+
+                                },
                                 enable = validState,
                                 buttonText = "Entrar"
                             )

@@ -9,7 +9,7 @@ import com.wagarcdev.der.data.entities.UserEntity
 
 @Database(
     entities = [UserEntity::class, ReportEntity::class, ServiceEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(DatabaseConverters::class)

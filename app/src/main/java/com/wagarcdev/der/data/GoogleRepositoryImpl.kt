@@ -19,4 +19,8 @@ class GoogleRepositoryImpl @Inject constructor(
         val listUserEntity = dao.getAllGoogleUsers(false)
         return listUserEntity.map { it.fromEntityToModel() }
     }
+
+    override suspend fun getGoogleUserById(idUser: String): User {
+       return dao.getUserById(idUser).fromEntityToModel()
+    }
 }
