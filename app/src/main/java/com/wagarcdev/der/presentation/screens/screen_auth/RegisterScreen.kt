@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
@@ -37,6 +38,7 @@ import com.wagarcdev.der.domain.model.User
 import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.components.InputField
+import com.wagarcdev.der.presentation.ui.components.InputFieldPassword
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import kotlinx.coroutines.launch
@@ -172,25 +174,19 @@ fun RegisterScreen(
                                 focusRequester = focusRequester
                             )
 
-                            InputField(
+                            InputFieldPassword(
                                 valueState = password,
                                 labelId = "Senha",
                                 enabled = true,
                                 isSingleLine = true,
-                                isPassword = true,
-                                isError = isPasswordError,
-                                errorMessage = "Preencha a senha",
                                 focusRequester = focusRequester
                             )
 
-                            InputField(
+                            InputFieldPassword(
                                 valueState = passwordConfirm,
                                 labelId = "Repita a senha",
                                 enabled = true,
                                 isSingleLine = true,
-                                isPassword = true,
-                                isError = isPasswordConfirmError,
-                                errorMessage = "Preencha a confirmação da senha",
                                 focusRequester = focusRequester
                             )
 
@@ -224,7 +220,15 @@ fun RegisterScreen(
                 SignUpButton(
                     onClick = {
                         coroutineScope.launch {
-                            mainViewModel.createSimpleUser(username, fullName, email, password, passwordConfirm, context, navHostController)
+                            mainViewModel.createSimpleUser(
+                                username,
+                                fullName,
+                                email,
+                                password,
+                                passwordConfirm,
+                                context,
+                                navHostController
+                            )
                         }
 
                     },
@@ -249,8 +253,8 @@ fun RegisterScreen(
                     Text(
                         modifier = Modifier
                             .clickable {
-                                       navHostController
-                                           .navigate(AuthScreens.Login.route)
+                                navHostController
+                                    .navigate(AuthScreens.Login.route)
                             },
                         text = "Efetue o seu Login!",
                         color = DER_yellow,
