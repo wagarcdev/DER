@@ -67,15 +67,14 @@ fun LoginScreen(
     val signInRequestCode = 0
     val context = LocalContext.current
 
-    //como resolver o erro de coroutine creation during compose?
-    coroutineScope.launch {
-        mainViewModel.checkIfUserAreLogged(navHostController)
-    }
+    val userId = signInGoogleViewModel.userId.value
+
+
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
             coroutineScope.launch {
-                signInGoogleViewModel.googleSignIn(task, context, mainViewModel, navHostController)
+                signInGoogleViewModel.googleSignIn(task, context, navHostController)
             }
 
         }
@@ -263,15 +262,13 @@ fun LoginScreen(
                             SignUpButton(
                                 onClick = {
 
-                                    coroutineScope.launch {
-                                        mainViewModel.signInUser(
-                                            password,
-                                            username,
-                                            mainViewModel,
-                                            context,
-                                            navHostController
-                                        )
-                                    }
+                                    signInGoogleViewModel.signInUser(
+                                        password,
+                                        username,
+                                        mainViewModel,
+                                        context,
+                                        navHostController
+                                    )
 
 
                                 },
