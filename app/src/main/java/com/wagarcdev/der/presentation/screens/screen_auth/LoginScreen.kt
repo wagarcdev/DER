@@ -45,6 +45,7 @@ import com.wagarcdev.der.presentation.navigation.Screens
 import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.components.InputField
+import com.wagarcdev.der.presentation.ui.components.InputFieldPassword
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
 import com.wagarcdev.der.presentation.ui.theme.RB_Black
@@ -206,7 +207,7 @@ fun LoginScreen(
                                 }
                             )
 
-                            InputField(
+                            InputFieldPassword(
                                 modifier = Modifier.onFocusChanged {
                                     if (it.isFocused) {
                                         isPasswordError.value = false
@@ -218,7 +219,6 @@ fun LoginScreen(
                                 isSingleLine = true,
                                 focusRequester = focusRequester,
                                 isError = isPasswordError,
-                                errorMessage = "Preencha a senha",
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Rounded.Key,
@@ -226,7 +226,6 @@ fun LoginScreen(
                                     )
                                 },
                                 keyboardType = KeyboardType.Password,
-                                isPassword = true,
                                 imeAction = ImeAction.Done
                             )
                             /** TODO onCLick */
