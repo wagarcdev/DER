@@ -12,10 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -59,7 +56,6 @@ fun LoginScreen(
     signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 ) {
 
-    val coroutineScope = rememberCoroutineScope()
 
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -67,16 +63,11 @@ fun LoginScreen(
     val signInRequestCode = 0
     val context = LocalContext.current
 
-    val userId = signInGoogleViewModel.userId.value
-
-
+    signInGoogleViewModel.checkIfUserAreLogged(navHostController)
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
-            coroutineScope.launch {
-                signInGoogleViewModel.googleSignIn(task, context, navHostController)
-            }
-
+            signInGoogleViewModel.googleSignIn(task, context, navHostController)
         }
 
     /** TODO onCLick */
@@ -169,7 +160,6 @@ fun LoginScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
                             val validState = remember(username.value, password.value) {
                                 username.value.trim().isNotEmpty() && password.value.trim()
                                     .isNotEmpty()
@@ -261,16 +251,12 @@ fun LoginScreen(
                             //Button "Entrar"
                             SignUpButton(
                                 onClick = {
-
                                     signInGoogleViewModel.signInUser(
                                         password,
                                         username,
-                                        mainViewModel,
                                         context,
                                         navHostController
                                     )
-
-
                                 },
                                 enable = validState,
                                 buttonText = "Entrar"

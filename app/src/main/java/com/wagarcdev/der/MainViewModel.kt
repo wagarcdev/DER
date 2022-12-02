@@ -31,14 +31,6 @@ class MainViewModel @Inject constructor(
     private val appPreferences: AppPreferences
 ) : ViewModel() {
 
-    // TODO(Provide an empty user instead of null)
-    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
-    val user: StateFlow<User?> = _user
-
-    // TODO(Provide an empty user instead of null)
-    private val _simpleUser: MutableStateFlow<User?> = MutableStateFlow(null)
-    private val simpleUser: StateFlow<User?> = _simpleUser
-
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 

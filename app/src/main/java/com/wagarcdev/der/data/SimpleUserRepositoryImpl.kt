@@ -10,25 +10,25 @@ import javax.inject.Inject
 class SimpleUserRepositoryImpl @Inject constructor(
     private val dao: AppDatabaseDAO
 ) : SimpleUserRepository {
-    override suspend  fun createNewSimpleUser(user: User) {
+    override suspend fun createNewSimpleUser(user: User) {
         dao.createNewSimpleUser(UserEntity.fromModelToEntity(user))
     }
 
-    override suspend  fun getAllUsers(): List<User> {
+    override suspend fun getAllUsers(): List<User> {
         return dao.getAllSimpleUsers(true).map {
             it.fromEntityToModel()
         }
     }
 
-    override suspend  fun validateLogin(isCommonUser: Boolean, username: String): String {
+    override suspend fun validateLogin(isCommonUser: Boolean, username: String): String {
         return dao.validateLogin(isCommonUser, username)
     }
 
-    override suspend  fun getUserId(isCommonUser: Boolean, username: String): String {
+    override suspend fun getUserId(isCommonUser: Boolean, username: String): String {
         return dao.getUserId(isCommonUser, username)
     }
 
-    override suspend  fun getUserById(id: String): User {
+    override suspend fun getUserById(id: String): User {
         return dao.getUserById(id).fromEntityToModel()
     }
 }

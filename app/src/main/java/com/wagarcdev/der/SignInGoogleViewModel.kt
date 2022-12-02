@@ -19,7 +19,6 @@ import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,15 +28,14 @@ class SignInGoogleViewModel @Inject constructor(
     private val simpleUserRepository: SimpleUserRepository,
     private val appPreferences: AppPreferences
 ) : ViewModel() {
-    private var _user = MutableLiveData<User?>()
-    val user: LiveData<User?> = _user
 
+    private var _typePassword: MutableStateFlow<String?> = MutableStateFlow(null)
     private var _userId: MutableStateFlow<String?> = MutableStateFlow(null)
-    val userId: StateFlow<String?> = _userId.asStateFlow()
 
     // TODO(Provide an empty user instead of null)
-    private val _simpleUser: MutableStateFlow<User?> = MutableStateFlow(null)
-    private val simpleUser: StateFlow<User?> = _simpleUser
+    private var _user: MutableStateFlow<User?> = MutableStateFlow(null)
+    val user: StateFlow<User?> = _user
+
 
     fun googleSignIn(
         task: Task<GoogleSignInAccount>?,
@@ -51,7 +49,7 @@ class SignInGoogleViewModel @Inject constructor(
                     .show()
             } else {
                 createGoogleUserInDatabase(
-                    id = account.id!!,
+                    userId = account.id!!,
                     email = account.email!!,
                     displayName = account.displayName!!,
                     photoUrl = account.photoUrl!!.toString(),
@@ -65,18 +63,18 @@ class SignInGoogleViewModel @Inject constructor(
     }
 
     fun createGoogleUserInDatabase(
-        id: String,
+        userId: String,
         email: String,
         displayName: String,
         photoUrl: String,
         navHostController: NavHostController
     ) {
         viewModelScope.launch {
-            _user.value = User(id, email, displayName, null, null, photoUrl, null, false)
+            _user.value = User(userId, email, displayName, null, null, photoUrl, null, false)
             googleRepository.createNewUserWithSignWithGoogle((user.value!!)).also {
-                changeUserId(id)
-                navHostController
-                    .navigate(AppScreens.Contracts.route)
+                appPreferences.changeUserId(userId).also {
+                    navHostController.navigate(AppScreens.Contracts.route)
+                }
             }
         }
     }
@@ -84,16 +82,22 @@ class SignInGoogleViewModel @Inject constructor(
     fun signInUser(
         password: MutableState<String>,
         username: MutableState<String>,
-        mainViewModel: MainViewModel,
         context: Context,
         navHostController: NavHostController
     ) {
         viewModelScope.launch {
-            val comingPassword = validateLogin(username = username.value)
-            if (comingPassword == password.value) {
-                val userId = getUserId(username.value)
-                changeUserId(userId)
-                navHostController.navigate(AppScreens.Contracts.route)
+            /**
+             * line that return the password of user according the username
+             */
+            _typePassword.value = simpleUserRepository.validateLogin(true, username.value)
+            if (_typePassword.value == password.value) {
+                /**
+                 * line that return the userId from user based in the username
+                 */
+                _userId.value = simpleUserRepository.getUserId(true, username.value)
+                appPreferences.changeUserId(_userId.value!!).also {
+                    navHostController.navigate(AppScreens.Contracts.route)
+                }
             } else {
                 Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
             }
@@ -102,62 +106,44 @@ class SignInGoogleViewModel @Inject constructor(
 
 
     /**
-     * method to save userId in datastore
+     * method to getUserId from datastore and pass the user from
+     * other screen in case of there's no null
+     * @param navHostController which is used to pass the user from other screen
      */
-    fun changeUserId(userId: String) {
-        viewModelScope.launch {
-            appPreferences.changeUserId(userId)
-        }
-
-    }
-
-
     fun checkIfUserAreLogged(navHostController: NavHostController) {
-        /**
-         * recupera dados do usuario e checa se ele é nulo
-         */
         viewModelScope.launch {
-            if (!_userId.value.isNullOrEmpty()) {
-                navHostController
-                    .navigate(AppScreens.Contracts.route)
+            if (!appPreferences.getUserId().isNullOrEmpty()) {
+                navHostController.navigate(AppScreens.Contracts.route)
             }
         }
-
     }
 
     /**
-     * Method to getUserId from datastore
+     * method that recive the user and create a new user
      */
-    fun getUserIdFromDatastore() {
+    fun createNewSimpleUser(comingUser: User) {
         viewModelScope.launch {
-            if (!appPreferences.getUserId().isNullOrEmpty()) {
-                   _userId.value = appPreferences.getUserId()
-            }
+            _user.value = comingUser
+            simpleUserRepository.createNewSimpleUser(user.value!!)
         }
-
-    }
-
-    fun createNewSimpleUser(user: User) {
-        _simpleUser.value = user
-        simpleUserRepository.createNewSimpleUser(simpleUser.value!!)
-    }
-
-    fun validateLogin(username: String): String {
-        return simpleUserRepository.validateLogin(true, username)
     }
 
     /**
      * method to get user by id
      * @param id userId retrived by method getUserIdFromDatastore
      */
-    fun getUserById(id: String): User {
-        return simpleUserRepository.getUserById(id)
+    fun getUserById() {
+        viewModelScope.launch {
+            _user.value = simpleUserRepository.getUserById(getUserIdFromDatastore().toString())
+        }
+
     }
 
-    fun getUserId(username: String): String {
-        return simpleUserRepository.getUserId(true, username)
-    }
-
+    /**
+     * method that makes the validation of field of creation of user
+     * check if the password that user has types are equals
+     * create a object user and call the method
+     */
     fun createSimpleUser(
         username: MutableState<String>,
         fullName: MutableState<String>,
@@ -207,6 +193,10 @@ class SignInGoogleViewModel @Inject constructor(
             return true
         }
         return false
+    }
+
+    suspend fun getUserIdFromDatastore(): String? {
+        return appPreferences.getUserId()
     }
 
 
