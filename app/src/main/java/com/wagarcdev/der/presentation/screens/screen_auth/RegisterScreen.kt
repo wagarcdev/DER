@@ -211,7 +211,7 @@ fun RegisterScreen(
                             navHostController
                         )
                     },
-                    enable = signInGoogleViewModel.validateState(fullName, email, password, passwordConfirm),
+                    enable = signInGoogleViewModel.validateState(fullName, email, password, passwordConfirm, null),
                     buttonText = "Cadastrar"
                 )
 

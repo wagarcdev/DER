@@ -102,7 +102,9 @@ class SignInGoogleViewModel @Inject constructor(
                 appPreferences.changeUserId(_userId.value!!).also {
                     navHostController.navigate(AppScreens.Contracts.route)
                 }
-            } else {
+            } else if (_typePassword.value.isNullOrEmpty()){
+                Toast.makeText(context, "Usuário não encontrado", Toast.LENGTH_SHORT).show()
+            }else{
                 Toast.makeText(context, "Senha incorreta", Toast.LENGTH_SHORT).show()
             }
         }
@@ -189,15 +191,20 @@ class SignInGoogleViewModel @Inject constructor(
     }
 
     fun validateState(
-        fullName: MutableState<String>,
-        email: MutableState<String>,
-        password: MutableState<String>,
-        passwordConfirm: MutableState<String>
+        fullName: MutableState<String>?,
+        email: MutableState<String>?,
+        password: MutableState<String>?,
+        passwordConfirm: MutableState<String>?,
+        username: MutableState<String>?
     ): Boolean {
-        return fullName.value.trim().isNotEmpty() && username.value!!.trim().isNotEmpty()
-                && email.value.trim().isNotEmpty() && password.value.trim()
-            .isNotEmpty() && passwordConfirm.value.trim()
-            .isNotEmpty()
+        return if (username!!.value.isNullOrEmpty()) {
+            (fullName!!.value.trim().isNotEmpty() && username.value!!.trim().isNotEmpty()
+                    && email!!.value.trim().isNotEmpty() && password!!.value.trim()
+                .isNotEmpty() && passwordConfirm!!.value.trim()
+                .isNotEmpty())
+        } else {
+            username.value.trim().isNotEmpty() && password!!.value.trim().isNotEmpty()
+        }
     }
 
 
