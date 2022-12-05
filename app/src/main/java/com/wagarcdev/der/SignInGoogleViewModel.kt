@@ -5,6 +5,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.lifecycle.*
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -28,6 +29,9 @@ class SignInGoogleViewModel @Inject constructor(
     private val simpleUserRepository: SimpleUserRepository,
     private val appPreferences: AppPreferences
 ) : ViewModel() {
+
+    private var _username: MutableStateFlow<String?> = MutableStateFlow(null)
+    val username: StateFlow<String?> = _username
 
     private var _typePassword: MutableStateFlow<String?> = MutableStateFlow(null)
     private var _userId: MutableStateFlow<String?> = MutableStateFlow(null)
@@ -182,6 +186,18 @@ class SignInGoogleViewModel @Inject constructor(
             Toast.makeText(context, "Preencha todos os campos corretamente", Toast.LENGTH_LONG)
                 .show()
         }
+    }
+
+    fun validateState(
+        fullName: MutableState<String>,
+        email: MutableState<String>,
+        password: MutableState<String>,
+        passwordConfirm: MutableState<String>
+    ): Boolean {
+        return fullName.value.trim().isNotEmpty() && username.value!!.trim().isNotEmpty()
+                && email.value.trim().isNotEmpty() && password.value.trim()
+            .isNotEmpty() && passwordConfirm.value.trim()
+            .isNotEmpty()
     }
 
 

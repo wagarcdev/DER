@@ -303,8 +303,6 @@ fun LoginScreen(
                             ) {
                                 authResultLauncher.launch(signInRequestCode)
                             }
-
-
                         }
                     }
                 }

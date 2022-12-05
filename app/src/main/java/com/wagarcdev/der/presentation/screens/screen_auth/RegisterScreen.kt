@@ -199,20 +199,6 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val validState = remember(
-                    fullName.value,
-                    username.value,
-                    email.value,
-                    password.value,
-                    passwordConfirm.value
-                ) {
-                    fullName.value.trim().isNotEmpty() && username.value.trim()
-                        .isNotEmpty()
-                            && email.value.trim().isNotEmpty() && password.value.trim()
-                        .isNotEmpty() && passwordConfirm.value.trim()
-                        .isNotEmpty()
-                }
-
                 SignUpButton(
                     onClick = {
                         signInGoogleViewModel.createSimpleUser(
@@ -225,7 +211,7 @@ fun RegisterScreen(
                             navHostController
                         )
                     },
-                    enable = validState,
+                    enable = signInGoogleViewModel.validateState(fullName, email, password, passwordConfirm),
                     buttonText = "Cadastrar"
                 )
 
