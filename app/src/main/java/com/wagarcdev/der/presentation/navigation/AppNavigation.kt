@@ -46,7 +46,7 @@ fun AppNavigation() {
 
         /** Authentication Screen */
         composable(route = Screens.AuthScreen.name) {
-            AuthScreen(mainViewModel, signInGoogleViewModel)
+            AuthScreen()
         }
 
         /** Reports Screen */

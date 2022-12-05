@@ -7,14 +7,14 @@ import com.wagarcdev.der.domain.model.User
 @Entity(tableName = "Usuarios")
 class UserEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: String,
-    val email: String?,
-    val username: String?,
-    val fullname: String?,
-    val displayName: String?,
-    val photoUrl: String?,
-    val password: String?,
-    val isCommonUser: Boolean
+    var id: String = "0",
+    var email: String? = "email@teste",
+    var username: String? = "username",
+    var fullname: String? = "fullname",
+    var displayName: String? = "displayname",
+    var photoUrl: String? = "photo",
+    var password: String? = "password",
+    var isCommonUser: Boolean = true
 ) {
     companion object {
         fun fromModelToEntity(simpleUser: User) = UserEntity(

@@ -10,15 +10,10 @@ import com.wagarcdev.der.SignInGoogleViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AuthScreen(
-    mainViewModel: MainViewModel,
-    signInGoogleViewModel: SignInGoogleViewModel
-) {
-
-    val wannaRegisterState = remember { mutableStateOf(false) }
+fun AuthScreen() {
 
     Scaffold(
-        topBar = {  },
+        topBar = { },
         content = {
 
         }

@@ -8,10 +8,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,17 +25,17 @@ import com.wagarcdev.der.presentation.ui.theme.DER_gray
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 import com.wagarcdev.der.presentation.ui.theme.RB_Black
 import com.wagarcdev.der.presentation.ui.theme.RB_White
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun RecoverScreen(navHostController: NavHostController) {
 
     val username = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordConfirmation = remember { mutableStateOf("") }
 
-    val coroutineScope = rememberCoroutineScope()
 
     val buttonFillWidthFloat = 0.7f
 
@@ -57,8 +54,7 @@ fun RecoverScreen(navHostController: NavHostController) {
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-            ,
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
 
@@ -109,15 +105,15 @@ fun RecoverScreen(navHostController: NavHostController) {
                 ) {
 
 
-
                     OutlinedTextField(
-                        value = email.value,
-                        onValueChange = {
-                            coroutineScope.launch {
-                                email.value = it
-                            }
+                        value = email,
+                        onValueChange = { email = it },
+                        label = {
+                            Text(
+                                text = "Email",
+                                color = textFieldColors
+                            )
                         },
-                        label = { Text(text = "Email", color = textFieldColors) },
                         colors = TextFieldDefaults.textFieldColors(
                             textColor = textFieldColors,
                             cursorColor = textFieldColors,
@@ -128,10 +124,8 @@ fun RecoverScreen(navHostController: NavHostController) {
                     )
 
 
-
                 }
             }
-
 
 
             /** RECOVER PASSWORD BUTTON*/
@@ -171,8 +165,8 @@ fun RecoverScreen(navHostController: NavHostController) {
                             .size(20.dp)
                             .padding(end = 8.dp)
                             .clickable {
-                                       navHostController
-                                           .navigate(AuthScreens.Login.route)
+                                navHostController
+                                    .navigate(AuthScreens.Login.route)
                             },
                         painter = painterResource(id = R.drawable.ic_back_arrow),
                         contentDescription = "Back to Log In",

@@ -1,7 +1,5 @@
 package com.wagarcdev.der.presentation.screens.screen_auth
 
-import android.util.Patterns
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,11 +28,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.R
-import com.wagarcdev.der.domain.model.User
+import com.wagarcdev.der.SignInGoogleViewModel
 import com.wagarcdev.der.presentation.navigation.graphs.AuthScreens
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.components.InputField
@@ -46,7 +42,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegisterScreen(
     navHostController: NavHostController,
-    mainViewModel: MainViewModel = hiltViewModel()
+    signInGoogleViewModel: SignInGoogleViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -203,36 +199,19 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val validState = remember(
-                    fullName.value,
-                    username.value,
-                    email.value,
-                    password.value,
-                    passwordConfirm.value
-                ) {
-                    fullName.value.trim().isNotEmpty() && username.value.trim()
-                        .isNotEmpty()
-                            && email.value.trim().isNotEmpty() && password.value.trim()
-                        .isNotEmpty() && passwordConfirm.value.trim()
-                        .isNotEmpty()
-                }
-
                 SignUpButton(
                     onClick = {
-                        coroutineScope.launch {
-                            mainViewModel.createSimpleUser(
-                                username,
-                                fullName,
-                                email,
-                                password,
-                                passwordConfirm,
-                                context,
-                                navHostController
-                            )
-                        }
-
+                        signInGoogleViewModel.createSimpleUser(
+                            username,
+                            fullName,
+                            email,
+                            password,
+                            passwordConfirm,
+                            context,
+                            navHostController
+                        )
                     },
-                    enable = validState,
+                    enable = signInGoogleViewModel.validateState(fullName, email, password, passwordConfirm, null),
                     buttonText = "Cadastrar"
                 )
 
