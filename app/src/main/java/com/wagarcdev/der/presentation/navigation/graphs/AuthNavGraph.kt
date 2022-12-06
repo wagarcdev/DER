@@ -1,6 +1,8 @@
 package com.wagarcdev.der.presentation.navigation.graphs
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
@@ -8,11 +10,10 @@ import com.google.accompanist.navigation.animation.composable
 import com.wagarcdev.der.presentation.navigation.Graph
 import com.wagarcdev.der.presentation.screens.screen_auth.LoginScreen
 import com.wagarcdev.der.presentation.screens.screen_auth.RecoverScreen
-import com.wagarcdev.der.presentation.screens.screen_auth.RegisterScreen
+import com.wagarcdev.der.presentation.screens.screen_register.RegisterScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
-
 
 
     navigation(
@@ -29,7 +30,10 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
         }
 
         composable(AuthScreens.Register.route) {
-            RegisterScreen(navHostController = navHostController)
+            RegisterScreen(
+                modifier = Modifier.fillMaxSize(),
+                onNavigateBack = { navHostController.popBackStack() }
+            )
         }
 
         composable(AuthScreens.Recover.route) {
