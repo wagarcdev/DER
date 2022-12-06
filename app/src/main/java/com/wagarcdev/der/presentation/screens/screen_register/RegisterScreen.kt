@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,6 +44,7 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.registerState.collectAsStateWithLifecycle()
+    val scrollState = rememberScrollState()
 
     BackHandler(onBack = onNavigateBack)
 
@@ -48,7 +52,8 @@ fun RegisterScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues = innerPadding),
+                .padding(paddingValues = innerPadding)
+                .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -78,23 +83,42 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "field name here")
+                    TextField(
+                        value = screenState.name,
+                        onValueChange = { viewModel.changeName(value = it) },
+                        label = { Text(text = "Full name") }
+                    )
 
-                    Text(text = "field email here")
+                    TextField(
+                        value = screenState.email,
+                        onValueChange = { viewModel.changeEmail(value = it) },
+                        label = { Text(text = "Email") }
+                    )
 
-                    Text(text = "field username here")
+                    TextField(
+                        value = screenState.username,
+                        onValueChange = { viewModel.changeUsername(value = it) },
+                        label = { Text(text = "Username") }
+                    )
 
-                    Text(text = "field password here")
+                    TextField(
+                        value = screenState.password,
+                        onValueChange = { viewModel.changePassword(value = it) },
+                        label = { Text(text = "Password") }
+                    )
 
-                    Text(text = "field repeat password here")
+                    TextField(
+                        value = screenState.repeatedPassword,
+                        onValueChange = { viewModel.changeRepeatedPassword(value = it) },
+                        label = { Text(text = "Repeat password") }
+                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(height = 16.dp))
 
             SignUpButton(
-                onClick = {},
-                enable = true,
+                onClick = { /* todo */ },
                 buttonText = "Cadastrar"
             )
         }
