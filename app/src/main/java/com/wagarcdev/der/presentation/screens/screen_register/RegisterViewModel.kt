@@ -2,16 +2,30 @@ package com.wagarcdev.der.presentation.screens.screen_register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wagarcdev.der.data.local.AppPreferences
+import com.wagarcdev.der.domain.model.User
+import com.wagarcdev.der.domain.repository.SimpleUserRepository
 import com.wagarcdev.der.domain.type.InputError
 import com.wagarcdev.der.domain.type.InputResult
 import com.wagarcdev.der.domain.usecase.ValidateEmailFieldUseCase
 import com.wagarcdev.der.domain.usecase.ValidateSimpleFieldUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+/**
+ * Sealed interface that represents one time events from view model to screen.
+ */
+sealed interface RegisterChannel {
+    object RegisterFailed : RegisterChannel
+    object RegisterSuccessfully : RegisterChannel
+}
 
 /**
  * State holder of screen and view model.
@@ -21,8 +35,6 @@ data class RegisterState(
     val nameError: String? = null,
     val email: String = "",
     val emailError: String? = null,
-    val username: String = "",
-    val usernameError: String? = null,
     val password: String = "",
     val passwordError: String? = null,
     val repeatedPassword: String = "",
@@ -34,7 +46,9 @@ data class RegisterState(
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val validateSimpleFieldUseCase: ValidateSimpleFieldUseCase,
-    private val validateEmailFieldUseCase: ValidateEmailFieldUseCase
+    private val validateEmailFieldUseCase: ValidateEmailFieldUseCase,
+    private val simpleUserRepository: SimpleUserRepository,
+    private val appPreferences: AppPreferences
 ) : ViewModel() {
     private val _registerState = MutableStateFlow(value = RegisterState())
 
@@ -44,16 +58,15 @@ class RegisterViewModel @Inject constructor(
         initialValue = _registerState.value
     )
 
+    private val _channel = Channel<RegisterChannel>()
+    val channel = _channel.receiveAsFlow()
+
     fun changeName(value: String) {
         _registerState.update { it.copy(name = value) }
     }
 
     fun changeEmail(value: String) {
         _registerState.update { it.copy(email = value) }
-    }
-
-    fun changeUsername(value: String) {
-        _registerState.update { it.copy(username = value) }
     }
 
     fun changePassword(value: String) {
@@ -83,10 +96,6 @@ class RegisterViewModel @Inject constructor(
             string = _registerState.value.email
         )
 
-        val usernameResult = validateSimpleFieldUseCase(
-            string = _registerState.value.username
-        )
-
         val passwordResult = validateSimpleFieldUseCase(
             string = _registerState.value.password,
             minChar = 4
@@ -109,13 +118,6 @@ class RegisterViewModel @Inject constructor(
                         else -> null
                     }
                 },
-                usernameError = when (usernameResult) {
-                    InputResult.Success -> null
-                    is InputResult.Error -> when (usernameResult.inputError) {
-                        InputError.FieldEmpty -> "Username cannot be empty"
-                        else -> null
-                    }
-                },
                 passwordError = when (passwordResult) {
                     InputResult.Success -> null
                     is InputResult.Error -> when (passwordResult.inputError) {
@@ -128,6 +130,31 @@ class RegisterViewModel @Inject constructor(
                     "The entered passwords don't match"
                 }
             )
+        }
+
+        listOf(
+            nameResult,
+            emailResult,
+            passwordResult
+        ).any { inputResult ->
+            inputResult is InputResult.Error
+        }.also { hasError ->
+            if (hasError || _registerState.value.repeatedPasswordError != null) return
+        }
+
+        val user = _registerState.value.run {
+            User(
+                fullname = name,
+                email = email,
+                password = password
+            )
+        }
+
+        viewModelScope.launch {
+            simpleUserRepository.createNewSimpleUser(user = user)
+            // todo refactor room function to return the user id after account creation
+            // todo save the returned id on datastore
+            _channel.send(element = RegisterChannel.RegisterSuccessfully)
         }
     }
 }

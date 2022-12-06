@@ -1,9 +1,12 @@
 package com.wagarcdev.der.presentation.screens.screen_register
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,20 +16,30 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Password
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +51,7 @@ import com.wagarcdev.der.presentation.ui.components.ClearTrailingButton
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
 import com.wagarcdev.der.presentation.ui.components.ToggleTextVisibilityTrailingButton
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 
 /**
  * Compose the Register Screen.
@@ -54,12 +68,38 @@ fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.registerState.collectAsStateWithLifecycle()
+
+    val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
+
     val focusManager = LocalFocusManager.current
+    val nextKeyBoardAction = KeyboardActions(
+        onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+    )
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.channel.collect { channel ->
+            when (channel) {
+                RegisterChannel.RegisterFailed -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Something went wrong"
+                    )
+                }
+                RegisterChannel.RegisterSuccessfully -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Account created successfully"
+                    )
+                }
+            }
+        }
+    }
 
     BackHandler(onBack = onNavigateBack)
 
-    Scaffold(modifier = modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        scaffoldState = scaffoldState
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,6 +142,9 @@ fun RegisterScreen(
                         onValueChange = { viewModel.changeName(value = it) },
                         labelString = "Full name",
                         errorMessage = screenState.nameError,
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Rounded.Person, contentDescription = null)
+                        },
                         trailingIcon = if (screenState.name.isEmpty()) null else {
                             { ClearTrailingButton { viewModel.changeName(value = "") } }
                         },
@@ -110,9 +153,7 @@ fun RegisterScreen(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
-                        )
+                        keyboardActions = nextKeyBoardAction
                     )
 
                     TempDerOutlinedTextField(
@@ -120,6 +161,9 @@ fun RegisterScreen(
                         onValueChange = { viewModel.changeEmail(value = it) },
                         labelString = "Email",
                         errorMessage = screenState.emailError,
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Rounded.Email, contentDescription = null)
+                        },
                         trailingIcon = if (screenState.email.isEmpty()) null else {
                             { ClearTrailingButton { viewModel.changeEmail(value = "") } }
                         },
@@ -128,27 +172,7 @@ fun RegisterScreen(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
-                        )
-                    )
-
-                    TempDerOutlinedTextField(
-                        value = screenState.username,
-                        onValueChange = { viewModel.changeUsername(value = it) },
-                        labelString = "Username",
-                        errorMessage = screenState.usernameError,
-                        trailingIcon = if (screenState.username.isEmpty()) null else {
-                            { ClearTrailingButton { viewModel.changeUsername(value = "") } }
-                        },
-                        enableWhiteSpace = false,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
-                        )
+                        keyboardActions = nextKeyBoardAction
                     )
 
                     TempDerOutlinedTextField(
@@ -157,6 +181,9 @@ fun RegisterScreen(
                         labelString = "Password",
                         errorMessage = screenState.passwordError,
                         enableWhiteSpace = false,
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Rounded.Password, contentDescription = null)
+                        },
                         trailingIcon = {
                             ToggleTextVisibilityTrailingButton(
                                 onClick = viewModel::togglePasswordVisibility,
@@ -168,9 +195,7 @@ fun RegisterScreen(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = KeyboardActions(
-                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
-                        )
+                        keyboardActions = nextKeyBoardAction
                     )
 
                     TempDerOutlinedTextField(
@@ -179,6 +204,9 @@ fun RegisterScreen(
                         labelString = "Repeat password",
                         errorMessage = screenState.repeatedPasswordError,
                         enableWhiteSpace = false,
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Rounded.Password, contentDescription = null)
+                        },
                         trailingIcon = {
                             ToggleTextVisibilityTrailingButton(
                                 onClick = viewModel::toggleRepeatedPasswordVisibility,
@@ -202,6 +230,29 @@ fun RegisterScreen(
             SignUpButton(
                 onClick = viewModel::signUpForEmailAndPassword,
                 buttonText = "Cadastrar"
+            )
+
+            Row(
+                modifier = Modifier.padding(all = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Já possui cadastro?")
+
+                Text(
+                    modifier = Modifier.clickable { onNavigateBack() },
+                    text = "Efetue o seu Login!",
+                    color = DER_yellow,
+                    textDecoration = TextDecoration.Underline,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Image(
+                modifier = Modifier.fillMaxWidth(fraction = 0.5F),
+                painter = painterResource(id = R.drawable.logotipo_st),
+                contentDescription = stringResource(R.string.Logo_ST6),
+                contentScale = ContentScale.Fit
             )
         }
     }
