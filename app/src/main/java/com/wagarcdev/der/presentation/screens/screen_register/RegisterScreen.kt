@@ -1,6 +1,7 @@
 package com.wagarcdev.der.presentation.screens.screen_register
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.R
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
+import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
 
 /**
  * Compose the Register Screen.
@@ -80,37 +81,45 @@ fun RegisterScreen(
                 BackgroundImageRow(imageResInt = R.drawable.backgroung_gray_img)
 
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(space = 4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TextField(
+                    TempDerOutlinedTextField(
                         value = screenState.name,
                         onValueChange = { viewModel.changeName(value = it) },
-                        label = { Text(text = "Full name") }
+                        labelString = "Full name",
+                        errorMessage = screenState.nameError
                     )
 
-                    TextField(
+                    TempDerOutlinedTextField(
                         value = screenState.email,
                         onValueChange = { viewModel.changeEmail(value = it) },
-                        label = { Text(text = "Email") }
+                        labelString = "Email",
+                        errorMessage = screenState.emailError
                     )
 
-                    TextField(
+                    TempDerOutlinedTextField(
                         value = screenState.username,
                         onValueChange = { viewModel.changeUsername(value = it) },
-                        label = { Text(text = "Username") }
+                        labelString = "Username",
+                        errorMessage = screenState.usernameError
                     )
 
-                    TextField(
+                    TempDerOutlinedTextField(
                         value = screenState.password,
                         onValueChange = { viewModel.changePassword(value = it) },
-                        label = { Text(text = "Password") }
+                        labelString = "Password",
+                        errorMessage = screenState.passwordError
                     )
 
-                    TextField(
+                    TempDerOutlinedTextField(
                         value = screenState.repeatedPassword,
                         onValueChange = { viewModel.changeRepeatedPassword(value = it) },
-                        label = { Text(text = "Repeat password") }
+                        labelString = "Repeat password",
+                        errorMessage = screenState.repeatedPasswordError
                     )
                 }
             }
@@ -118,7 +127,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(height = 16.dp))
 
             SignUpButton(
-                onClick = { /* todo */ },
+                onClick = viewModel::signUpForEmailAndPassword,
                 buttonText = "Cadastrar"
             )
         }
