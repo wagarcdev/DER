@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -17,8 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,8 +34,10 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.R
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
+import com.wagarcdev.der.presentation.ui.components.ClearTrailingButton
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
+import com.wagarcdev.der.presentation.ui.components.ToggleTextVisibilityTrailingButton
 
 /**
  * Compose the Register Screen.
@@ -46,6 +55,7 @@ fun RegisterScreen(
 ) {
     val screenState by viewModel.registerState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+    val focusManager = LocalFocusManager.current
 
     BackHandler(onBack = onNavigateBack)
 
@@ -91,35 +101,98 @@ fun RegisterScreen(
                         value = screenState.name,
                         onValueChange = { viewModel.changeName(value = it) },
                         labelString = "Full name",
-                        errorMessage = screenState.nameError
+                        errorMessage = screenState.nameError,
+                        trailingIcon = if (screenState.name.isEmpty()) null else {
+                            { ClearTrailingButton { viewModel.changeName(value = "") } }
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+                        )
                     )
 
                     TempDerOutlinedTextField(
                         value = screenState.email,
                         onValueChange = { viewModel.changeEmail(value = it) },
                         labelString = "Email",
-                        errorMessage = screenState.emailError
+                        errorMessage = screenState.emailError,
+                        trailingIcon = if (screenState.email.isEmpty()) null else {
+                            { ClearTrailingButton { viewModel.changeEmail(value = "") } }
+                        },
+                        enableWhiteSpace = false,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+                        )
                     )
 
                     TempDerOutlinedTextField(
                         value = screenState.username,
                         onValueChange = { viewModel.changeUsername(value = it) },
                         labelString = "Username",
-                        errorMessage = screenState.usernameError
+                        errorMessage = screenState.usernameError,
+                        trailingIcon = if (screenState.username.isEmpty()) null else {
+                            { ClearTrailingButton { viewModel.changeUsername(value = "") } }
+                        },
+                        enableWhiteSpace = false,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+                        )
                     )
 
                     TempDerOutlinedTextField(
                         value = screenState.password,
                         onValueChange = { viewModel.changePassword(value = it) },
                         labelString = "Password",
-                        errorMessage = screenState.passwordError
+                        errorMessage = screenState.passwordError,
+                        enableWhiteSpace = false,
+                        trailingIcon = {
+                            ToggleTextVisibilityTrailingButton(
+                                onClick = viewModel::togglePasswordVisibility,
+                                isVisible = screenState.isPasswordVisible
+                            )
+                        },
+                        hideText = !screenState.isPasswordVisible,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+                        )
                     )
 
                     TempDerOutlinedTextField(
                         value = screenState.repeatedPassword,
                         onValueChange = { viewModel.changeRepeatedPassword(value = it) },
                         labelString = "Repeat password",
-                        errorMessage = screenState.repeatedPasswordError
+                        errorMessage = screenState.repeatedPasswordError,
+                        enableWhiteSpace = false,
+                        trailingIcon = {
+                            ToggleTextVisibilityTrailingButton(
+                                onClick = viewModel::toggleRepeatedPasswordVisibility,
+                                isVisible = screenState.isRepeatedPasswordVisible
+                            )
+                        },
+                        hideText = !screenState.isRepeatedPasswordVisible,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        )
                     )
                 }
             }

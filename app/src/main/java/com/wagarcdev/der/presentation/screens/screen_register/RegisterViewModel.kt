@@ -26,7 +26,9 @@ data class RegisterState(
     val password: String = "",
     val passwordError: String? = null,
     val repeatedPassword: String = "",
-    val repeatedPasswordError: String? = null
+    val repeatedPasswordError: String? = null,
+    val isPasswordVisible: Boolean = false,
+    val isRepeatedPasswordVisible: Boolean = false
 )
 
 @HiltViewModel
@@ -60,6 +62,14 @@ class RegisterViewModel @Inject constructor(
 
     fun changeRepeatedPassword(value: String) {
         _registerState.update { it.copy(repeatedPassword = value) }
+    }
+
+    fun togglePasswordVisibility() {
+        _registerState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
+    }
+
+    fun toggleRepeatedPasswordVisibility() {
+        _registerState.update { it.copy(isRepeatedPasswordVisible = !it.isRepeatedPasswordVisible) }
     }
 
     fun signUpForEmailAndPassword() {
