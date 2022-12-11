@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_reports
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,11 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.wagarcdev.der.MainViewModel
 import com.wagarcdev.der.domain.model.Report
 import com.wagarcdev.der.presentation.ui.theme.DER_gray
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
@@ -24,13 +22,15 @@ import com.wagarcdev.der.utils.NoReportsDivider
 @Composable
 fun ReportsScreen(
     modifier: Modifier = Modifier,
-    onCreateReport: () -> Unit,
-    mainViewModel: MainViewModel
+    onNavigateBack: () -> Unit,
+    onNavigateToCreateReportScreen: () -> Unit
 ) {
+    BackHandler(onBack = onNavigateBack)
+
     Scaffold(modifier = modifier) { innerPadding ->
         ReportScreenContent(
             innerPadding = innerPadding,
-            onCreateReport = onCreateReport
+            onCreateReport = onNavigateToCreateReportScreen
         )
     }
 }
@@ -128,14 +128,4 @@ fun CreateReportCard(
             )
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ReportScreenPreview() {
-    val mainViewModel: MainViewModel = hiltViewModel()
-    ReportsScreen(
-        onCreateReport = {},
-        mainViewModel = mainViewModel
-    )
 }

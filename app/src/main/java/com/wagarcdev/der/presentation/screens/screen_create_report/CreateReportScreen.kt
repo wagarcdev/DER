@@ -22,25 +22,23 @@ import com.wagarcdev.der.presentation.screens.screen_create_report.steps.FirstSt
 import com.wagarcdev.der.presentation.screens.screen_create_report.steps.SecondStep
 
 /**
- * Composes the Create Report screen.
+ * Compose the Create Report screen.
  *
- * @param modifier the [Modifier] to be applied on the main container of this screen.
- * @param onBack a lambda to handle when user press the back button from navigation bar and/or
- * other button to navigate back from screen (ie navigation icon from TopAppBar).
- * @param viewModel the [CreateReportViewModel] for this screen. Default instance of view model
- * is created by [hiltViewModel].
+ * @param modifier the [Modifier] to be applied on main container of this screen.
+ * @param onNavigateBack callback to navigate back from this screen.
+ * @param viewModel the [CreateReportViewModel]. Default is provided by [hiltViewModel].
  */
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun CreateReportScreen(
-    modifier: Modifier = Modifier,
-    onBack: () -> Unit,
+    modifier: Modifier,
+    onNavigateBack: () -> Unit,
     viewModel: CreateReportViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
     val stepsNavController = rememberAnimatedNavController()
 
-    BackHandler(onBack = onBack)
+    BackHandler(onBack = onNavigateBack)
 
     Scaffold(modifier = modifier) { innerPadding ->
         AnimatedNavHost(
@@ -63,7 +61,7 @@ fun CreateReportScreen(
                     changeContractor = { viewModel.changeContractor(value = it) },
                     changeAreaExtension = { viewModel.changeAreaExtension(value = it) },
                     changeSupervisor = { viewModel.changeSupervisor(value = it) },
-                    onBack = onBack,
+                    onBack = onNavigateBack,
                     onNext = {
                         stepsNavController.navigate(destinationRoute = StepRoute.SecondStep.route)
                     }
@@ -78,7 +76,7 @@ fun CreateReportScreen(
                     attachedImageNames = screenState.report.attachedImageNames,
                     onAddImage = { viewModel.addImage(uri = it) },
                     onRemoveImage = { viewModel.removeImage(index = it) },
-                    onBack = onBack,
+                    onBack = onNavigateBack,
                     onPrevious = {
                         stepsNavController.navigateBackWithFallback(
                             currentRoute = StepRoute.SecondStep.route,

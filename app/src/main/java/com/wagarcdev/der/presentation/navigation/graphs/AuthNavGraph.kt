@@ -5,49 +5,60 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.navigation
 import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.navigation
 import com.wagarcdev.der.presentation.navigation.Graph
-import com.wagarcdev.der.presentation.screens.screen_auth.LoginScreen
-import com.wagarcdev.der.presentation.screens.screen_auth.RecoverScreen
+import com.wagarcdev.der.presentation.screens.screen_login.LoginScreen
 import com.wagarcdev.der.presentation.screens.screen_register.RegisterScreen
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
-
-
+fun NavGraphBuilder.authNavGraph(
+    onNavigateBack: () -> Unit,
+    navHostController: NavHostController
+) {
     navigation(
         route = Graph.AUTH,
         startDestination = AuthScreens.Login.route
     ) {
-
-//        composable(AuthScreens.Splash.route) {
-//            AnimatedSplashScreen(navHostController = navHostController)
-//        }
-
-        composable(AuthScreens.Login.route) {
-            LoginScreen(navHostController)
-        }
-
-        composable(AuthScreens.Register.route) {
-            RegisterScreen(
+        composable(route = AuthScreens.Login.route) {
+            LoginScreen(
                 modifier = Modifier.fillMaxSize(),
-                onNavigateBack = { navHostController.popBackStack() }
+                onNavigateBack = onNavigateBack,
+                onNavigateToRegisterScreen = {
+                    navHostController.navigate(route = AuthScreens.Register.route) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToContractsScreen = {
+                    navHostController.navigate(route = Graph.APP) {
+                        popUpTo(route = AuthScreens.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 
-        composable(AuthScreens.Recover.route) {
-            RecoverScreen(navHostController = navHostController)
+        composable(route = AuthScreens.Register.route) {
+            RegisterScreen(
+                modifier = Modifier.fillMaxSize(),
+                onNavigateBack = { navHostController.popBackStack() },
+                onNavigateToContractsScreen = {
+                    navHostController.navigate(route = Graph.APP) {
+                        popUpTo(route = AuthScreens.Register.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
 
-
+        composable(route = AuthScreens.Recover.route) {
+            // todo
+        }
     }
 }
 
-
 sealed class AuthScreens(val route: String) {
-    object Splash : AuthScreens(route = "SPLASH")
-    object Register : AuthScreens(route = "REGISTER")
     object Login : AuthScreens(route = "LOGIN")
+    object Register : AuthScreens(route = "REGISTER")
     object Recover : AuthScreens(route = "RECOVER")
 }

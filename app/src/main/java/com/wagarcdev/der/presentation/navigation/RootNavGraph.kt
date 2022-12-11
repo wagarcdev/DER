@@ -9,15 +9,25 @@ import com.wagarcdev.der.presentation.navigation.graphs.authNavGraph
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun RootNavGraph(navHostController: NavHostController) {
-
+fun RootNavGraph(
+    navHostController: NavHostController,
+    startDestination: String,
+    onNavigateBack: () -> Unit
+) {
     AnimatedNavHost(
         navController = navHostController,
         route = Graph.ROOT,
-        startDestination = Graph.AUTH
+        startDestination = startDestination
     ) {
-        authNavGraph(navHostController)
-        appNavGraph(navHostController)
+        authNavGraph(
+            onNavigateBack = onNavigateBack,
+            navHostController = navHostController
+        )
+
+        appNavGraph(
+            onNavigateBack = onNavigateBack,
+            navHostController = navHostController
+        )
     }
 }
 

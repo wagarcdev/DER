@@ -19,7 +19,3 @@ plugins {
     id "com.google.dagger.hilt.android" version "$hiltVer" apply false
     id "com.google.gms.google-services" version "4.3.14" apply false
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

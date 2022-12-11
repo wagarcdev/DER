@@ -16,7 +16,7 @@ import javax.inject.Singleton
 interface CoroutinesModule {
     @Binds
     @Singleton
-    fun bindCoroutinesDispatchers(
+    fun bindsCoroutinesDispatchers(
         dispatchers: CoroutinesDispatchersImpl
     ): CoroutinesDispatchers
 }

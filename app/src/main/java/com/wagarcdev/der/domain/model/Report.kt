@@ -1,5 +1,8 @@
 package com.wagarcdev.der.domain.model
 
+/**
+ * Model class that represents an report.
+ */
 data class Report(
     val id: Int,
     val contract: String,

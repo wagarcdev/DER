@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wagarcdev.der.domain.model.Climate
 import com.wagarcdev.der.domain.model.DayPeriod
 import com.wagarcdev.der.domain.model.Report
-import com.wagarcdev.der.domain.repository.ReportsRepository
+import com.wagarcdev.der.domain.usecase.InsertReportUseCase
 import com.wagarcdev.der.utils.CreatePdf
 import com.wagarcdev.der.utils.ImageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,7 +62,7 @@ private data class CreateReportViewModelState(
 
 @HiltViewModel
 class CreateReportViewModel @Inject constructor(
-    private val reportsRepository: ReportsRepository,
+    private val insertReportUseCase: InsertReportUseCase,
     private val imageManager: ImageManager,
     private val createPdf: CreatePdf
 ) : ViewModel() {
@@ -147,7 +147,7 @@ class CreateReportViewModel @Inject constructor(
 
     private fun saveReport() {
         viewModelScope.launch {
-            reportsRepository.createNewReport(report = screenState.value.report)
+            insertReportUseCase(report = screenState.value.report)
         }
     }
 }

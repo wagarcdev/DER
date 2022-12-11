@@ -2,11 +2,12 @@ package com.wagarcdev.der.presentation.screens.screen_register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wagarcdev.der.data.local.AppPreferences
 import com.wagarcdev.der.domain.model.User
-import com.wagarcdev.der.domain.repository.SimpleUserRepository
 import com.wagarcdev.der.domain.type.InputError
 import com.wagarcdev.der.domain.type.InputResult
+import com.wagarcdev.der.domain.usecase.InsertUserUseCase
+import com.wagarcdev.der.domain.usecase.IsEmailAvailableUseCase
+import com.wagarcdev.der.domain.usecase.SetCurrentUserIdUseCase
 import com.wagarcdev.der.domain.usecase.ValidateEmailFieldUseCase
 import com.wagarcdev.der.domain.usecase.ValidateSimpleFieldUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ import javax.inject.Inject
  * Sealed interface that represents one time events from view model to screen.
  */
 sealed interface RegisterChannel {
+    object UnavailableEmail : RegisterChannel
     object RegisterFailed : RegisterChannel
     object RegisterSuccessfully : RegisterChannel
 }
@@ -47,11 +49,11 @@ data class RegisterState(
 class RegisterViewModel @Inject constructor(
     private val validateSimpleFieldUseCase: ValidateSimpleFieldUseCase,
     private val validateEmailFieldUseCase: ValidateEmailFieldUseCase,
-    private val simpleUserRepository: SimpleUserRepository,
-    private val appPreferences: AppPreferences
+    private val isEmailAvailableUseCase: IsEmailAvailableUseCase,
+    private val insertUserUseCase: InsertUserUseCase,
+    private val setCurrentUserIdUseCase: SetCurrentUserIdUseCase
 ) : ViewModel() {
     private val _registerState = MutableStateFlow(value = RegisterState())
-
     val registerState = _registerState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
@@ -139,22 +141,30 @@ class RegisterViewModel @Inject constructor(
         ).any { inputResult ->
             inputResult is InputResult.Error
         }.also { hasError ->
-            if (hasError || _registerState.value.repeatedPasswordError != null) return
+            if (hasError) return
         }
 
-        val user = _registerState.value.run {
-            User(
-                fullname = name,
-                email = email,
-                password = password
-            )
-        }
+        if (_registerState.value.repeatedPasswordError != null) return
 
         viewModelScope.launch {
-            simpleUserRepository.createNewSimpleUser(user = user)
-            // todo refactor room function to return the user id after account creation
-            // todo save the returned id on datastore
-            _channel.send(element = RegisterChannel.RegisterSuccessfully)
+            val isEmailAvailable = isEmailAvailableUseCase(email = _registerState.value.email)
+            if (!isEmailAvailable) {
+                _channel.send(element = RegisterChannel.UnavailableEmail)
+                return@launch
+            }
+
+            val createdUserId = insertUserUseCase(
+                user = User(
+                    name = _registerState.value.name,
+                    email = _registerState.value.email,
+                    password = _registerState.value.password
+                )
+            )
+
+            if (createdUserId > 0) {
+                setCurrentUserIdUseCase(userId = createdUserId)
+                _channel.send(element = RegisterChannel.RegisterSuccessfully)
+            } else _channel.send(element = RegisterChannel.RegisterFailed)
         }
     }
 }

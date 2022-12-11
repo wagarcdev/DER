@@ -1,6 +1,7 @@
-package com.wagarcdev.der.presentation.screens.screen_register
+package com.wagarcdev.der.presentation.screens.screen_login
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +24,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Password
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,13 +31,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -46,53 +47,75 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.R
+import com.wagarcdev.der.presentation.screens.screen_login.google_one_tap_sign_in.GoogleOneTapSignIn
+import com.wagarcdev.der.presentation.screens.screen_login.google_one_tap_sign_in.rememberOneTapSignInState
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
 import com.wagarcdev.der.presentation.ui.components.ClearTrailingButton
+import com.wagarcdev.der.presentation.ui.components.SignInButton
 import com.wagarcdev.der.presentation.ui.components.SignUpButton
 import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
 import com.wagarcdev.der.presentation.ui.components.ToggleTextVisibilityTrailingButton
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow
+import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
+import com.wagarcdev.der.presentation.ui.theme.RB_Black
+import com.wagarcdev.der.presentation.ui.theme.RB_White
 
 /**
- * Compose the Register Screen.
+ * Compose the Login Screen.
  *
  * @param modifier the [Modifier] to be applied on main container of this screen.
  * @param onNavigateBack callback to navigate back from this screen.
- * @param onNavigateToContractsScreen callback to navigate to contracts screen.
- * @param viewModel the [RegisterViewModel]. Default is provided by [hiltViewModel].
+ * @param onNavigateToRegisterScreen callback to navigate to register screen.
+ * @param viewModel the [LoginViewModel]. Default is provided by [hiltViewModel].
  */
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun RegisterScreen(
+fun LoginScreen(
     modifier: Modifier,
     onNavigateBack: () -> Unit,
+    onNavigateToRegisterScreen: () -> Unit,
     onNavigateToContractsScreen: () -> Unit,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val screenState by viewModel.registerState.collectAsStateWithLifecycle()
+    val screenState by viewModel.loginState.collectAsStateWithLifecycle()
+
+    val focusManager = LocalFocusManager.current
 
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
 
-    val focusManager = LocalFocusManager.current
-    val nextKeyBoardAction = KeyboardActions(
-        onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+    val oneTapSignState = rememberOneTapSignInState()
+    GoogleOneTapSignIn(
+        state = oneTapSignState,
+        clientId = stringResource(id = R.string.google_cloud_server_client_id),
+        onUserReceived = { user ->
+            viewModel.signInWithGoogleAccount(user = user)
+        },
+        onDialogDismissed = { message ->
+            // todo show the message in a proper way
+            println(message)
+        }
     )
 
     LaunchedEffect(key1 = Unit) {
         viewModel.channel.collect { channel ->
             when (channel) {
-                RegisterChannel.UnavailableEmail -> {
+                LoginChannel.EmailNotFound -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = "This email already has an account associated"
+                        message = "This email is not associated with an account"
                     )
                 }
-                RegisterChannel.RegisterFailed -> {
+                LoginChannel.IncorrectPassword -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = "Something went wrong"
+                        message = "Incorrect password"
                     )
                 }
-                RegisterChannel.RegisterSuccessfully -> onNavigateToContractsScreen()
+                LoginChannel.SignInWithGoogleFailed -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = "Something went wrong with Google Sign-In"
+                    )
+                }
+                LoginChannel.SignInSuccessfully -> onNavigateToContractsScreen()
             }
         }
     }
@@ -110,54 +133,40 @@ fun RegisterScreen(
                 .verticalScroll(state = scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Novo cadastro",
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = 0.85F)
+                    .fillMaxHeight(fraction = 0.2F),
+                painter = painterResource(id = R.drawable.logotipo_st),
+                contentDescription = stringResource(R.string.DER_Logo_desc)
             )
-
-            Text(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.registro_frase),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(height = 16.dp))
 
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                BackgroundImageRow(imageResInt = R.drawable.backgroung_gray_img)
+                BackgroundImageRow(imageResInt = R.drawable.backgroung_color_img)
 
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(space = 4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TempDerOutlinedTextField(
-                        value = screenState.name,
-                        onValueChange = { viewModel.changeName(value = it) },
-                        labelString = "Full name",
-                        errorMessage = screenState.nameError,
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Rounded.Person, contentDescription = null)
-                        },
-                        trailingIcon = if (screenState.name.isEmpty()) null else {
-                            { ClearTrailingButton { viewModel.changeName(value = "") } }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            capitalization = KeyboardCapitalization.Words,
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = nextKeyBoardAction
+                    Text(
+                        modifier = Modifier.align(alignment = Alignment.Start),
+                        text = "Olá!",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
                     )
+
+                    Text(
+                        modifier = Modifier.align(alignment = Alignment.Start),
+                        text = stringResource(R.string.saudacao_frase),
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    Spacer(modifier = Modifier.height(height = 8.dp))
 
                     TempDerOutlinedTextField(
                         value = screenState.email,
@@ -175,13 +184,17 @@ fun RegisterScreen(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        keyboardActions = nextKeyBoardAction
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }
+                        )
                     )
+
+                    Spacer(modifier = Modifier.height(height = 4.dp))
 
                     TempDerOutlinedTextField(
                         value = screenState.password,
                         onValueChange = { viewModel.changePassword(value = it) },
-                        labelString = "Password",
+                        labelString = "Repeat password",
                         errorMessage = screenState.passwordError,
                         enableWhiteSpace = false,
                         leadingIcon = {
@@ -196,55 +209,65 @@ fun RegisterScreen(
                         hideText = !screenState.isPasswordVisible,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        keyboardActions = nextKeyBoardAction
-                    )
-
-                    TempDerOutlinedTextField(
-                        value = screenState.repeatedPassword,
-                        onValueChange = { viewModel.changeRepeatedPassword(value = it) },
-                        labelString = "Repeat password",
-                        errorMessage = screenState.repeatedPasswordError,
-                        enableWhiteSpace = false,
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Rounded.Password, contentDescription = null)
-                        },
-                        trailingIcon = {
-                            ToggleTextVisibilityTrailingButton(
-                                onClick = viewModel::toggleRepeatedPasswordVisibility,
-                                isVisible = screenState.isRepeatedPasswordVisible
-                            )
-                        },
-                        hideText = !screenState.isRepeatedPasswordVisible,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Done
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = { focusManager.clearFocus() }
                         )
                     )
+
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+
+                    SignUpButton(
+                        onClick = viewModel::signInWithEmailAndPassword,
+                        buttonText = "Entrar"
+                    )
+
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+
+                    Text(
+                        text = "Ou então, entre com um clique pelo Google",
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    SignInButton(
+                        buttonFillMaxWidthFloat = 0.7f,
+                        buttonVerticalPaddingDp = 15.dp,
+                        buttonDefaultMinHeight = 30.dp,
+                        rowVerticalPadding = 1.dp,
+                        rowHorizontalPadding = 8.dp,
+                        isLoading = oneTapSignState.opened,
+                        progressColor = DER_yellow_intense,
+                        iconID = R.drawable.ic_google_logo,
+                        text = "Login usando Google",
+                        iconDescription = "Google Icon",
+                        textAlign = TextAlign.Center,
+                        textFillMaxWidthFloat = 0.85f,
+                        textFontColor = RB_Black,
+                        fontWeight = FontWeight.SemiBold,
+                        borderStroke = BorderStroke(0.dp, Color.Transparent),
+                        leftGradientColor = RB_White,
+                        centerLeftGradientColor = RB_White,
+                        centerGradientColor = RB_White,
+                        centerRightGradientColor = RB_White,
+                        rightGradientColor = RB_White,
+                        bottomSpacer = 0.dp,
+                    ) {
+                        oneTapSignState.open()
+                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(height = 16.dp))
-
-            SignUpButton(
-                onClick = viewModel::signUpForEmailAndPassword,
-                buttonText = "Cadastrar"
-            )
 
             Row(
                 modifier = Modifier.padding(all = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Já possui cadastro?")
+                Text(text = "Ainda não tem cadastro?")
 
                 Text(
-                    modifier = Modifier.clickable { onNavigateBack() },
-                    text = "Efetue o seu Login!",
+                    modifier = Modifier.clickable { onNavigateToRegisterScreen() },
+                    text = "CADASTRE-SE AQUI!",
                     color = DER_yellow,
                     textDecoration = TextDecoration.Underline,
                     fontWeight = FontWeight.Bold
@@ -252,8 +275,10 @@ fun RegisterScreen(
             }
 
             Image(
-                modifier = Modifier.fillMaxWidth(fraction = 0.5F),
-                painter = painterResource(id = R.drawable.logotipo_st),
+                modifier = Modifier
+                    .fillMaxWidth(fraction = 0.5F)
+                    .fillMaxHeight(fraction = 0.6F),
+                painter = painterResource(id = R.drawable.logo_der_sp_horizontal),
                 contentDescription = stringResource(R.string.Logo_ST6),
                 contentScale = ContentScale.Fit
             )
