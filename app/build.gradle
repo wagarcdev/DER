@@ -124,17 +124,17 @@ dependencies {
 
 
     // Compose
-    implementation "androidx.compose.animation:animation:$composeUiVer"
-    implementation "androidx.compose.foundation:foundation:$composeUiVer"
-    implementation "androidx.compose.runtime:runtime:$composeUiVer"
-    implementation "androidx.compose.ui:ui:$composeUiVer"
-    implementation "androidx.compose.ui:ui-tooling-preview:$composeUiVer"
+    implementation platform("androidx.compose:compose-bom:2022.12.00")
+    implementation "androidx.compose.animation:animation"
+    implementation "androidx.compose.foundation:foundation"
+    implementation "androidx.compose.runtime:runtime"
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material:material"
+    implementation "androidx.compose.material:material-icons-extended"
+
+
+    // Navigation
     implementation "androidx.navigation:navigation-compose:2.5.3"
-
-
-    //Material
-    implementation "androidx.compose.material:material:$composeUiVer"
-    implementation "androidx.compose.material:material-icons-extended:$composeUiVer"
 
 
     /**
@@ -187,7 +187,7 @@ dependencies {
     /**
      * Firebase
      * */
-    implementation platform("com.google.firebase:firebase-bom:31.1.0")
+    implementation platform("com.google.firebase:firebase-bom:31.1.1")
     //Storage
     implementation "com.google.firebase:firebase-storage-ktx"
     //Firestore
@@ -201,7 +201,7 @@ dependencies {
     testImplementation "junit:junit:4.13.2"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVer"
     //Compose
-    debugImplementation "androidx.compose.ui:ui-tooling:$composeUiVer"
+    debugImplementation "androidx.compose.ui:ui-tooling"
 
 
 }

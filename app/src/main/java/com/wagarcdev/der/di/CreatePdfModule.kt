@@ -16,7 +16,7 @@ import javax.inject.Singleton
 interface CreatePdfModule {
     @Binds
     @Singleton
-    fun bindCreatePdf(
+    fun bindsCreatePdf(
         generatePdf: CreatePdfImpl
     ): CreatePdf
 }

@@ -14,8 +14,9 @@ import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 
 @Composable
 fun SignUpButton(
-    onClick: () -> Unit, enable: Boolean,
-    buttonText: String = ""
+    onClick: () -> Unit,
+    buttonText: String,
+    enable: Boolean = true
 ) {
 
     GradientButton(

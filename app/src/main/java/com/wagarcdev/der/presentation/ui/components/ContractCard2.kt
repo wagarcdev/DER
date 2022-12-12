@@ -12,11 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.wagarcdev.der.data.local.contracts
 import com.wagarcdev.der.domain.model.Contract
 import com.wagarcdev.der.presentation.ui.theme.DER_gray
 import com.wagarcdev.der.presentation.ui.theme.DER_yellow_deep
@@ -126,10 +124,4 @@ fun ContractCard2(
 
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ContractCard2Preview() {
-    ContractCard2(0.95f, contracts[0])
 }

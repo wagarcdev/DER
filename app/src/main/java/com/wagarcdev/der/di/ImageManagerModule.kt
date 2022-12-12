@@ -16,7 +16,7 @@ import javax.inject.Singleton
 interface ImageManagerModule {
     @Binds
     @Singleton
-    fun bindImageManager(
+    fun bindsImageManager(
         imageManager: ImageManagerImpl
     ): ImageManager
 }

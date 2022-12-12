@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.wagarcdev.der.utils.CoroutinesDispatchers
+import com.wagarcdev.der.utils.CreatePdf
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,12 +16,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
+/**
+ * Hilt module for [DataStore].
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
     @Provides
     @Singleton
-    fun provideAppPreferences(
+    fun providesAppPreferences(
         @ApplicationContext context: Context,
         coroutinesDispatchers: CoroutinesDispatchers
     ): DataStore<Preferences> = PreferenceDataStoreFactory.create(

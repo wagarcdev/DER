@@ -1,12 +1,12 @@
 package com.wagarcdev.der.domain.model
 
+/**
+ * Model class that represents an user. The [id] must not be informed for an
+ * operation to create a new user.
+ */
 data class User(
-    val id: String = "0",
-    val email: String? = "email",
-    val username: String? = "user",
-    val fullname: String? = "full",
-    val displayName: String? = "display",
-    val photoUrl: String? = "photo",
-    val password: String? = "123",
-    val isCommonUser: Boolean = false
+    val id: Int = 0,
+    val name: String,
+    val email: String,
+    val password: String
 )

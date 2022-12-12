@@ -1,35 +1,38 @@
 package com.wagarcdev.der.di
 
-import com.wagarcdev.der.data.GoogleRepositoryImpl
-import com.wagarcdev.der.data.ReportsRepositoryImpl
-import com.wagarcdev.der.data.SimpleUserRepositoryImpl
-import com.wagarcdev.der.domain.repository.GoogleRepository
-import com.wagarcdev.der.domain.repository.ReportsRepository
-import com.wagarcdev.der.domain.repository.SimpleUserRepository
+import com.wagarcdev.der.data.repository.AppPreferencesRepository
+import com.wagarcdev.der.data.repository.AppPreferencesRepositoryImpl
+import com.wagarcdev.der.data.repository.ReportsRepository
+import com.wagarcdev.der.data.repository.ReportsRepositoryImpl
+import com.wagarcdev.der.data.repository.UsersRepository
+import com.wagarcdev.der.data.repository.UsersRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Hilt module for repositories.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
     @Binds
     @Singleton
-    fun bindGoogleRepository(
-        repository: GoogleRepositoryImpl
-    ): GoogleRepository
+    fun bindsAppPreferencesRepository(
+        repository: AppPreferencesRepositoryImpl
+    ): AppPreferencesRepository
 
     @Binds
     @Singleton
-    fun bindSimpleUserRepository(
-        repository: SimpleUserRepositoryImpl
-    ): SimpleUserRepository
+    fun bindsUsersRepository(
+        repository: UsersRepositoryImpl
+    ): UsersRepository
 
     @Binds
     @Singleton
-    fun bindReportsRepository(
+    fun bindsReportsRepository(
         repository: ReportsRepositoryImpl
     ): ReportsRepository
 }
