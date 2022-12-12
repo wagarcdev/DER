@@ -40,7 +40,7 @@ fun ContractsScreen(
     modifier: Modifier,
     onNavigateBack: () -> Unit,
     onNavigateToLoginScreen: () -> Unit,
-    onNavigateToReportsScreen: () -> Unit,
+    onNavigateToReportsScreen: (String) -> Unit,
     viewModel: ContractsViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.contractsState.collectAsStateWithLifecycle()
@@ -100,12 +100,14 @@ fun ContractsScreen(
                     verticalArrangement = Arrangement.Top
 
                 ) {
+                    // todo migrate contracts to view model
+
                     contracts.forEach { contract ->
                         item {
                             ContractCard(
                                 maxWidthFloat,
                                 contract,
-                                onclick = { onNavigateToReportsScreen() }
+                                onclick = { onNavigateToReportsScreen(contract.number) }
                             )
                         }
                     }

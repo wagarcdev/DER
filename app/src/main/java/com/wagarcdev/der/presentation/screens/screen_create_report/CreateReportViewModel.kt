@@ -1,12 +1,14 @@
 package com.wagarcdev.der.presentation.screens.screen_create_report
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wagarcdev.der.domain.model.Climate
 import com.wagarcdev.der.domain.model.DayPeriod
 import com.wagarcdev.der.domain.model.Report
 import com.wagarcdev.der.domain.usecase.InsertReportUseCase
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
 import com.wagarcdev.der.utils.CreatePdf
 import com.wagarcdev.der.utils.ImageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,6 +64,7 @@ private data class CreateReportViewModelState(
 
 @HiltViewModel
 class CreateReportViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val insertReportUseCase: InsertReportUseCase,
     private val imageManager: ImageManager,
     private val createPdf: CreatePdf
@@ -73,6 +76,12 @@ class CreateReportViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
         initialValue = viewModelState.value.asScreenState()
     )
+
+    init {
+        // todo include contract id on report id
+        val contractId = savedStateHandle.get<String>(contractIdKey)
+        println(contractId)
+    }
 
     fun changeName(value: String) {
         viewModelState.update { it.copy(name = value) }

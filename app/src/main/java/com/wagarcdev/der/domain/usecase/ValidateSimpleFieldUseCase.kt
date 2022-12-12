@@ -24,6 +24,9 @@ interface ValidateSimpleFieldUseCase {
     ): InputResult
 }
 
+/**
+ * Implementation of [ValidateSimpleFieldUseCase].
+ */
 class ValidateSimpleFieldUseCaseImpl @Inject constructor() : ValidateSimpleFieldUseCase {
     override fun invoke(string: String, minChar: Int?, maxChar: Int?): InputResult {
         if (string.isBlank()) return InputResult.Error(

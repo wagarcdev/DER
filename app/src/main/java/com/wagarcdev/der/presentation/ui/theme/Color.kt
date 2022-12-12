@@ -2,12 +2,6 @@ package com.wagarcdev.der.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
-
 val DER_yellow = Color(0xFFFFDD0E)
 val DER_yellow_intense = Color(0xFFFFDB00)
 val DER_yellow_light = Color(0xFFFFE64C)
