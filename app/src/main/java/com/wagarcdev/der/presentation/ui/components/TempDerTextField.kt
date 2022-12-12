@@ -20,12 +20,10 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow
 
 /**
  * Compose [TextField] with custom information.
@@ -110,7 +108,12 @@ fun TempDerTextField(
         singleLine = singleLine,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        shape = RoundedCornerShape(size = 15.dp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            backgroundColor = MaterialTheme.colors.background,
+            focusedLabelColor = MaterialTheme.colors.onBackground
+        )
     )
 
     errorMessage?.let {
@@ -213,9 +216,7 @@ fun TempDerOutlinedTextField(
         shape = RoundedCornerShape(size = 15.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             backgroundColor = MaterialTheme.colors.background,
-            cursorColor = DER_yellow,
-            focusedBorderColor = DER_yellow,
-            focusedLabelColor = Color.Black
+            focusedLabelColor = MaterialTheme.colors.onBackground
         )
     )
 
