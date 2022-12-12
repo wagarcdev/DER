@@ -28,7 +28,7 @@ import com.wagarcdev.der.utils.NoReportsDivider
 fun ReportsScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
-    onNavigateToCreateReportScreen: () -> Unit,
+    onNavigateToCreateReportScreen: (String) -> Unit,
     viewModel: ReportsViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.reportsState.collectAsStateWithLifecycle()
@@ -82,7 +82,11 @@ fun ReportsScreen(
             }
 
             item {
-                CreateReportCard(onCreateReport = onNavigateToCreateReportScreen)
+                CreateReportCard(
+                    onCreateReport = {
+                        onNavigateToCreateReportScreen(screenState.contract?.number ?: "")
+                    }
+                )
             }
 
             if (screenState.reports.isEmpty()) {

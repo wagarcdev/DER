@@ -56,15 +56,25 @@ fun NavGraphBuilder.appNavGraph(
             ReportsScreen(
                 modifier = Modifier.fillMaxSize(),
                 onNavigateBack = { navHostController.popBackStack() },
-                onNavigateToCreateReportScreen = {
-                    navHostController.navigate(route = AppScreens.CreateReport.route) {
+                onNavigateToCreateReportScreen = { contractId ->
+                    navHostController.navigate(
+                        route = AppScreens.CreateReport.routeWithContractId(id = contractId)
+                    ) {
                         launchSingleTop = true
                     }
                 }
             )
         }
 
-        composable(route = AppScreens.CreateReport.route) {
+        composable(
+            route = AppScreens.CreateReport.route,
+            arguments = listOf(
+                navArgument(name = contractIdKey) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) {
             CreateReportScreen(
                 modifier = Modifier.fillMaxSize(),
                 onNavigateBack = { navHostController.popBackStack() }
@@ -78,9 +88,19 @@ sealed class AppScreens(val route: String) {
     val contractIdKey: String = "contractId"
 
     object Contracts : AppScreens(route = "contracts_screen")
-    object CreateReport : AppScreens(route = "create_report_screen")
 
-    object Reports : AppScreens(route = "reports_screen?$contractIdKey={$contractIdKey}") {
+    object Reports : AppScreens(
+        route = "reports_screen?$contractIdKey={$contractIdKey}"
+    ) {
+        fun routeWithContractId(id: String): String = route.replace(
+            oldValue = "{$contractIdKey}",
+            newValue = id
+        )
+    }
+
+    object CreateReport : AppScreens(
+        route = "create_report_screen?$contractIdKey={$contractIdKey}"
+    ) {
         fun routeWithContractId(id: String): String = route.replace(
             oldValue = "{$contractIdKey}",
             newValue = id
