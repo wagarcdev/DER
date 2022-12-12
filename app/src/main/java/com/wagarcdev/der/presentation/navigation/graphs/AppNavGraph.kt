@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.wagarcdev.der.presentation.navigation.Graph
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
 import com.wagarcdev.der.presentation.screens.screen_contracts.ContractsScreen
 import com.wagarcdev.der.presentation.screens.screen_create_report.CreateReportScreen
 import com.wagarcdev.der.presentation.screens.screen_reports.ReportsScreen
@@ -31,15 +34,25 @@ fun NavGraphBuilder.appNavGraph(
                         launchSingleTop = true
                     }
                 },
-                onNavigateToReportsScreen = {
-                    navHostController.navigate(route = AppScreens.Reports.route) {
+                onNavigateToReportsScreen = { contractId ->
+                    navHostController.navigate(
+                        route = AppScreens.Reports.routeWithContractId(id = contractId)
+                    ) {
                         launchSingleTop = true
                     }
                 }
             )
         }
 
-        composable(route = AppScreens.Reports.route) {
+        composable(
+            route = AppScreens.Reports.route,
+            arguments = listOf(
+                navArgument(name = contractIdKey) {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) {
             ReportsScreen(
                 modifier = Modifier.fillMaxSize(),
                 onNavigateBack = { navHostController.popBackStack() },
@@ -62,7 +75,15 @@ fun NavGraphBuilder.appNavGraph(
 
 
 sealed class AppScreens(val route: String) {
-    object Contracts : AppScreens(route = "CONTRACTS")
-    object Reports : AppScreens(route = "REPORTS")
-    object CreateReport : AppScreens(route = "CREATE_REPORT")
+    val contractIdKey: String = "contractId"
+
+    object Contracts : AppScreens(route = "contracts_screen")
+    object CreateReport : AppScreens(route = "create_report_screen")
+
+    object Reports : AppScreens(route = "reports_screen?$contractIdKey={$contractIdKey}") {
+        fun routeWithContractId(id: String): String = route.replace(
+            oldValue = "{$contractIdKey}",
+            newValue = id
+        )
+    }
 }
