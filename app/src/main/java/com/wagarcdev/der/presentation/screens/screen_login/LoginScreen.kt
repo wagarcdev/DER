@@ -194,7 +194,7 @@ fun LoginScreen(
                     TempDerOutlinedTextField(
                         value = screenState.password,
                         onValueChange = { viewModel.changePassword(value = it) },
-                        labelString = "Repeat password",
+                        labelString = "Password",
                         errorMessage = screenState.passwordError,
                         enableWhiteSpace = false,
                         leadingIcon = {
