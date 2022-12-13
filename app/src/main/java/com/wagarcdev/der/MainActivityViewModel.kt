@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wagarcdev.der.domain.usecase.GetCurrentUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +41,7 @@ class MainActivityViewModel @Inject constructor(
         _mainActivityState.update { MainActivityState.Loading }
 
         viewModelScope.launch {
-            // delay(timeMillis = 3000)
+             delay(timeMillis = 1000) // FAKE DELAY
             val currentUserId = getCurrentUserIdUseCase()
 
             _mainActivityState.update {
