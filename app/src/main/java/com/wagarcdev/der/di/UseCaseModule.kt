@@ -2,6 +2,10 @@ package com.wagarcdev.der.di
 
 import com.wagarcdev.der.domain.usecase.GetCurrentUserIdUseCase
 import com.wagarcdev.der.domain.usecase.GetCurrentUserIdUseCaseImpl
+import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCase
+import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCaseImpl
+import com.wagarcdev.der.domain.usecase.GetReportsForContractStreamUseCase
+import com.wagarcdev.der.domain.usecase.GetReportsForContractStreamUseCaseImpl
 import com.wagarcdev.der.domain.usecase.GetUserByEmailUseCase
 import com.wagarcdev.der.domain.usecase.GetUserByEmailUseCaseImpl
 import com.wagarcdev.der.domain.usecase.GetUserByIdStreamUseCase
@@ -81,6 +85,18 @@ interface UseCaseModule {
     fun bindsInsertUserUseCase(
         useCase: InsertUserUseCaseImpl
     ): InsertUserUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsGetReportsForContractStreamUseCase(
+        useCase: GetReportsForContractStreamUseCaseImpl
+    ): GetReportsForContractStreamUseCase
+
+    @Binds
+    @ViewModelScoped
+    fun bindsGetReportByIdStreamUseCase(
+        useCase: GetReportByIdStreamUseCaseImpl
+    ): GetReportByIdStreamUseCase
 
     @Binds
     @ViewModelScoped

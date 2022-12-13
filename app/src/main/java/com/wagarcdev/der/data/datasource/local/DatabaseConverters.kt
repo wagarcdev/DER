@@ -24,7 +24,9 @@ class DatabaseConverters {
     @TypeConverter
     fun convertStringToStringList(
         string: String
-    ): List<String> = string.split(listSeparator)
+    ): List<String> = string.split(listSeparator).takeIf { stringList ->
+        stringList.size > 1 || stringList[0].isNotEmpty()
+    } ?: emptyList()
 
     /**
      * Convert an [Climate] into [String].

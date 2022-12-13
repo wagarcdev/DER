@@ -11,7 +11,7 @@ import com.wagarcdev.der.data.datasource.local.entity.UserEntity
 
 @Database(
     entities = [UserEntity::class, ReportEntity::class, ServiceEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(DatabaseConverters::class)

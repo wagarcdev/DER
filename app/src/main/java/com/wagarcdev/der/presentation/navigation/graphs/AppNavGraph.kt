@@ -11,8 +11,9 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.navigation
 import com.wagarcdev.der.presentation.navigation.Graph
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.reportIdKey
 import com.wagarcdev.der.presentation.screens.screen_contracts.ContractsScreen
-import com.wagarcdev.der.presentation.screens.screen_create_report.CreateReportScreen
+import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.CreateOrEditReportScreen
 import com.wagarcdev.der.presentation.screens.screen_reports.ReportsScreen
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -58,7 +59,14 @@ fun NavGraphBuilder.appNavGraph(
                 onNavigateBack = { navHostController.popBackStack() },
                 onNavigateToCreateReportScreen = { contractId ->
                     navHostController.navigate(
-                        route = AppScreens.CreateReport.routeWithContractId(id = contractId)
+                        route = AppScreens.CreateOrEditReport.routeWithContractId(id = contractId)
+                    ) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToEditReportScreen = { reportId ->
+                    navHostController.navigate(
+                        route = AppScreens.CreateOrEditReport.routeWithReportId(id = reportId)
                     ) {
                         launchSingleTop = true
                     }
@@ -66,16 +74,25 @@ fun NavGraphBuilder.appNavGraph(
             )
         }
 
+        // todo maybe there is a better way to handler multiple navigation args
+        // or maybe can be better split this screen into two, one to create and one to edit
+        // for now, we have two optional args, but one of them should be always passed
+        // if contract id is the one, indicates that we should create a new report
+        // if report id is the one, indicates that we should edit the current report
         composable(
-            route = AppScreens.CreateReport.route,
+            route = AppScreens.CreateOrEditReport.route,
             arguments = listOf(
                 navArgument(name = contractIdKey) {
+                    type = NavType.StringType
+                    nullable = true
+                },
+                navArgument(name = reportIdKey) {
                     type = NavType.StringType
                     nullable = true
                 }
             )
         ) {
-            CreateReportScreen(
+            CreateOrEditReportScreen(
                 modifier = Modifier.fillMaxSize(),
                 onNavigateBack = { navHostController.popBackStack() }
             )
@@ -85,7 +102,8 @@ fun NavGraphBuilder.appNavGraph(
 
 
 sealed class AppScreens(val route: String) {
-    val contractIdKey: String = "contractId"
+    val contractIdKey = "contractId"
+    val reportIdKey = "reportId"
 
     object Contracts : AppScreens(route = "contracts_screen")
 
@@ -98,11 +116,16 @@ sealed class AppScreens(val route: String) {
         )
     }
 
-    object CreateReport : AppScreens(
-        route = "create_report_screen?$contractIdKey={$contractIdKey}"
+    object CreateOrEditReport : AppScreens(
+        route = "create_edit_report_screen?$contractIdKey={$contractIdKey}&$reportIdKey={$reportIdKey}"
     ) {
         fun routeWithContractId(id: String): String = route.replace(
             oldValue = "{$contractIdKey}",
+            newValue = id
+        )
+
+        fun routeWithReportId(id: String): String = route.replace(
+            oldValue = "{$reportIdKey}",
             newValue = id
         )
     }

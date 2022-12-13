@@ -12,8 +12,8 @@ import com.wagarcdev.der.domain.model.Report
 @Entity(tableName = "reports")
 class ReportEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
-    val contract: String,
+    val id: String,
+    val contractNumber: String,
     val name: String,
     val regionCode: String,
     val highway: String,
