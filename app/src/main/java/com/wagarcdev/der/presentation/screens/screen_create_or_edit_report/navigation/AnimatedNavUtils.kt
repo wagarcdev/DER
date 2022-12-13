@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.screens.screen_create_report.navigation
+package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.navigation
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi

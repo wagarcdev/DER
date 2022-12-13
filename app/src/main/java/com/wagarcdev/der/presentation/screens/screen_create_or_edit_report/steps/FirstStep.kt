@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.screens.screen_create_report.steps
+package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
@@ -6,14 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -21,12 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.wagarcdev.der.domain.model.Report
 import com.wagarcdev.der.presentation.ui.components.ClearTrailingButton
-import com.wagarcdev.der.presentation.ui.components.GradientButton
 import com.wagarcdev.der.presentation.ui.components.TempDerOutlinedTextField
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 
 @Composable
 fun FirstStep(
@@ -39,7 +35,7 @@ fun FirstStep(
     changeContractor: (String) -> Unit,
     changeAreaExtension: (String) -> Unit,
     changeSupervisor: (String) -> Unit,
-    onBack: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNext: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -57,7 +53,7 @@ fun FirstStep(
         }
     )
 
-    BackHandler(onBack = onBack)
+    BackHandler(onBack = onNavigateBack)
 
     Column(
         modifier = modifier.verticalScroll(state = scrollState),
@@ -149,21 +145,12 @@ fun FirstStep(
 
         Spacer(modifier = Modifier.weight(weight = 1F))
 
-        GradientButton(
+        Button(
             modifier = Modifier.fillMaxWidth(),
-            text = "Next",
-            textColor = Color.Black,
-            gradient = Brush.verticalGradient(
-                colors = listOf(
-                    DER_yellow_light_extra,
-                    DER_yellow_light,
-                    DER_yellow,
-                    DER_yellow,
-                    DER_yellow_intense
-                )
-            ),
             onClick = onNext,
-            enabled = true
-        )
+            shape = RoundedCornerShape(size = 15.dp)
+        ) {
+            Text(text = "Next")
+        }
     }
 }

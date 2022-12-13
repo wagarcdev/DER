@@ -1,4 +1,4 @@
-package com.wagarcdev.der.presentation.screens.screen_create_report.steps
+package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps
 
 import android.Manifest
 import android.net.Uri
@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -24,8 +26,6 @@ import androidx.compose.material.icons.rounded.AttachFile
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -34,11 +34,6 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
-import com.wagarcdev.der.presentation.ui.components.GradientButton
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_intense
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light
-import com.wagarcdev.der.presentation.ui.theme.DER_yellow_light_extra
 import com.wagarcdev.der.utils.imageFile
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -48,7 +43,7 @@ fun SecondStep(
     attachedImageNames: List<String>,
     onAddImage: (Uri) -> Unit,
     onRemoveImage: (Int) -> Unit,
-    onBack: () -> Unit,
+    onNavigateBack: () -> Unit,
     onPrevious: () -> Unit,
     onFinish: () -> Unit
 ) {
@@ -69,7 +64,7 @@ fun SecondStep(
 
     val imageSize = 120.dp
 
-    BackHandler(onBack = onBack)
+    BackHandler(onBack = onNavigateBack)
 
     Column(
         modifier = modifier.verticalScroll(state = scrollState),
@@ -132,39 +127,21 @@ fun SecondStep(
             horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            GradientButton(
+            Button(
                 modifier = Modifier.weight(weight = 1F),
-                text = "Previous",
-                textColor = Color.Black,
-                gradient = Brush.verticalGradient(
-                    colors = listOf(
-                        DER_yellow_light_extra,
-                        DER_yellow_light,
-                        DER_yellow,
-                        DER_yellow,
-                        DER_yellow_intense
-                    )
-                ),
                 onClick = onPrevious,
-                enabled = true
-            )
+                shape = RoundedCornerShape(size = 15.dp)
+            ) {
+                Text(text = "Previous")
+            }
 
-            GradientButton(
+            Button(
                 modifier = Modifier.weight(weight = 1F),
-                text = "Finish",
-                textColor = Color.Black,
-                gradient = Brush.verticalGradient(
-                    colors = listOf(
-                        DER_yellow_light_extra,
-                        DER_yellow_light,
-                        DER_yellow,
-                        DER_yellow,
-                        DER_yellow_intense
-                    )
-                ),
                 onClick = onFinish,
-                enabled = true
-            )
+                shape = RoundedCornerShape(size = 15.dp)
+            ) {
+                Text(text = "Finish")
+            }
         }
     }
 }
