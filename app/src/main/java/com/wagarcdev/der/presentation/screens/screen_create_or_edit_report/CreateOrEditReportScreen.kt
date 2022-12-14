@@ -8,7 +8,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,7 +21,7 @@ import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps.SecondStep
 
 /**
- * Compose the Create Report screen.
+ * Compose the Create Or Edit Report screen.
  *
  * @param modifier the [Modifier] to be applied on main container of this screen.
  * @param onNavigateBack callback to navigate back from this screen.
@@ -50,9 +49,7 @@ fun CreateOrEditReportScreen(
         ) {
             composeSlideAnimateScreen(route = StepRoute.FirstStep.route) {
                 FirstStep(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(all = 16.dp),
+                    modifier = Modifier.fillMaxSize(),
                     report = screenState.report,
                     changeName = { viewModel.changeName(value = it) },
                     changeRegionCode = { viewModel.changeRegionCode(value = it) },
@@ -61,8 +58,10 @@ fun CreateOrEditReportScreen(
                     changeContractor = { viewModel.changeContractor(value = it) },
                     changeAreaExtension = { viewModel.changeAreaExtension(value = it) },
                     changeSupervisor = { viewModel.changeSupervisor(value = it) },
+                    changeClimate = { viewModel.changeClimate(value = it) },
+                    changeDayPeriod = { viewModel.changeDayPeriod(value = it) },
                     onNavigateBack = onNavigateBack,
-                    onNext = {
+                    onNextStep = {
                         stepsNavController.navigate(destinationRoute = StepRoute.SecondStep.route)
                     }
                 )
@@ -70,22 +69,18 @@ fun CreateOrEditReportScreen(
 
             composeSlideAnimateScreen(route = StepRoute.SecondStep.route) {
                 SecondStep(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(all = 16.dp),
+                    modifier = Modifier.fillMaxSize(),
                     attachedImageNames = screenState.report.attachedImageNames,
                     onAddImage = { viewModel.addImage(uri = it) },
                     onRemoveImage = { viewModel.removeImage(index = it) },
                     onNavigateBack = onNavigateBack,
-                    onPrevious = {
+                    onPreviousStep = {
                         stepsNavController.navigateBackWithFallback(
                             currentRoute = StepRoute.SecondStep.route,
                             destinationRoute = StepRoute.SecondStep.route
                         )
                     },
-                    onFinish = {
-                        // TODO
-                    }
+                    onFinishSteps = viewModel::createPdf
                 )
             }
         }

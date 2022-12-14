@@ -6,7 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wagarcdev.der.domain.model.Climate
 import com.wagarcdev.der.domain.model.DayPeriod
+import com.wagarcdev.der.domain.model.DisplayText
+import com.wagarcdev.der.domain.model.PdfContent
 import com.wagarcdev.der.domain.model.Report
+import com.wagarcdev.der.domain.model.defaultContentTextConfig
+import com.wagarcdev.der.domain.model.defaultTitleTextConfig
 import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCase
 import com.wagarcdev.der.domain.usecase.InsertReportUseCase
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
@@ -199,6 +203,152 @@ class CreateOrEditReportViewModel @Inject constructor(
 
         viewModelState.update { it.copy(attachedImageNames = imagesUriMutable.toList()) }
         saveReport()
+    }
+
+    fun createPdf() {
+        viewModelScope.launch {
+            val fileName = viewModelState.value.name.takeIf { it.isNotBlank() } ?: "test"
+
+            val bitmaps = viewModelState.value.attachedImageNames.mapNotNull {
+                imageManager.getImageBitmap(fileName = it)
+            }
+
+            val pdfContent = PdfContent(
+                fileName = fileName,
+                displayTexts = getDisplayTexts(),
+                bitmaps = bitmaps
+            )
+
+            createPdf.invoke(pdfContent = pdfContent)
+        }
+    }
+
+    // todo improvement needed
+    private fun getDisplayTexts(): List<DisplayText> {
+        val nameSection = if (viewModelState.value.name.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Name:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.name,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val regionCodeSection = if (viewModelState.value.regionCode.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Region code:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.regionCode,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val highwaySection = if (viewModelState.value.highway.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Highway:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.highway,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val countySection = if (viewModelState.value.county.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "County:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.county,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val contractorSection = if (viewModelState.value.contractor.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Contractor:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.contractor,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val areaExtensionSection = if (viewModelState.value.areaExtension.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Area extension:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.areaExtension,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val supervisorSection = if (viewModelState.value.supervisor.isNotBlank()) {
+            listOf(
+                DisplayText(
+                    text = "Supervisor:",
+                    textConfig = defaultTitleTextConfig
+                ),
+                DisplayText(
+                    text = viewModelState.value.supervisor,
+                    textConfig = defaultContentTextConfig
+                )
+            )
+        } else emptyList()
+
+        val climateSection = listOf(
+            DisplayText(
+                text = "Climate:",
+                textConfig = defaultTitleTextConfig
+            ),
+            DisplayText(
+                text = viewModelState.value.climate.name,
+                textConfig = defaultContentTextConfig
+            )
+        )
+
+        val dayPeriodSection = listOf(
+            DisplayText(
+                text = "Day period:",
+                textConfig = defaultTitleTextConfig
+            ),
+            DisplayText(
+                text = viewModelState.value.dayPeriod.name,
+                textConfig = defaultContentTextConfig
+            )
+        )
+
+        return listOf(
+            nameSection,
+            regionCodeSection,
+            highwaySection,
+            countySection,
+            contractorSection,
+            areaExtensionSection,
+            supervisorSection,
+            climateSection,
+            dayPeriodSection
+        ).flatten()
     }
 
     private fun saveReport() {

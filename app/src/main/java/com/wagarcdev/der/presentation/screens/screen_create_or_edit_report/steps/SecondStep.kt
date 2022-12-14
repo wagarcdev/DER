@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,16 +45,11 @@ fun SecondStep(
     onAddImage: (Uri) -> Unit,
     onRemoveImage: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    onPrevious: () -> Unit,
-    onFinish: () -> Unit
+    onPreviousStep: () -> Unit,
+    onFinishSteps: () -> Unit
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-
-    // TODO(make it compatible with Android 13)
-    val readStoragePermissionState = rememberPermissionState(
-        permission = Manifest.permission.READ_EXTERNAL_STORAGE
-    )
 
     val imageChooserLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -62,17 +58,25 @@ fun SecondStep(
         }
     )
 
+    // TODO(make it compatible with Android 13)
+    val readStoragePermissionState = rememberPermissionState(
+        permission = Manifest.permission.READ_EXTERNAL_STORAGE,
+        onPermissionResult = { granted ->
+            if (granted) imageChooserLauncher.launch("image/*")
+        }
+    )
+
     val imageSize = 120.dp
 
     BackHandler(onBack = onNavigateBack)
 
-    Column(
-        modifier = modifier.verticalScroll(state = scrollState),
-        verticalArrangement = Arrangement.spacedBy(space = 16.dp)
-    ) {
+    Column(modifier = modifier.verticalScroll(state = scrollState)) {
         Text(
-            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            text = "Attach images"
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .align(alignment = Alignment.CenterHorizontally),
+            text = "Attach images",
+            style = MaterialTheme.typography.h6
         )
 
         FlowRow(
@@ -123,13 +127,15 @@ fun SecondStep(
         Spacer(modifier = Modifier.weight(weight = 1F))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier.weight(weight = 1F),
-                onClick = onPrevious,
+                onClick = onPreviousStep,
                 shape = RoundedCornerShape(size = 15.dp)
             ) {
                 Text(text = "Previous")
@@ -137,10 +143,10 @@ fun SecondStep(
 
             Button(
                 modifier = Modifier.weight(weight = 1F),
-                onClick = onFinish,
+                onClick = onFinishSteps,
                 shape = RoundedCornerShape(size = 15.dp)
             ) {
-                Text(text = "Finish")
+                Text(text = "Create PDF")
             }
         }
     }
