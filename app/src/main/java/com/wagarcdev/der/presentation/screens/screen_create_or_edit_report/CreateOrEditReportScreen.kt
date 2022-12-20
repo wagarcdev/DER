@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,7 +38,7 @@ fun CreateOrEditReportScreen(
 ) {
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
     val stepsNavController = rememberAnimatedNavController()
-
+    val context = LocalContext.current
     BackHandler(onBack = onNavigateBack)
 
     Scaffold(modifier = modifier) { innerPadding ->
@@ -80,7 +82,7 @@ fun CreateOrEditReportScreen(
                             destinationRoute = StepRoute.SecondStep.route
                         )
                     },
-                    onFinishSteps = viewModel::createPdf
+                    onFinishSteps = { viewModel.createPdf(context) }
                 )
             }
         }

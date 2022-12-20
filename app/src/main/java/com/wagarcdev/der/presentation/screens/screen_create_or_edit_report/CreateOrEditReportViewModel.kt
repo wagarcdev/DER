@@ -1,16 +1,13 @@
 package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wagarcdev.der.domain.model.Climate
-import com.wagarcdev.der.domain.model.DayPeriod
-import com.wagarcdev.der.domain.model.DisplayText
-import com.wagarcdev.der.domain.model.PdfContent
-import com.wagarcdev.der.domain.model.Report
-import com.wagarcdev.der.domain.model.defaultContentTextConfig
-import com.wagarcdev.der.domain.model.defaultTitleTextConfig
+import com.wagarcdev.der.domain.model.*
 import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCase
 import com.wagarcdev.der.domain.usecase.InsertReportUseCase
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
@@ -18,15 +15,12 @@ import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.rep
 import com.wagarcdev.der.utils.CreatePdf
 import com.wagarcdev.der.utils.ImageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.File
+import java.util.*
 import javax.inject.Inject
+
 
 /**
  * Data class that represents the state of screen.
@@ -87,6 +81,9 @@ class CreateOrEditReportViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
             initialValue = viewModelState.value.asScreenState()
         )
+
+    private val _fileState: MutableStateFlow<File?> = MutableStateFlow(value = null)
+    val fileState: StateFlow<File?> = _fileState
 
     init {
         initializeFormData()
@@ -205,7 +202,7 @@ class CreateOrEditReportViewModel @Inject constructor(
         saveReport()
     }
 
-    fun createPdf() {
+    fun createPdf(context: Context) {
         viewModelScope.launch {
             val fileName = viewModelState.value.name.takeIf { it.isNotBlank() } ?: "test"
 
@@ -219,7 +216,17 @@ class CreateOrEditReportViewModel @Inject constructor(
                 bitmaps = bitmaps
             )
 
-            createPdf.invoke(pdfContent = pdfContent)
+
+            _fileState.value = createPdf.invoke(pdfContent = pdfContent)
+            val file = fileState.value
+            if (file!!.exists()) {
+                val contentUri = FileProvider.getUriForFile(context, context.applicationContext.packageName+".fileprovider", file)
+                val share = Intent()
+                share.action = Intent.ACTION_SEND
+                share.putExtra(Intent.EXTRA_STREAM, contentUri)
+                share.setType("application/pdf")
+                context.startActivity(share)
+            }
         }
     }
 

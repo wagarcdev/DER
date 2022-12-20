@@ -178,6 +178,10 @@ class CreatePdfImpl @Inject constructor(
             val pdfFile = File(pdfsFilePath, "${pdfContent.fileName}.pdf")
             val pdfOutputStream = FileOutputStream(pdfFile)
 
+
+
+
+
             var distanceX = margin
             var distanceY = margin
 
