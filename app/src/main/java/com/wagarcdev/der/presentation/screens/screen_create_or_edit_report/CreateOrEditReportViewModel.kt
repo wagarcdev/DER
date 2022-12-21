@@ -12,6 +12,7 @@ import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCase
 import com.wagarcdev.der.domain.usecase.InsertReportUseCase
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.reportIdKey
+import com.wagarcdev.der.utils.Constants
 import com.wagarcdev.der.utils.CreatePdf
 import com.wagarcdev.der.utils.ImageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -85,8 +86,12 @@ class CreateOrEditReportViewModel @Inject constructor(
     private val _fileState: MutableStateFlow<File?> = MutableStateFlow(value = null)
     val fileState: StateFlow<File?> = _fileState
 
+    private val _textButton: MutableStateFlow<String> = MutableStateFlow(value = Constants.CREATE_PDF)
+    val textButton: StateFlow<String> = _textButton
+
     init {
         initializeFormData()
+
     }
 
     private fun initializeFormData() {
@@ -105,6 +110,8 @@ class CreateOrEditReportViewModel @Inject constructor(
                 }
             }
             !reportId.isNullOrBlank() -> {
+                _textButton.value = Constants.SHARE_PDF
+                createPdf()
                 viewModelScope.launch {
                     getReportByIdStreamUseCase(id = reportId).collectLatest { report ->
                         report?.let {
@@ -202,7 +209,7 @@ class CreateOrEditReportViewModel @Inject constructor(
         saveReport()
     }
 
-    fun createPdf(context: Context) {
+    fun createPdf() {
         viewModelScope.launch {
             val fileName = viewModelState.value.name.takeIf { it.isNotBlank() } ?: "test"
 
@@ -215,21 +222,11 @@ class CreateOrEditReportViewModel @Inject constructor(
                 displayTexts = getDisplayTexts(),
                 bitmaps = bitmaps
             )
+            val file = createPdf.invoke(pdfContent = pdfContent)
+            _fileState.value = file
 
-
-            _fileState.value = createPdf.invoke(pdfContent = pdfContent)
-            val file = fileState.value
-            if (file!!.exists()) {
-                val contentUri = FileProvider.getUriForFile(context, context.applicationContext.packageName+".fileprovider", file)
-                val share = Intent()
-                share.action = Intent.ACTION_SEND
-                share.putExtra(Intent.EXTRA_STREAM, contentUri)
-                share.setType("application/pdf")
-                context.startActivity(share)
-            }
         }
     }
-
     // todo improvement needed
     private fun getDisplayTexts(): List<DisplayText> {
         val nameSection = if (viewModelState.value.name.isNotBlank()) {
