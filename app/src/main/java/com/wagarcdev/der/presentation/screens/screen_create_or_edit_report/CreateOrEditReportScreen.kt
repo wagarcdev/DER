@@ -1,5 +1,6 @@
 package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -93,42 +94,49 @@ fun CreateOrEditReportScreen(
                     onPreviousStep = {
                         stepsNavController.navigateBackWithFallback(
                             currentRoute = StepRoute.SecondStep.route,
-                            destinationRoute = StepRoute.SecondStep.route
+                            destinationRoute = StepRoute.FirstStep.route
                         )
                     },
                     onFinishSteps = {
                         when (viewModel.textButton.value) {
                             Constants.CREATE_PDF -> {
-                                viewModel.createPdf()
-                                /*como navegar para a tela que lista os relatorios? seria interessante por isso aqui*/
+                                createAndUpdatePDF(viewModel)
                             }
-
                             Constants.SHARE_PDF -> {
-                                viewModel.createPdf().also {
-                                    viewModel.fileState.value?.let {
-                                        val contentUri = FileProvider.getUriForFile(
-                                            context,
-                                            context.applicationContext.packageName + ".fileprovider",
-                                            it
-                                        )
-                                        val share = Intent()
-                                        share.apply {
-                                            action = Intent.ACTION_SEND
-                                            putExtra(Intent.EXTRA_STREAM, contentUri)
-                                            type = "application/pdf"
-                                        }
-                                        context.startActivity(share)
-                                    }
-                                }
+                                sharePDF(viewModel, context)
                             }
                         }
-
                     },
-                    textButton = viewModel.textButton.collectAsState().value
+                    textButton = viewModel.textButton.collectAsState().value,
+                    onUpdateStep = { createAndUpdatePDF(viewModel) }
                 )
             }
         }
+    }
+}
 
 
+private fun createAndUpdatePDF(viewModel: CreateOrEditReportViewModel) {
+    viewModel.createPdf().also {
+        /*como navegar para a tela que lista os relatorios? seria interessante por isso aqui*/
+    }
+}
+
+private fun sharePDF(viewModel: CreateOrEditReportViewModel, context: Context) {
+    viewModel.createPdf().also {
+        viewModel.fileState.value?.let {
+            val contentUri = FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName + ".fileprovider",
+                it
+            )
+            val share = Intent()
+            share.apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                type = "application/pdf"
+            }
+            context.startActivity(share)
+        }
     }
 }

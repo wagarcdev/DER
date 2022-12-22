@@ -1,5 +1,7 @@
 package com.wagarcdev.der.presentation.screens.screen_reports
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -58,7 +61,8 @@ fun ReportsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCreateReportScreen: (String) -> Unit,
     onNavigateToEditReportScreen: (String) -> Unit,
-    viewModel: ReportsViewModel = hiltViewModel()
+    viewModel: ReportsViewModel = hiltViewModel(),
+    createOrEditReportViewModel: CreateOrEditReportViewModel = hiltViewModel()
 ) {
     val screenState by viewModel.reportsState.collectAsStateWithLifecycle()
 
@@ -239,4 +243,23 @@ private fun SuccessState(
 
 private fun LazyListScope.passByFabSize() = item {
     Spacer(modifier = Modifier.height(height = 56.dp))
+}
+
+private fun sharePDF(viewModel: CreateOrEditReportViewModel, context: Context) {
+    viewModel.createPdf().also {
+        viewModel.fileState.value?.let {
+            val contentUri = FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName + ".fileprovider",
+                it
+            )
+            val share = Intent()
+            share.apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                type = "application/pdf"
+            }
+            context.startActivity(share)
+        }
+    }
 }
