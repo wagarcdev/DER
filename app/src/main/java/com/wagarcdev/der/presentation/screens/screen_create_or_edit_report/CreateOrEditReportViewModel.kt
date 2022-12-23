@@ -1,32 +1,27 @@
 package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wagarcdev.der.domain.model.Climate
-import com.wagarcdev.der.domain.model.DayPeriod
-import com.wagarcdev.der.domain.model.DisplayText
-import com.wagarcdev.der.domain.model.PdfContent
-import com.wagarcdev.der.domain.model.Report
-import com.wagarcdev.der.domain.model.defaultContentTextConfig
-import com.wagarcdev.der.domain.model.defaultTitleTextConfig
+import com.wagarcdev.der.domain.model.*
 import com.wagarcdev.der.domain.usecase.GetReportByIdStreamUseCase
 import com.wagarcdev.der.domain.usecase.InsertReportUseCase
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.reportIdKey
+import com.wagarcdev.der.utils.Constants
 import com.wagarcdev.der.utils.CreatePdf
 import com.wagarcdev.der.utils.ImageManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.File
+import java.util.*
 import javax.inject.Inject
+
 
 /**
  * Data class that represents the state of screen.
@@ -88,8 +83,15 @@ class CreateOrEditReportViewModel @Inject constructor(
             initialValue = viewModelState.value.asScreenState()
         )
 
+    private val _fileState: MutableStateFlow<File?> = MutableStateFlow(value = null)
+    val fileState: StateFlow<File?> = _fileState
+
+    private val _textButton: MutableStateFlow<String> = MutableStateFlow(value = Constants.CREATE_PDF)
+    val textButton: StateFlow<String> = _textButton
+
     init {
         initializeFormData()
+
     }
 
     private fun initializeFormData() {
@@ -108,6 +110,8 @@ class CreateOrEditReportViewModel @Inject constructor(
                 }
             }
             !reportId.isNullOrBlank() -> {
+                _textButton.value = Constants.SHARE_PDF
+                createPdf()
                 viewModelScope.launch {
                     getReportByIdStreamUseCase(id = reportId).collectLatest { report ->
                         report?.let {
@@ -218,11 +222,11 @@ class CreateOrEditReportViewModel @Inject constructor(
                 displayTexts = getDisplayTexts(),
                 bitmaps = bitmaps
             )
+            val file = createPdf.invoke(pdfContent = pdfContent)
+            _fileState.value = file
 
-            createPdf.invoke(pdfContent = pdfContent)
         }
     }
-
     // todo improvement needed
     private fun getDisplayTexts(): List<DisplayText> {
         val nameSection = if (viewModelState.value.name.isNotBlank()) {

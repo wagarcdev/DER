@@ -7,6 +7,7 @@ import com.wagarcdev.der.data.datasource.local.contracts
 import com.wagarcdev.der.domain.model.Contract
 import com.wagarcdev.der.domain.model.Report
 import com.wagarcdev.der.domain.usecase.GetReportsForContractStreamUseCase
+import com.wagarcdev.der.presentation.navigation.graphs.AppScreens
 import com.wagarcdev.der.presentation.navigation.graphs.AppScreens.Contracts.contractIdKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -100,4 +101,5 @@ class ReportsViewModel @Inject constructor(
     fun reloadContractData() {
         getContractData()
     }
+
 }

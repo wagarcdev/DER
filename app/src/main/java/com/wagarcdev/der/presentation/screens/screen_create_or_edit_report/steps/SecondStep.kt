@@ -35,6 +35,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import com.wagarcdev.der.utils.Constants
 import com.wagarcdev.der.utils.imageFile
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -46,7 +47,9 @@ fun SecondStep(
     onRemoveImage: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     onPreviousStep: () -> Unit,
-    onFinishSteps: () -> Unit
+    onFinishSteps: () -> Unit,
+    onUpdateStep :() -> Unit,
+    textButton:String
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
@@ -54,7 +57,9 @@ fun SecondStep(
     val imageChooserLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            uri?.let { onAddImage(it) }
+            uri?.let {
+                onAddImage(it)
+            }
         }
     )
 
@@ -134,7 +139,7 @@ fun SecondStep(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                modifier = Modifier.weight(weight = 1F),
+                modifier = Modifier.weight(weight = 0.5F),
                 onClick = onPreviousStep,
                 shape = RoundedCornerShape(size = 15.dp)
             ) {
@@ -142,13 +147,25 @@ fun SecondStep(
             }
 
             Button(
-                modifier = Modifier.weight(weight = 1F),
+                modifier = Modifier.weight(weight = 0.5F),
                 onClick = onFinishSteps,
                 shape = RoundedCornerShape(size = 15.dp)
             ) {
-                Text(text = "Create PDF")
+                Text(text = textButton)
+            }
+
+            if (textButton == Constants.SHARE_PDF){
+                Button(
+                    modifier = Modifier.weight(weight = 0.5F),
+                    onClick = onUpdateStep,
+                    shape = RoundedCornerShape(size = 15.dp)
+                ) {
+                    Text(text = "Update")
+                }
             }
         }
+
+
     }
 }
 

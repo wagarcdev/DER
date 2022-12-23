@@ -1,13 +1,24 @@
 package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report
 
+import android.content.Context
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AddRoad
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,6 +30,9 @@ import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.navig
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.navigation.navigateBackWithFallback
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps.FirstStep
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps.SecondStep
+import com.wagarcdev.der.presentation.screens.screen_reports.ReportsState
+import com.wagarcdev.der.utils.Constants
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Compose the Create Or Edit Report screen.
@@ -36,10 +50,13 @@ fun CreateOrEditReportScreen(
 ) {
     val screenState by viewModel.screenState.collectAsStateWithLifecycle()
     val stepsNavController = rememberAnimatedNavController()
+    val context = LocalContext.current
 
     BackHandler(onBack = onNavigateBack)
 
-    Scaffold(modifier = modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier
+    ) { innerPadding ->
         AnimatedNavHost(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,12 +94,49 @@ fun CreateOrEditReportScreen(
                     onPreviousStep = {
                         stepsNavController.navigateBackWithFallback(
                             currentRoute = StepRoute.SecondStep.route,
-                            destinationRoute = StepRoute.SecondStep.route
+                            destinationRoute = StepRoute.FirstStep.route
                         )
                     },
-                    onFinishSteps = viewModel::createPdf
+                    onFinishSteps = {
+                        when (viewModel.textButton.value) {
+                            Constants.CREATE_PDF -> {
+                                createAndUpdatePDF(viewModel)
+                            }
+                            Constants.SHARE_PDF -> {
+                                sharePDF(viewModel, context)
+                            }
+                        }
+                    },
+                    textButton = viewModel.textButton.collectAsState().value,
+                    onUpdateStep = { createAndUpdatePDF(viewModel) }
                 )
             }
+        }
+    }
+}
+
+
+private fun createAndUpdatePDF(viewModel: CreateOrEditReportViewModel) {
+    viewModel.createPdf().also {
+        /*como navegar para a tela que lista os relatorios? seria interessante por isso aqui*/
+    }
+}
+
+private fun sharePDF(viewModel: CreateOrEditReportViewModel, context: Context) {
+    viewModel.createPdf().also {
+        viewModel.fileState.value?.let {
+            val contentUri = FileProvider.getUriForFile(
+                context,
+                context.applicationContext.packageName + ".fileprovider",
+                it
+            )
+            val share = Intent()
+            share.apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                type = "application/pdf"
+            }
+            context.startActivity(share)
         }
     }
 }
