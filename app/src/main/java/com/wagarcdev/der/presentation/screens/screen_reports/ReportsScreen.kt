@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.CreateOrEditReportViewModel
 
@@ -54,7 +53,7 @@ import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.Creat
  * @param onNavigateToEditReportScreen callback to navigate to edit report screen.
  * @param viewModel the [ReportsViewModel]. Default is provided by [hiltViewModel].
  */
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReportsScreen(
     modifier: Modifier = Modifier,

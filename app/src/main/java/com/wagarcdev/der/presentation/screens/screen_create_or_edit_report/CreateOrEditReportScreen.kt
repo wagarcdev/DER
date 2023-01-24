@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -41,7 +40,7 @@ import kotlinx.coroutines.flow.collectLatest
  * @param onNavigateBack callback to navigate back from this screen.
  * @param viewModel the [CreateOrEditReportViewModel]. Default is provided by [hiltViewModel].
  */
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CreateOrEditReportScreen(
     modifier: Modifier,
