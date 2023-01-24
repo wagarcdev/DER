@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.R
 import com.wagarcdev.der.presentation.ui.components.BackgroundImageRow
@@ -61,7 +60,6 @@ import com.wagarcdev.der.presentation.ui.theme.DER_yellow
  * @param onNavigateToContractsScreen callback to navigate to contracts screen.
  * @param viewModel the [RegisterViewModel]. Default is provided by [hiltViewModel].
  */
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier,

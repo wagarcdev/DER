@@ -28,13 +28,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.data.datasource.local.contracts
 import com.wagarcdev.der.presentation.ui.components.ContractCard
 import com.wagarcdev.der.presentation.ui.components.SearchBarRow
 
-@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContractsScreen(
     modifier: Modifier,

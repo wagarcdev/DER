@@ -1,9 +1,9 @@
 package com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps
 
-import android.Manifest
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,13 +32,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberPermissionState
 import com.wagarcdev.der.utils.Constants
 import com.wagarcdev.der.utils.imageFile
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SecondStep(
     modifier: Modifier = Modifier,
@@ -48,26 +44,16 @@ fun SecondStep(
     onNavigateBack: () -> Unit,
     onPreviousStep: () -> Unit,
     onFinishSteps: () -> Unit,
-    onUpdateStep :() -> Unit,
-    textButton:String
+    onUpdateStep: () -> Unit,
+    textButton: String
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    val imageChooserLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
+    val imagePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            uri?.let {
-                onAddImage(it)
-            }
-        }
-    )
-
-    // TODO(make it compatible with Android 13)
-    val readStoragePermissionState = rememberPermissionState(
-        permission = Manifest.permission.READ_EXTERNAL_STORAGE,
-        onPermissionResult = { granted ->
-            if (granted) imageChooserLauncher.launch("image/*")
+            uri?.let { onAddImage(it) }
         }
     )
 
@@ -113,9 +99,10 @@ fun SecondStep(
                     modifier = Modifier
                         .size(size = imageSize)
                         .clickable {
-                            readStoragePermissionState.status.handler(
-                                granted = { imageChooserLauncher.launch("image/*") },
-                                denied = readStoragePermissionState::launchPermissionRequest
+                            imagePickerLauncher.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
                             )
                         },
                     contentAlignment = Alignment.Center
@@ -167,13 +154,4 @@ fun SecondStep(
 
 
     }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-private fun PermissionStatus.handler(
-    granted: () -> Unit,
-    denied: () -> Unit
-) = when (this) {
-    is PermissionStatus.Granted -> granted()
-    is PermissionStatus.Denied -> denied()
 }

@@ -44,7 +44,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wagarcdev.der.R
 import com.wagarcdev.der.presentation.screens.screen_login.google_one_tap_sign_in.GoogleOneTapSignIn
@@ -68,7 +67,6 @@ import com.wagarcdev.der.presentation.ui.theme.RB_White
  * @param onNavigateToRegisterScreen callback to navigate to register screen.
  * @param viewModel the [LoginViewModel]. Default is provided by [hiltViewModel].
  */
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun LoginScreen(
     modifier: Modifier,
