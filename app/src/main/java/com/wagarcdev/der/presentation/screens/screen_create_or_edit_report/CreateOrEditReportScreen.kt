@@ -6,18 +6,12 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AddRoad
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,9 +23,7 @@ import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.navig
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.navigation.navigateBackWithFallback
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps.FirstStep
 import com.wagarcdev.der.presentation.screens.screen_create_or_edit_report.steps.SecondStep
-import com.wagarcdev.der.presentation.screens.screen_reports.ReportsState
 import com.wagarcdev.der.utils.Constants
-import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Compose the Create Or Edit Report screen.
