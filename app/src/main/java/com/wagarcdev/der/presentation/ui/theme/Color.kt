@@ -10,6 +10,7 @@ val DER_yellow_light_extra = Color(0xFFFAED9C)
 
 
 val DER_yellow_deep = Color(0xFFC49900)
+val DER_yellow_deep_plus = Color(0xFFAD8701)
 
 val DER_gray = Color(0xFFCECECE)
 

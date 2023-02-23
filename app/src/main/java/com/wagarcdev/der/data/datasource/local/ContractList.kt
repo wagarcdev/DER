@@ -12,9 +12,12 @@ val contracts =
             road = "SP-068",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 01 - Lote 18",
-            sections = "km 255+000m ao km 268+600m",
-            extension = "13,600Km",
+            block = 1,
+            plot = 18,
+            startKm = 255,
+            startAdjustInMeters = 0,
+            endKm = 268,
+            endAdjustInMeters = 600,
             city = "São José do Barreiro"
         ),
 
@@ -25,9 +28,12 @@ val contracts =
             road = "SPA-017/123",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 02 - Lote 18",
-            sections = "km 000+000m ao km 004+900m",
-            extension = "4,900Km",
+            block = 2,
+            plot = 18,
+            startKm = 0,
+            startAdjustInMeters = 0,
+            endKm = 4,
+            endAdjustInMeters = 900,
             city = "Tremembé"
         ),
 
@@ -38,9 +44,12 @@ val contracts =
             road = "SP-068",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 03 - Lote 18",
-            sections = "km 247+400m ao km 255+000m",
-            extension = "7,600Km",
+            block = 3,
+            plot = 18,
+            startKm = 247,
+            startAdjustInMeters = 400,
+            endKm = 255,
+            endAdjustInMeters = 0,
             city = "Areias"
         ),
 
@@ -51,9 +60,12 @@ val contracts =
             road = "SP-077",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 01 - Lote 19",
-            sections = "km 255+000m ao km 268+600m",
-            extension = "13,600Km",
+            block = 1,
+            plot = 19,
+            startKm = 255,
+            startAdjustInMeters = 0,
+            endKm = 268,
+            endAdjustInMeters = 600,
             city = "São José do Barreiro"
         ),
 
@@ -64,9 +76,12 @@ val contracts =
             road = "SPA-014/125",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 01 - Lote 20",
-            sections = "km 000+000m ao km 000+700m",
-            extension = "0,700Km",
+            block = 1,
+            plot = 20,
+            startKm = 0,
+            startAdjustInMeters = 0,
+            endKm = 0,
+            endAdjustInMeters = 700,
             city = "Taubaté"
         ),
 
@@ -77,9 +92,12 @@ val contracts =
             road = "SP-068",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 01 - Lote 22",
-            sections = "km 112+550m ao km 120+000m",
-            extension =  "7,450Km",
+            block = 1,
+            plot = 22,
+            startKm = 112,
+            startAdjustInMeters = 550,
+            endKm = 120,
+            endAdjustInMeters = 0,
             city = "São Sebastião"
         ),
 
@@ -90,9 +108,12 @@ val contracts =
             road = "SPA-046/171",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 01 - Lote 21",
-            sections = "km 000+000m ao km 002+600m",
-            extension = "2,600Km",
+            block = 1,
+            plot = 21,
+            startKm = 0,
+            startAdjustInMeters = 0,
+            endKm = 2,
+            endAdjustInMeters = 600,
             city = "Cunha"
         ),
 
@@ -103,9 +124,12 @@ val contracts =
             road = "SP-123",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 02 - Lote 14",
-            sections = "km 000+000m ao km 007+000m",
-            extension = "7,000Km",
+            block = 2,
+            plot = 14,
+            startKm = 0,
+            startAdjustInMeters = 0,
+            endKm = 7,
+            endAdjustInMeters = 0,
             city = "Taubaté"
         ),
 
@@ -116,9 +140,12 @@ val contracts =
             road = "SP-050",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 02 - Lote 15",
-            sections = "km 098+000m ao km 113+300m",
-            extension = "15,300Km",
+            block = 2,
+            plot = 15,
+            startKm = 98,
+            startAdjustInMeters = 0,
+            endKm = 113,
+            endAdjustInMeters = 300,
             city = "São José dos Campos"
         ),
 
@@ -129,9 +156,12 @@ val contracts =
             road = "SP-050",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 02 - Lote 16",
-            sections = "km 113+300m ao km 126+000m",
-            extension = "12,700Km",
+            block = 2,
+            plot = 16,
+            startKm = 113,
+            startAdjustInMeters = 300,
+            endKm = 126,
+            endAdjustInMeters = 0,
             city = "Monteiro Lobato"
         ),
 
@@ -142,9 +172,12 @@ val contracts =
             road = "SP-062",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 02 - Lote 17",
-            sections = "km 133+780m ao km 137+600m",
-            extension = "3,820Km",
+            block = 2,
+            plot = 17,
+            startKm = 133,
+            startAdjustInMeters = 780,
+            endKm = 137,
+            endAdjustInMeters = 600,
             city = "Taubaté"
         ),
 
@@ -155,9 +188,12 @@ val contracts =
             road = "SP-062",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 03 - Lote 17",
-            sections = "km 137+500m ao km 146+000m",
-            extension = "8,500Km",
+            block = 3,
+            plot = 17,
+            startKm = 137,
+            startAdjustInMeters = 500,
+            endKm = 146,
+            endAdjustInMeters = 0,
             city = "Pindamonhangaba"
         ),
 
@@ -169,9 +205,12 @@ val contracts =
             road = "SP-062",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 03 - Lote 18",
-            sections = "km 151+180m ao km 159+800m",
-            extension = "8,620Km",
+            block = 3,
+            plot = 18,
+            startKm = 151,
+            startAdjustInMeters = 180,
+            endKm = 159,
+            endAdjustInMeters = 800,
             city = "Pindamonhangaba"
         ),
 
@@ -183,12 +222,12 @@ val contracts =
             road = "SPA-227/058",
             serviceDescription = "Serviço de Conservação Especial e Reabilitação da" +
                     " Sinalização Horizontal da Rodovia SP-068",
-            site = "Bloco 03 - Lote 20",
-            sections = "km 000+000m ao km 002+600m",
-            extension = "2,600Km",
+            block = 3,
+            plot = 20,
+            startKm = 0,
+            startAdjustInMeters = 0,
+            endKm = 2,
+            endAdjustInMeters = 600,
             city = "Lavrinhas"
-        ),
-
-
-
         )
+    )
