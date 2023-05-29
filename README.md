@@ -45,12 +45,7 @@ O DER | ST6 é um projeto Android desenvolvido como um trabalho voluntário em c
 
 O DER | ST6 foi desenvolvido por uma equipe de cinco voluntários, incluindo Wagner Arcieri como um dos desenvolvedores. Cada membro da equipe contribuiu com suas habilidades e conhecimentos para tornar o projeto uma realidade.
 
-- Autor: Wagner Arcieri
-- Colaboradores: [Nome do Colaborador 1], [Nome do Colaborador 2], [Nome do Colaborador 3], [Nome do Colaborador 4]
-
-## Contribuição 🤝
-
-Este projeto é de código aberto e contribuições são bem-vindas! Se você tiver ideias, sugestões ou desejar contribuir de alguma forma, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+- Autores: Wagner Arcieri, Thales Isidoro, Valter Gabriel, Marcelo Satos 
 
 ## Licença ⚖️
 
