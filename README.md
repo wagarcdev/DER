@@ -8,31 +8,36 @@ O DER | ST6 é um projeto Android desenvolvido como um trabalho voluntário em c
 
 ## Funcionalidades ✨
 
-- Digitalização de Relatórios: O DER | ST6 permite a digitalização de relatórios diários realizados pela equipe de Engenheiros do DER/SP. Os relatórios podem ser preenchidos e salvos no aplicativo.
+- 📝 Digitalização de Relatórios: O DER | ST6 permite a digitalização de relatórios diários realizados pela equipe de Engenheiros do DER/SP. Os relatórios podem ser preenchidos e salvos no aplicativo.
 
-- Anexar Fotos: É possível anexar fotos aos relatórios, permitindo a documentação visual de obras, problemas identificados ou qualquer outra informação relevante.
+- 📷 Anexar Fotos: É possível anexar fotos aos relatórios, permitindo a documentação visual de obras, problemas identificados ou qualquer outra informação relevante.
 
-- Exportar para PDF: O aplicativo oferece a funcionalidade de exportar os relatórios para o formato PDF, facilitando o compartilhamento e armazenamento dos documentos.
+- 📄 Exportar para PDF: O aplicativo oferece a funcionalidade de exportar os relatórios para o formato PDF, facilitando o compartilhamento e armazenamento dos documentos.
 
 ## Tecnologias Utilizadas 🚀
 
-- MVVM Architecture: O projeto utiliza a arquitetura MVVM (Model-View-ViewModel) para uma separação clara das responsabilidades e facilitar a manutenção e testabilidade do código.
+🏗️ MVVM Architecture: O projeto utiliza a arquitetura MVVM (Model-View-ViewModel) para uma separação clara das responsabilidades e facilitar a manutenção e testabilidade do código.
 
-- Linguagem Kotlin: O aplicativo é desenvolvido em Kotlin, uma linguagem moderna e expressiva que é oficialmente suportada pelo Android.
-
-- Jetpack Compose: O DER | ST6 utiliza o Jetpack Compose, a biblioteca de interface de usuário moderna do Android, para criar interfaces de usuário flexíveis e dinâmicas.
+🚀 Jetpack Compose: O DER | ST6 utiliza o Jetpack Compose, a biblioteca de interface de usuário moderna do Android, para criar interfaces de usuário flexíveis e dinâmicas.
 
 - Bibliotecas Utilizadas:
-  - Hilt: Biblioteca utilizada para a injeção de dependências no aplicativo, facilitando a gestão e acesso aos componentes.
-  - Flow: Biblioteca que oferece suporte à programação reativa no Kotlin, permitindo o gerenciamento assíncrono de dados.
-  - ROOM: Biblioteca de persistência de dados que fornece uma camada de abstração sobre o SQLite, simplificando o acesso e manipulação dos dados do aplicativo.
-  - Firebase e Firestore: O DER | ST6 utiliza as tecnologias Firebase e Firestore para armazenamento e sincronização de dados em tempo real.
-  - Firebase Storage: Biblioteca utilizada para o armazenamento de arquivos, como as fotos anexadas aos relatórios.
-  - Coil: Biblioteca de carregamento de imagens para Android, utilizada para exibir e manipular as imagens no aplicativo.
-  - Coroutines: Framework utilizado para programação assíncrona e concorrente, permitindo a execução de tarefas em segundo plano sem bloquear a interface do usuário.
-  - MediaStore: API utilizada para acessar e gerenciar os recursos de mídia do dispositivo, permitindo o acesso às fotos e vídeos capturados.
-  - Accompanist: Conjunto de bibliotecas para Jetpack Compose, que oferece uma variedade de componentes e recursos adicionais para a criação de interfaces de usuário avançadas.
-  - PdfDocument: API do Android utilizada para a criação e manipulação de documentos PDF.
+💉 Hilt: Biblioteca utilizada para a injeção de dependências no aplicativo, facilitando a gestão e acesso aos componentes.
+
+🌊 Flow: Biblioteca que oferece suporte à programação reativa no Kotlin, permitindo o gerenciamento assíncrono de dados.
+
+🗄️ ROOM: Biblioteca de persistência de dados que fornece uma camada de abstração sobre o SQLite, simplificando o acesso e manipulação dos dados do aplicativo.
+
+🔥🗄️ Firebase e Firestore: O DER | ST6 utiliza as tecnologias Firebase e Firestore para armazenamento e sincronização de dados em tempo real.
+
+🖼️ Coil: Biblioteca de carregamento de imagens para Android, utilizada para exibir e manipular as imagens no aplicativo.
+
+🌪️ Coroutines: Framework utilizado para programação assíncrona e concorrente, permitindo a execução de tarefas em segundo plano sem bloquear a interface do usuário.
+
+📸 MediaStore: API utilizada para acessar e gerenciar os recursos de mídia do dispositivo, permitindo o acesso às fotos e vídeos capturados.
+
+🎨 Accompanist: Conjunto de bibliotecas para Jetpack Compose, que oferece uma variedade de componentes e recursos adicionais para a criação de interfaces de usuário avançadas.
+
+📄 PdfDocument: API do Android utilizada para a criação e manipulação de documentos PDF.
 
 ## Uso/Getting Started 🚀
 
