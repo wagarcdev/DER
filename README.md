@@ -20,7 +20,8 @@ O DER | ST6 é um projeto Android desenvolvido como um trabalho voluntário em c
 
 🚀 Jetpack Compose: O DER | ST6 utiliza o Jetpack Compose, a biblioteca de interface de usuário moderna do Android, para criar interfaces de usuário flexíveis e dinâmicas.
 
-- Bibliotecas Utilizadas:
+## Bibliotecas Utilizadas 📄
+
 💉 Hilt: Biblioteca utilizada para a injeção de dependências no aplicativo, facilitando a gestão e acesso aos componentes.
 
 🌊 Flow: Biblioteca que oferece suporte à programação reativa no Kotlin, permitindo o gerenciamento assíncrono de dados.
